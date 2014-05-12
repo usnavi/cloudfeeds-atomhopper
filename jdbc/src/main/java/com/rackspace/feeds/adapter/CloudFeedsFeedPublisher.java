@@ -1,4 +1,4 @@
-package org.atomhopper.cloudfeeds.adapter;
+package com.rackspace.feeds.adapter;
 
 import org.atomhopper.jdbc.adapter.AbstractJdbcFeedPublisher;
 import org.atomhopper.jdbc.model.PersistedEntry;
@@ -7,7 +7,7 @@ import org.atomhopper.jdbc.query.PostgreSQLTextArray;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.atomhopper.cloudfeeds.adapter.CloudFeedsFeedSource.*;
+import static com.rackspace.feeds.adapter.CloudFeedsFeedSource.*;
 
 /**
  * Implements the AbstractJdbcFeedSource to store all atom categories prefixed with "tid:" to store in the "tenantid"

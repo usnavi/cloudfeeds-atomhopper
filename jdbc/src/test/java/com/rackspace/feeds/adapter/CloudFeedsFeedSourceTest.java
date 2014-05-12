@@ -1,4 +1,4 @@
-package org.atomhopper.cloudfeeds.adapater;
+package com.rackspace.feeds.adapter;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.i18n.iri.IRI;

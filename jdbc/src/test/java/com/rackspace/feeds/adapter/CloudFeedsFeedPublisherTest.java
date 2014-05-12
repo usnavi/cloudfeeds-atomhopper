@@ -1,4 +1,4 @@
-package org.atomhopper.cloudfeeds.adapater;
+package com.rackspace.feeds.adapter;
 
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.parser.stax.FOMEntry;

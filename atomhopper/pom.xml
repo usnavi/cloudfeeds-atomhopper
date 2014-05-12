@@ -220,7 +220,7 @@
                             </mapping>
                         </mappings>
                         <postinstallScriptlet>
-                            <script>touch "/srv/tomcat7/webapps/ATOMHOPPER.war"</script>
+                            <script>touch "/srv/tomcat/webapps/ATOMHOPPER.war"</script>
                         </postinstallScriptlet>
                         <!--
                              First of all, <postremoveScriptlet> does not seem to take
@@ -233,7 +233,7 @@
                         <postremoveScriptlet>
                             <script>rm -rf "/opt/atomhopper/"</script>
                             <script>rm -rf "/var/log/atomhopper/"</script>
-                            <script>rm -rf "/srv/tomcat7/webapps/ROOT/"</script>
+                            <script>rm -rf "/srv/tomcat/webapps/ROOT/"</script>
                         </postremoveScriptlet>
                         -->
                         <requires>

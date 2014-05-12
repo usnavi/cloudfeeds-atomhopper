@@ -1,7 +1,6 @@
-package org.atomhopper.cloudfeeds.adapter;
+package com.rackspace.feeds.adapter;
 
 import org.atomhopper.jdbc.adapter.AbstractJdbcFeedSource;
-import org.atomhopper.jdbc.adapter.JdbcFeedSource;
 import org.atomhopper.jdbc.model.PersistedEntry;
 import org.atomhopper.jdbc.query.SearchToSqlConverter;
 import org.springframework.dao.DataAccessException;
