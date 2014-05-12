@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.rackspace.feeds</groupId>
+        <artifactId>cloudfeeds-atomhopper</artifactId>
+        <version>1.2.21-SNAPSHOT</version>
+        <relativePath>./../pom.xml</relativePath>
+    </parent>
+
+    <groupId>com.rackspace.feeds</groupId>
+    <artifactId>cf-atomhopper</artifactId>
+    <packaging>war</packaging>
+
+    <name>Cloud Feeds Atom Hopper</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.atomhopper</groupId>
+            <artifactId>atomhopper</artifactId>
+           <version>${atomhopper.version}</version>
+            <type>war</type>
+        </dependency>
+
+        <dependency>
+            <groupId>com.rackspace.feeds</groupId>
+            <artifactId>cf-jdbc-adapter</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <overlays>
+                        <overlay>
+                            <groupId>org.atomhopper</groupId>
+                            <artifactId>atomhopper</artifactId>
+                            <excludes>
+                                <!-- override excluding META-INF -->
+                            </excludes>
+                        </overlay>
+                    </overlays>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+    <!--
+        By default we turn off this plugin to make builds faster - however,
+        if you want to build the RPM simply run maven with
+        the following option, '-P build-rpm'
+
+        Example: mvn -P build-rpm clean install
+    -->
+    <profile>
+        <id>build-rpm</id>
+        <build>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <configuration>
+                        <failOnMissingWebXml>true</failOnMissingWebXml>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>copy</goal>
+                            </goals>
+                            <configuration>
+                                <outputDirectory>${endorsed.dir}</outputDirectory>
+                                <silent>true</silent>
+                                <artifactItems>
+                                    <artifactItem>
+                                        <groupId>javax</groupId>
+                                        <artifactId>javaee-endorsed-api</artifactId>
+                                        <type>jar</type>
+                                    </artifactItem>
+                                </artifactItems>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>rpm-maven-plugin</artifactId>
+                    <version>2.1-alpha-1</version>
+                    <executions>
+                        <execution>
+                            <id>Build RPM</id>
+                            <goals>
+                                <goal>attached-rpm</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <copyright>Apache License, Version 2.0</copyright>
+                        <group>Applications/Communications</group>
+                        <packager>Rackspace - Cloud Integration Team</packager>
+                        <description>ATOM Hopper - The ATOMPub Java Server</description>
+                        <release>1</release>
+                        <mappings>
+                            <mapping>
+                                <directory>/etc/atomhopper</directory>
+                                <username>tomcat</username>
+                                <groupname>tomcat</groupname>
+                                <!-- Modify file permissions as needed -->
+                                <filemode>644</filemode>
+                                <configuration>noreplace</configuration>
+                                <directoryIncluded>true</directoryIncluded>
+                                <sources>
+                                    <source>
+                                        <location>overlays/org.atomhopper.atomhopper-${atomhopper.version}/WEB-INF/classes/META-INF/atom-server.cfg.xml</location>
+                                    </source>
+                                </sources>
+                            </mapping>
+                            <mapping>
+                                <directory>/etc/atomhopper</directory>
+                                <username>tomcat</username>
+                                <groupname>tomcat</groupname>
+                                <!-- Modify file permissions as needed -->
+                                <filemode>644</filemode>
+                                <configuration>noreplace</configuration>
+                                <directoryIncluded>true</directoryIncluded>
+                                <sources>
+                                    <source>
+                                        <location>overlays/org.atomhopper.atomhopper-${atomhopper.version}/META-INF/application-context.xml</location>
+                                    </source>
+                                </sources>
+                            </mapping>
+                            <mapping>
+                                <directory>/etc/atomhopper</directory>
+                                <username>tomcat</username>
+                                <groupname>tomcat</groupname>
+                                <!-- Modify file permissions as needed -->
+                                <filemode>644</filemode>
+                                <configuration>noreplace</configuration>
+                                <directoryIncluded>true</directoryIncluded>
+                                <sources>
+                                    <source>
+                                        <location>overlays/org.atomhopper.atomhopper-${atomhopper.version}/META-INF/template-logback.xml</location>
+                                        <destination>logback.xml</destination>
+                                    </source>
+                                </sources>
+                            </mapping>
+                            <mapping>
+                                <!--
+                                    Use this path for Tomcat6
+                                    <directory>/var/lib/tomcat6/webapps/</directory>
+                                -->
+                                <!--
+                                    This path is for our custom Tomcat7 RPM since
+                                    an official Tomcat7 RPM doesn't exist yet for CentOS
+                                -->
+                                <directory>/srv/tomcat/webapps</directory>
+                                <username>tomcat</username>
+                                <groupname>tomcat</groupname>
+                                <!-- Modify file permissions as needed -->
+                                <filemode>644</filemode>
+                                <directoryIncluded>false</directoryIncluded>
+                                <sources>
+                                    <source>
+                                        <location>target/cf-atomhopper-${project.version}.war</location>
+                                        <!--
+                                            If you already have a ROOT.war and wish to keeo it
+                                            then remove the following destination completely
+                                        -->
+                                        <destination>ATOMHOPPER.war</destination>
+                                    </source>
+                                </sources>
+                            </mapping>
+                            <mapping>
+                                <directory>/opt/atomhopper</directory>
+                                <username>tomcat</username>
+                                <groupname>tomcat</groupname>
+                                <!-- Modify file permissions as needed -->
+                                <filemode>755</filemode>
+                                <configuration>false</configuration>
+                                <directoryIncluded>true</directoryIncluded>
+                                <sources>
+                                    <source>
+                                        <location>overlays/org.atomhopper.atomhopper-${atomhopper.version}/META-INF/PlaceholderForAtomHopperH2Files</location>
+                                    </source>
+                                </sources>
+                            </mapping>
+                            <mapping>
+                                <directory>/var/log/atomhopper</directory>
+                                <username>tomcat</username>
+                                <groupname>tomcat</groupname>
+                                <!-- Modify file permissions as needed -->
+                                <filemode>755</filemode>
+                                <configuration>false</configuration>
+                                <directoryIncluded>true</directoryIncluded>
+                                <sources>
+                                    <source>
+                                        <location>overlays/org.atomhopper.atomhopper-${atomhopper.version}/META-INF/PlaceholderForAtomHopperLogFiles</location>
+                                    </source>
+                                </sources>
+                            </mapping>
+                        </mappings>
+                        <postinstallScriptlet>
+                            <script>touch "/srv/tomcat7/webapps/ATOMHOPPER.war"</script>
+                        </postinstallScriptlet>
+                        <!--
+                             First of all, <postremoveScriptlet> does not seem to take
+                             multiple <script> elements. It only takes the last one.
+                             Seconnd, the last <script> broke rpm -e, so we are unable
+                             to remove old packages.
+                             Third, I don't see why we need to remove these directories.
+                             I think we should keep /var/log/atomhopper. The /opt/atomhopper
+                             does not exist
+                        <postremoveScriptlet>
+                            <script>rm -rf "/opt/atomhopper/"</script>
+                            <script>rm -rf "/var/log/atomhopper/"</script>
+                            <script>rm -rf "/srv/tomcat7/webapps/ROOT/"</script>
+                        </postremoveScriptlet>
+                        -->
+                        <requires>
+                            <!--
+                                Use this for Tomcat6
+                                <require>tomcat6</require>
+                            -->
+                            <!--
+                                This path is for our custom Tomcat7 RPM since
+                                an official Tomcat7 RPM doesn't exist yet for CentOS
+                            -->
+                            <require>tomcat7</require>
+                            <!--
+                                You can modify this to use the Oracle Java JDK 1.6 or Open JDK
+                                if you want
+                             -->
+                            <!--
+                            <require>jdk</require>
+                            -->
+                        </requires>
+                    </configuration>
+                </plugin>
+
+            </plugins>
+        </build>
+    </profile>
+    </profiles>
+
+</project>
