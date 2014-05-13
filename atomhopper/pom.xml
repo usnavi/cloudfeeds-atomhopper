@@ -8,7 +8,7 @@
     <parent>
         <groupId>com.rackspace.feeds</groupId>
         <artifactId>cloudfeeds-atomhopper</artifactId>
-        <version>1.2.21-SNAPSHOT</version>
+        <version>1.2.21.0-SNAPSHOT</version>
         <relativePath>./../pom.xml</relativePath>
     </parent>
 
@@ -19,6 +19,7 @@
     <name>Cloud Feeds Atom Hopper</name>
 
     <dependencies>
+
         <dependency>
             <groupId>org.atomhopper</groupId>
             <artifactId>atomhopper</artifactId>
@@ -34,21 +35,40 @@
 
     <build>
         <plugins>
+        <plugin>
+           <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-war-plugin</artifactId>
+            <configuration>
+               <overlays>
+                    <overlay>
+                        <groupId>org.atomhopper</groupId>
+                        <artifactId>atomhopper</artifactId>
+                        <excludes>
+                            <!-- override excluding META-INF by default -->
+                        </excludes>
+                    </overlay>
+                </overlays>
+            </configuration>
+        </plugin>
             <plugin>
-               <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.4</version>
-                <configuration>
-                    <overlays>
-                        <overlay>
-                            <groupId>org.atomhopper</groupId>
-                            <artifactId>atomhopper</artifactId>
-                            <excludes>
-                                <!-- override excluding META-INF -->
-                            </excludes>
-                        </overlay>
-                    </overlays>
-                </configuration>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>src/main/webapp/META-INF/maven/org.atomhopper/atomhopper</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>target/maven-archiver</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

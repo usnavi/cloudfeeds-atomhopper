@@ -18,3 +18,4 @@ target
 *.out
 
 atomhopper/overlays
+atomhopper/src/main/webapp/META-INF/maven/org.atomhopper/atomhopper/pom.properties
