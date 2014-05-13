@@ -46,6 +46,7 @@
                 <groupId>org.atomhopper</groupId>
                 <artifactId>atomhopper</artifactId>
                 <version>${atomhopper.version}</version>
+                <type>war</type>
             </dependency>
 
             <dependency>

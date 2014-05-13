@@ -4,63 +4,115 @@ import org.atomhopper.jdbc.adapter.AbstractJdbcFeedPublisher;
 import org.atomhopper.jdbc.model.PersistedEntry;
 import org.atomhopper.jdbc.query.PostgreSQLTextArray;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.rackspace.feeds.adapter.CloudFeedsFeedSource.*;
+import java.util.*;
 
 /**
- * Implements the AbstractJdbcFeedSource to store all atom categories prefixed with "tid:" to store in the "tenantid"
- * text column & all atom categories prefixed with "type:" in the "eventtype" column.
+ * Implements the AbstractJdbcFeedSource to allow specific category prefixes to be saved to specific columns.
+ *
+ *
+ *
  */
 public class CloudFeedsFeedPublisher extends AbstractJdbcFeedPublisher {
+
+    private Map<String, String> mapPrefix = new HashMap<String, String>();
+    private Set<String> setBothSet = new HashSet<String>();
+
+    private String split;
+
+    public void setAsCategorySet( Set<String> set ) {
+
+        setBothSet = new HashSet<String>( set );
+    }
+
+    public void setPrefixColumnMap( Map<String, String> prefix ) {
+
+        mapPrefix = new HashMap<String, String>( prefix );
+    }
+
+    public void setDelimiter( String splitParam ) {
+
+        split = splitParam;
+    }
 
     @Override
     protected void insertDb( PersistedEntry persistedEntry ) {
 
-        String insertSQL = "INSERT INTO entries (entryid, entrybody, eventtype, tenantId, feed, categories) VALUES (?, ?, ?, ?, ?, ?)";
-
         Categories categories = new Categories( persistedEntry.getCategories() );
 
-        Object[] params = new Object[]{
-              persistedEntry.getEntryId(),
-              persistedEntry.getEntryBody(),
-              categories.getEventType(),
-              categories.getTenantId(),
-              persistedEntry.getFeed(),
-              new PostgreSQLTextArray( categories.getCategories() )
-        };
-        getJdbcTemplate().update(insertSQL, params);
+        String insertSql1 = "INSERT INTO entries (entryid, entrybody, feed, categories";
+        String insertSql2 = ") VALUES (?, ?, ?, ?";
+
+        String sql = createSql( insertSql1, insertSql2 );
+
+        List<Object> params = new ArrayList<Object>();
+        params.add( persistedEntry.getEntryId() );
+        params.add( persistedEntry.getEntryBody() );
+        params.add( persistedEntry.getFeed() );
+        params.add( new PostgreSQLTextArray( categories.getCategories() ) );
+
+        for( String prefix : mapPrefix.keySet() ) {
+
+            params.add( categories.getPrefix( prefix ) );
+        }
+
+        getJdbcTemplate().update( sql, params.toArray( new Object[0] ));
     }
+
 
     @Override
     protected void insertDbOverrideDate( PersistedEntry persistedEntry ) {
 
-        String insertSQL = "INSERT INTO entries (entryid, creationdate, datelastupdated, entrybody, eventtype, tenantId, feed, categories) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String insertSql1 = "INSERT INTO entries (entryid, creationdate, datelastupdated, entrybody, feed, categories";
+        String insertSql2 = ") VALUES (?, ?, ?, ?, ?, ?";
+
+        String sql = createSql( insertSql1, insertSql2 );
 
         Categories categories = new Categories( persistedEntry.getCategories() );
 
-        Object[] params = new Object[]{
-              persistedEntry.getEntryId(),
-              persistedEntry.getCreationDate(),
-              persistedEntry.getDateLastUpdated(),
-              persistedEntry.getEntryBody(),
-              categories.getEventType(),
-              categories.getTenantId(),
-              persistedEntry.getFeed(),
-              new PostgreSQLTextArray( categories.getCategories() )
-        };
-        getJdbcTemplate().update(insertSQL, params);
+        List<Object> params = new ArrayList<Object>();
+        params.add( persistedEntry.getEntryId() );
+        params.add( persistedEntry.getCreationDate() );
+        params.add( persistedEntry.getDateLastUpdated() );
+        params.add( persistedEntry.getEntryBody() );
+        params.add( persistedEntry.getFeed() );
+        params.add( new PostgreSQLTextArray( categories.getCategories() ) );
+
+        for( String prefix : mapPrefix.keySet() ) {
+
+            params.add( categories.getPrefix( prefix ) );
+        }
+
+        getJdbcTemplate().update(sql, params.toArray( new Object[0] ));
+    }
+
+
+    private String createSql( String insertSql1, String insertSql2 ) {
+        String insertSqlEnd = ")";
+
+        StringBuilder sbSql = new StringBuilder();
+        sbSql.append( insertSql1 );
+
+        for( String prefix : mapPrefix.keySet() ) {
+
+            sbSql.append( ", " + mapPrefix.get( prefix ) );
+        }
+
+        sbSql.append( insertSql2 );
+
+        for( int i = 0; i < mapPrefix.size(); i++ ) {
+
+            sbSql.append( ", ?" );
+        }
+
+        sbSql.append( insertSqlEnd );
+        return sbSql.toString();
     }
 
     class Categories {
 
         private String[] categories = new String[ 0 ];
-        private String eventType;
-        private String tenantId;
 
-        private final String tidPrefix = TID + SPLIT;
-        private final String typePrefix = TYPE + SPLIT;
+        private Map<String, String> mapByPrefix = new HashMap<String, String>();
 
         public Categories( String[] cats ) {
 
@@ -68,20 +120,25 @@ public class CloudFeedsFeedPublisher extends AbstractJdbcFeedPublisher {
 
             for( String cat : cats ) {
 
+                boolean isPrefix = false;
 
-                if( cat.startsWith( tidPrefix  ) ) {
+                for( String prefix : mapPrefix.keySet() ) {
 
-                    tenantId = cat.substring( tidPrefix.length() );
+                    String prefixSplit =  prefix + split;
 
-                    // TID:  remove when enabling tid column search
-                    list.add( cat );
-                    //
+                    if( cat.startsWith( prefixSplit ) ) {
+
+                        mapByPrefix.put( prefix, cat.substring( prefixSplit.length() ) );
+
+                        // if we are setting both, we want it in the column as well as the generic categories array
+                        if( !setBothSet.contains( prefix ) )
+                            isPrefix = true;
+
+                        break;
+                    }
                 }
-                else if ( cat.startsWith( typePrefix ) ) {
 
-                    eventType = cat.substring( typePrefix.length() );
-                }
-                else {
+                if( !isPrefix ) {
                     list.add( cat );
                 }
             }
@@ -89,17 +146,14 @@ public class CloudFeedsFeedPublisher extends AbstractJdbcFeedPublisher {
             categories = list.toArray( categories );
         }
 
+        public String getPrefix( String prefix ) {
+
+            return mapByPrefix.get( prefix );
+        }
 
         public String[] getCategories() {
             return categories;
         }
 
-        public String getEventType() {
-            return eventType;
-        }
-
-        public String getTenantId() {
-            return tenantId;
-        }
     }
 }

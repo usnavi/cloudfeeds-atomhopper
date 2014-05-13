@@ -23,8 +23,8 @@ CREATE TABLE entries (
     datelastupdated timestamp without time zone NOT NULL DEFAULT current_timestamp,
     entrybody text,
     feed text,
-    eventType text,
-    tenantId text,
+    eventtype text,
+    tenantid text,
     categories character varying[],
     PRIMARY KEY(datelastupdated, id)
 );
@@ -32,5 +32,5 @@ CREATE INDEX entryid_idx on entries(entryid);
 CREATE INDEX categories_idx on entries(categories);
 CREATE INDEX feed_idx on entries(feed);
 CREATE INDEX feed_entryid_idx on entries(feed, entryid);
-CREATE INDEX eventType_idx on entries( eventTYpe );
-CREATE INDEX tenantId_idx on entries( tenantId );
+CREATE INDEX eventtype_idx on entries( eventtype );
+CREATE INDEX tenantid_idx on entries( tenantid );

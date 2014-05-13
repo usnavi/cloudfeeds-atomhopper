@@ -17,26 +17,32 @@ import java.util.*;
  */
 public class CloudFeedsFeedSource extends AbstractJdbcFeedSource {
 
-    protected final static String TID = "tid";
-    protected final static String TYPE = "type";
+    private Map<String, String> mapPrefix;
+    private Map<String, String> mapColumn;
 
-    protected final static Map<String, String> PREFIX_MAP = new HashMap<String, String>();
-    protected final static Map<String, String> COLUMN_MAP = new HashMap<String, String>();
-    protected final static String SPLIT = ":";
+    private String split;
 
-    static {
+    public void setPrefixColumnMap( Map<String, String> prefix ) {
 
-     //TID:   PREFIX_MAP.put( TID, "tenantid" );
-        PREFIX_MAP.put( TYPE, "eventtype" );
+        mapPrefix = new HashMap<String, String>( prefix );
 
-     //TID:   COLUMN_MAP.put( "tenantid", TID );
-        COLUMN_MAP.put( "eventtype", TYPE );
+        mapColumn = new HashMap<String, String>();
+
+        for( String key : mapPrefix.keySet() ) {
+
+            mapColumn.put( mapPrefix.get( key ), key );
+        }
+    }
+
+    public void setDelimiter( String splitParam ) {
+
+        split = splitParam;
     }
 
     @Override
     protected SearchToSqlConverter getSearchToSqlConverter() {
 
-        return new SearchToSqlConverter( PREFIX_MAP, SPLIT );
+        return new SearchToSqlConverter( mapPrefix, split );
     }
 
     @Override
@@ -72,11 +78,11 @@ public class CloudFeedsFeedSource extends AbstractJdbcFeedSource {
 
             List<String> cats = new ArrayList<String>( Arrays.asList( (String[])rs.getArray( "categories" ).getArray() ) );
 
-            for( String column : COLUMN_MAP.keySet() ) {
+            for( String column : mapColumn.keySet() ) {
 
                 if( rs.getString( column) != null ) {
 
-                    cats.add( COLUMN_MAP.get( column) + SPLIT + rs.getString( column) );
+                    cats.add( mapColumn.get( column) + split + rs.getString( column) );
                 }
             }
 
