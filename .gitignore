@@ -1,0 +1,22 @@
+## intellij stuff
+.idea/
+
+## java specific
+!.gitignore
+*.iml
+*.iws
+*.ipr
+target
+*/target
+*/*/target
+ 
+#cloudfeeds-atomhopper specific
+*/overlays
+
+## generic files to ignore
+*~
+*.lock
+*.DS_Store
+*.swp
+*.out
+

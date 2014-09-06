@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+    <display-name>Cloud Feeds Atom Hopper Server</display-name>
+    <description>Customized Atom Hopper server for Rackspace Cloud Feeds</description>
+
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <!--
+            If you would rather this config file be read out of the META-INF
+            folder then use this setting:
+            <param-value>/META-INF/application-context.xml</param-value>
+        -->
+        <param-value>file:///etc/atomhopper/application-context.xml</param-value>
+    </context-param>
+    
+    <listener>
+        <listener-class>org.atomhopper.ExternalConfigLoaderContextListener</listener-class>
+    </listener>
+
+    <listener>
+        <display-name>Spring Context Loader</display-name>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <servlet id="atom-hopper">
+        <servlet-name>Atom-Hopper</servlet-name>
+        <servlet-class>org.atomhopper.AtomHopperServlet</servlet-class>
+
+        <init-param>
+            <param-name>config-location</param-name>
+            <param-value>file:///etc/atomhopper/atom-server.cfg.xml</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>context-adapter-class</param-name>
+            <param-value>org.atomhopper.servlet.ServletSpringContext</param-value>
+        </init-param>
+        <!--
+            Use the atomhopper-url-pattern to match the url-pattern so ATOM entries
+            use valid self URLs.
+
+            Ex: <url-pattern>/atom/*</url-pattern>
+
+            Map the above as:
+            <param-name>atomhopper-url-pattern</param-name>
+            <param-value>atom</param-value>
+
+            Note: There is no need for the asterix on the
+            atomhopper-url-pattern param-value
+
+        -->
+        <init-param>
+            <param-name>atomhopper-url-pattern</param-name>
+            <param-value></param-value>
+        </init-param>
+    </servlet>
+
+    <servlet id="atom-hopper-version">
+        <servlet-name>Atom-Hopper-Version</servlet-name>
+        <servlet-class>org.atomhopper.AtomHopperVersionServlet</servlet-class>
+    </servlet>
+
+    <servlet id="atom-hopper-metrics">
+        <servlet-name>Atom-Hopper-Metrics</servlet-name>
+        <servlet-class>com.yammer.metrics.reporting.MetricsServlet</servlet-class>
+        <init-param>
+            <param-name>metrics-uri</param-name>
+            <param-value>/metrics</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet-mapping id="atom-hopper-mapping">
+        <servlet-name>Atom-Hopper</servlet-name>
+        <url-pattern>/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping id="atom-hopper-version-mapping">
+        <servlet-name>Atom-Hopper-Version</servlet-name>
+        <url-pattern>/buildinfo</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping id="metrics-mapping">
+        <servlet-name>Atom-Hopper-Metrics</servlet-name>
+        <url-pattern>/atommetrics/*</url-pattern>
+    </servlet-mapping>
+
+    <filter>
+        <filter-name>TenantedFilter</filter-name>
+        <filter-class>com.rackspace.feeds.filter.TenantedFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>TenantedFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <env-entry>
+        <env-entry-name>logback/configuration-resource</env-entry-name>
+        <env-entry-type>java.lang.String</env-entry-type>
+        <env-entry-value>file:///etc/atomhopper/logback.xml</env-entry-value>
+    </env-entry>
+    
+    <listener>
+        <listener-class>ch.qos.logback.classic.selector.servlet.ContextDetachingSCL</listener-class>
+    </listener>
+</web-app>
