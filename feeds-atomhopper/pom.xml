@@ -58,6 +58,7 @@
                             <excludes>
                                 <!-- override excluding META-INF by default -->
                                 <!-- dont package all the adapters we dont use -->
+                                <exclude>WEB-INF/lib/h2-1.3.167.jar</exclude>
                                 <exclude>WEB-INF/lib/mongo-java-driver-2.7.1.jar</exclude>
                                 <exclude>WEB-INF/lib/hibernate-adapter-${atomhopper.version}.jar</exclude>
                                 <exclude>WEB-INF/lib/hibernate-c3p0-4.1.3.Final.jar</exclude>
@@ -234,34 +235,6 @@
                                             then remove the following destination completely
                                         -->
                                         <destination>feeds-atomhopper.war</destination>
-                                    </source>
-                                </sources>
-                            </mapping>
-                            <mapping>
-                                <directory>/opt/atomhopper</directory>
-                                <username>tomcat</username>
-                                <groupname>tomcat</groupname>
-                                <!-- Modify file permissions as needed -->
-                                <filemode>755</filemode>
-                                <configuration>false</configuration>
-                                <directoryIncluded>true</directoryIncluded>
-                                <sources>
-                                    <source>
-                                        <location>target/feeds-atomhopper-${project.version}/META-INF/PlaceholderForAtomHopperH2Files</location>
-                                    </source>
-                                </sources>
-                            </mapping>
-                            <mapping>
-                                <directory>/var/log/atomhopper</directory>
-                                <username>tomcat</username>
-                                <groupname>tomcat</groupname>
-                                <!-- Modify file permissions as needed -->
-                                <filemode>755</filemode>
-                                <configuration>false</configuration>
-                                <directoryIncluded>true</directoryIncluded>
-                                <sources>
-                                    <source>
-                                        <location>target/feeds-atomhopper-${project.version}/META-INF/PlaceholderForAtomHopperLogFiles</location>
                                     </source>
                                 </sources>
                             </mapping>
