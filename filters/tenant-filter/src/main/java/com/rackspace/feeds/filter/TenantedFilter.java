@@ -77,6 +77,11 @@ public class TenantedFilter implements Filter {
             if ( SEARCH_PARAM.equals(parameterName) ) {
                 String tenantId = getTenantId();
                 if ( tenantId != null ) {
+                    // If there's no search parameter, value will be null or empty. We will
+                    // instead have a search parameter like this:
+                    //   (AND(AND(cat=tid:5914283)(NOT(cat=cloudfeeds:private))))
+                    // There will be an extra 'AND' there with empty operand. The search works
+                    // this way too.
                     return String.format(TENANTED_SEARCH_FORMAT, tenantId, StringUtils.defaultIfEmpty(value, ""));
                 }
             }
