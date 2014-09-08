@@ -11,3 +11,8 @@ Some of the customizations are:
 ```
 mvn clean install
 ```
+
+**How to build an RPM**
+```
+mvn -P build-rpm clean install
+```
