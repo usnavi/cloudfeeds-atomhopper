@@ -26,6 +26,7 @@
 
     <modules>
         <module>filters/tenant-filter</module>
+        <module>filters/xslt-filter</module>
         <module>feeds-atomhopper</module>
     </modules>
 
@@ -77,6 +78,12 @@
             </dependency>
 
             <dependency>
+                <groupId>net.sf.saxon</groupId>
+                <artifactId>Saxon-HE</artifactId>
+                <version>9.4.0.6</version>
+            </dependency>
+
+            <dependency>
                 <groupId>org.atomhopper</groupId>
                 <artifactId>atomhopper</artifactId>
                 <version>${atomhopper.version}</version>
@@ -86,6 +93,13 @@
             <dependency>
                 <groupId>com.rackspace.feeds.filters</groupId>
                 <artifactId>tenant-filter</artifactId>
+                <version>${project.version}</version>
+                <type>jar</type>
+            </dependency>
+
+            <dependency>
+                <groupId>com.rackspace.feeds.filters</groupId>
+                <artifactId>xslt-filter</artifactId>
                 <version>${project.version}</version>
                 <type>jar</type>
             </dependency>

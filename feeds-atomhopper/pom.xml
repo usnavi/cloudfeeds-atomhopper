@@ -28,6 +28,11 @@
             <artifactId>tenant-filter</artifactId>
             <type>jar</type>
         </dependency>
+        <dependency>
+            <groupId>com.rackspace.feeds.filters</groupId>
+            <artifactId>xslt-filter</artifactId>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 
     <build>
@@ -45,6 +50,9 @@
                           </includes>
                           <targetPath>META-INF/maven/org.atomhopper/atomhopper</targetPath>
                           <filtering>true</filtering>
+                      </resource>
+                      <resource>
+                          <directory>src/main/webapp/WEB-INF/xslt</directory>
                       </resource>
                    </webResources>
                    <archive>

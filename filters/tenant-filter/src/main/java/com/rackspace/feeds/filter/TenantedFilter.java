@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,9 +33,15 @@ public class TenantedFilter implements Filter {
      */
     static Pattern TENANTED_URI_PATTERN = Pattern.compile("(.*/events/)([^/?]+)(/entries/[^/?]+)?/?(\\?.*)?");
 
+    static final Pattern NORMALIZED_TENANTED_SEARCH_PATTERN = Pattern.compile("(.*)%28AND%28AND%28cat%3Dtid%3A(.*)%29%28NOT%28cat%3Dcloudfeeds%3Aprivate%29%29%29(.*)%29(.*)");
+
     static final String TENANTED_SEARCH_FORMAT = "(AND(AND(cat=tid:%s)(NOT(cat=cloudfeeds:private)))%s)";
 
     static final String SEARCH_PARAM = "search";
+
+    static final String LOCATION_HEADER = "location";
+
+    static final String LINK_HEADER = "link";
 
     public void  init(FilterConfig config)
             throws ServletException {
@@ -47,7 +55,9 @@ public class TenantedFilter implements Filter {
 
         // Pass request back down the filter chain
         if ( isFeedsGetRequest((HttpServletRequest) request) ) {
-            chain.doFilter(new TenantedRequest(request), response);
+            String tenantId = getTenantId((HttpServletRequest)request);
+            chain.doFilter(new TenantedRequest((HttpServletRequest)request, tenantId),
+                           new TenantedResponse((HttpServletResponse)response, tenantId));
         } else {
             chain.doFilter(request, response);
         }
@@ -64,10 +74,26 @@ public class TenantedFilter implements Filter {
         return matcher.matches() && request.getMethod().equalsIgnoreCase("get");
     }
 
+    String getTenantId(HttpServletRequest request) {
+        String uri = request.getRequestURI();
+        if ( StringUtils.isEmpty(uri) ) {
+            throw new IllegalArgumentException("Empty uri");
+        }
+
+        Matcher matcher = TENANTED_URI_PATTERN.matcher(uri);
+        if ( !matcher.matches() ) {
+            return null;
+        }
+        return matcher.group(2);
+    }
+
     static class TenantedRequest extends HttpServletRequestWrapper {
 
-        public TenantedRequest(ServletRequest request) {
-            super((HttpServletRequest)request);
+        private String tenantId;
+
+        public TenantedRequest(HttpServletRequest request, String tenantId) {
+            super(request);
+            this.tenantId = tenantId;
         }
 
         @Override
@@ -75,7 +101,6 @@ public class TenantedFilter implements Filter {
 
             String value = super.getParameter(parameterName);
             if ( SEARCH_PARAM.equals(parameterName) ) {
-                String tenantId = getTenantId();
                 if ( tenantId != null ) {
                     // If there's no search parameter, value will be null or empty. We will
                     // instead have a search parameter like this:
@@ -104,18 +129,35 @@ public class TenantedFilter implements Filter {
             }
             return uri;
         }
+    }
 
-        String getTenantId() {
-            String uri = super.getRequestURI();
-            if ( StringUtils.isEmpty(uri) ) {
-                throw new IllegalArgumentException("Empty uri");
-            }
+    static class TenantedResponse extends HttpServletResponseWrapper {
 
-            Matcher matcher = TENANTED_URI_PATTERN.matcher(uri);
-            if ( !matcher.matches() ) {
-                return null;
+        private String tenantId = null;
+
+        public TenantedResponse(HttpServletResponse response, String tenantId) {
+            super(response);
+            this.tenantId = tenantId;
+        }
+
+        public void setHeader(String name, String value) {
+
+            if ( StringUtils.isNotBlank(tenantId) && StringUtils.isNotBlank(value) ) {
+                if ( name.equalsIgnoreCase(LINK_HEADER) || name.equalsIgnoreCase(LOCATION_HEADER) ) {
+                    // re-insert tenantId
+                    String newValue = value.replaceAll("/events", "/events/" + tenantId);
+
+                    // strip the tenanted search format
+                    Matcher customMatcher = NORMALIZED_TENANTED_SEARCH_PATTERN.matcher(newValue);
+                    if ( customMatcher.matches() ) {
+                        super.setHeader(name, customMatcher.group(1) + customMatcher.group(3) + customMatcher.group(4));
+                    } else {
+                        super.setHeader(name, newValue);
+                    }
+                    return;
+                }
             }
-            return matcher.group(2);
+            super.setHeader(name, value);
         }
     }
 }
