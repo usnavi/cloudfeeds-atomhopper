@@ -4,6 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicReference;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.xml.transform.*;
@@ -15,8 +22,6 @@ import javax.xml.transform.stream.*;
 public class XsltFilter implements Filter {
 
     static Logger LOG = LoggerFactory.getLogger(XsltFilter.class);
-    static final TransformerFactory transformerFactory =
-                      TransformerFactory.newInstance("net.sf.saxon.TransformerFactoryImpl",null);
 
     private String xsltFileName;
 
@@ -46,34 +51,29 @@ public class XsltFilter implements Filter {
     }
 
     public void doFilter (ServletRequest request, ServletResponse response,
-                          FilterChain chain)
+                          final FilterChain chain)
             throws IOException, ServletException {
 
-        if (!(response instanceof HttpServletResponse)) {
-            throw new ServletException("This filter only supports HTTP");
-        }
+        final HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
+        ServletResponsePipe srp = new ServletResponsePipe(httpServletResponse);
+        srp.doFilterAsynch(chain, httpServletRequest);
+
+        // prepare the real response here
+        response.setContentType(httpServletResponse.getContentType());
+
+        Map<String, Object> xsltParameters = new HashMap<String, Object>();
         try {
-            // do the XSLT transformation
-            CharResponseWrapper wrappedResponse =
-                    new CharResponseWrapper((HttpServletResponse)response);
-            response.setContentType(wrappedResponse.getContentType());
-
-            chain.doFilter(request, wrappedResponse);
-            Source stream = new StreamSource(new StringReader(wrappedResponse.toString()));
-            Transformer trans = transformerFactory.newTransformer(
-                    new StreamSource(new File(this.xsltFileName)));
-
-            CharArrayWriter caw = new CharArrayWriter();
-            StreamResult result = new StreamResult(caw);
-            trans.transform(stream, result);
-            response.setContentLength(caw.toString().length());
-            PrintWriter out = response.getWriter();
-            out.write(caw.toString());
-        } catch (TransformerException te) {
-            LOG.error("Got transformer exception: ", te);
+            TransformerUtils transformer = new TransformerUtils();
+            transformer.doTransform(getXsltStreamSource(),
+                    xsltParameters,
+                    new StreamSource(srp.getInputStream()),
+                    new StreamResult(httpServletResponse.getWriter()));
+        } catch(TransformerException te) {
             throw new ServletException(te);
         }
+
     }
 
     /**
@@ -81,5 +81,9 @@ public class XsltFilter implements Filter {
      */
     public void destroy( ) {
 
+    }
+
+    protected StreamSource getXsltStreamSource() {
+        return new StreamSource(new File(this.xsltFileName));
     }
 }

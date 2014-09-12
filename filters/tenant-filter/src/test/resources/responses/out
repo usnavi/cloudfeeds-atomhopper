@@ -1,0 +1,454 @@
+HTTP/1.1 200 OK
+Server: Apache-Coyote/1.1
+ETag: W/"urn:uuid:95382f66-a168-38ba-2975-154074cb5cf5:urn:uuid:2794d8f6-f0bf-2397-1885-37f2b768d2a7:"
+Link: <https://atom.test.ord1.us.ci.rackspace.net/functest1/events/5914283/?marker=urn:uuid:5472c3d6-b0e2-4cbe-8fb7-1551a697de86&limit=25&search=&direction=backward>; rel="next", <https://atom.test.ord1.us.ci.rackspace.net/functest1/events/5914283/?marker=urn:uuid:95382f66-a168-38ba-2975-154074cb5cf5&limit=25&search=&direction=forward>; rel="previous"
+Last-Modified: Thu, 11 Sep 2014 13:33:46 GMT
+Content-Type: application/atom+xml; type=feed;charset=UTF-8
+Transfer-Encoding: chunked
+Date: Thu, 11 Sep 2014 13:33:46 GMT
+
+<feed xmlns="http://www.w3.org/2005/Atom"><link href="https://atom.test.ord1.us.ci.rackspace.net/functest1/events/" rel="current" /><link href="https://atom.test.ord1.us.ci.rackspace.net/functest1/events/?limit=25&amp;search=%28AND%28AND%28cat%3Dtid%3A5914283%29%28NOT%28cat%3Dcloudfeeds%3Aprivate%29%29%29%29&amp;direction=backward" rel="self" /><id>urn:uuid8d85f90a-e61f-4676-a5c2-da299d3a03e7</id><title type="text">functest1/events</title><link href="https://atom.test.ord1.us.ci.rackspace.net/functest1/events/?marker=urn:uuid:95382f66-a168-38ba-2975-154074cb5cf5&amp;limit=25&amp;search=%28AND%28AND%28cat%3Dtid%3A5914283%29%28NOT%28cat%3Dcloudfeeds%3Aprivate%29%29%29%29&amp;direction=forward" rel="previous" /><link href="https://atom.test.ord1.us.ci.rackspace.net/functest1/events/?marker=urn:uuid:5472c3d6-b0e2-4cbe-8fb7-1551a697de86&amp;limit=25&amp;search=%28AND%28AND%28cat%3Dtid%3A5914283%29%28NOT%28cat%3Dcloudfeeds%3Aprivate%29%29%29%29&amp;direction=backward" rel="next" /><link href="https://atom.test.ord1.us.ci.rackspace.net/functest1/events/?marker=last&amp;limit=25&amp;search=%28AND%28AND%28cat%3Dtid%3A5914283%29%28NOT%28cat%3Dcloudfeeds%3Aprivate%29%29%29%29&amp;direction=backward" rel="last" /><updated>2014-09-11T13:33:46.361Z</updated><atom:entry xmlns:atom="http://www.w3.org/2005/Atom" xmlns="http://wadl.dev.java.net/2009/02" xmlns:db="http://docbook.org/ns/docbook" xmlns:error="http://docs.rackspace.com/core/error" xmlns:wadl="http://wadl.dev.java.net/2009/02" xmlns:json="http://json-schema.org/schema#" xmlns:d448e1="http://wadl.dev.java.net/2009/02" xmlns:cldfeeds="http://docs.rackspace.com/api/cloudfeeds">
+<atom:id>urn:uuid:95382f66-a168-38ba-2975-154074cb5cf5</atom:id>
+<atom:category term="tid:5914283" />
+<atom:category term="rgn:DFW" />
+<atom:category term="dc:DFW1" />
+<atom:category term="rid:4116" />
+<atom:category term="cloudservers.slice.slice.info" />
+<atom:category term="type:cloudservers.slice.slice.info" />
+<atom:category term="action:RESIZE" />
+<atom:category term="status:BUILD" />
+<atom:title type="text">Slice Action</atom:title>
+<atom:author>
+<atom:name>Atom Hopper Team</atom:name>
+</atom:author>
+<atom:category term="/private-attrs/servers/servers-slice-action.xml-d8bbd39245" />
+<atom:content type="application/xml">
+<event xmlns="http://docs.rackspace.com/core/event" xmlns:csd="http://docs.rackspace.com/event/servers/slice" dataCenter="DFW1" environment="PROD" eventTime="2012-09-15T11:51:11Z" id="95382f66-a168-38ba-2975-154074cb5cf5" region="DFW" resourceId="4116" tenantId="5914283" type="INFO" version="1">
+<csd:product action="RESIZE" createdAt="2011-05-15T11:51:11Z" customerId="100" dns1="1.1.1.1" dns2="1.1.1.1" flavorId="101" huddleId="202" imageId="101" imageName="My Image" managed="false" options="5" privateIp="1.1.1.1" publicIp="1.1.1.1" resourceType="SLICE" rootPassword="12345678" serverId="10" serviceCode="CloudServers" sliceType="CLOUD" status="BUILD" version="1">
+<csd:sliceMetaData key="key1" value="value1" />
+<csd:sliceMetaData key="key2" value="value2" />
+<csd:additionalPublicAddress dns1="1.1.1.1" dns2="1.1.1.1" ip="1.1.1.1" />
+<csd:additionalPublicAddress dns1="1.1.1.2" dns2="1.1.1.2" ip="1.1.1.2" />
+</csd:product>
+</event>
+</atom:content>
+<atom:link href="https://atom.test.ord1.us.ci.rackspace.net/functest1/events/entries/urn:uuid:95382f66-a168-38ba-2975-154074cb5cf5" rel="self" /><atom:updated>2014-09-11T04:07:57.237Z</atom:updated><atom:published>2014-09-11T04:07:57.237Z</atom:published></atom:entry><atom:entry xmlns:atom="http://www.w3.org/2005/Atom" xmlns="http://wadl.dev.java.net/2009/02" xmlns:db="http://docbook.org/ns/docbook" xmlns:error="http://docs.rackspace.com/core/error" xmlns:wadl="http://wadl.dev.java.net/2009/02" xmlns:json="http://json-schema.org/schema#" xmlns:d448e1="http://wadl.dev.java.net/2009/02" xmlns:cldfeeds="http://docs.rackspace.com/api/cloudfeeds"><atom:id>urn:uuid:91c351d5-488f-622f-9cfb-54b7dbda16f2</atom:id><atom:category term="tid:5914283" /><atom:category term="rgn:DFW" /><atom:category term="dc:DFW1" /><atom:category term="rid:4116" /><atom:category term="cloudservers.slice.slice.info" /><atom:category term="type:cloudservers.slice.slice.info" /><atom:category term="action:RESIZE" /><atom:category term="status:BUILD" /><atom:title type="text">Slice Action</atom:title><atom:author><atom:name>Atom Hopper Team</atom:name></atom:author><atom:category term="/private-attrs/servers/servers-slice-action.xml-afba5363d5" /><atom:content type="application/xml"><event xmlns="http://docs.rackspace.com/core/event" xmlns:csd="http://docs.rackspace.com/event/servers/slice" dataCenter="DFW1" environment="PROD" eventTime="2012-09-15T11:51:11Z" id="91c351d5-488f-622f-9cfb-54b7dbda16f2" region="DFW" resourceId="4116" tenantId="5914283" type="INFO" version="1"><csd:product action="RESIZE" createdAt="2011-05-15T11:51:11Z" customerId="100" dns1="1.1.1.1" dns2="1.1.1.1" flavorId="101" huddleId="202" imageId="101" imageName="My Image" managed="false" options="5" privateIp="1.1.1.1" publicIp="1.1.1.1" resourceType="SLICE" rootPassword="12345678" serverId="10" serviceCode="CloudServers" sliceType="CLOUD" status="BUILD" version="1"><csd:sliceMetaData key="key1" value="value1" /><csd:sliceMetaData key="key2" value="value2" /><csd:additionalPublicAddress dns1="1.1.1.1" dns2="1.1.1.1" ip="1.1.1.1" /><csd:additionalPublicAddress dns1="1.1.1.2" dns2="1.1.1.2" ip="1.1.1.2" /></csd:product></event></atom:content><atom:link href="https://atom.test.ord1.us.ci.rackspace.net/functest1/events/entries/urn:uuid:91c351d5-488f-622f-9cfb-54b7dbda16f2" rel="self" /><atom:updated>2014-09-11T04:07:46.469Z</atom:updated><atom:published>2014-09-11T04:07:46.469Z</atom:published></atom:entry><atom:entry xmlns:atom="http://www.w3.org/2005/Atom" xmlns="http://wadl.dev.java.net/2009/02" xmlns:db="http://docbook.org/ns/docbook" xmlns:error="http://docs.rackspace.com/core/error" xmlns:wadl="http://wadl.dev.java.net/2009/02" xmlns:json="http://json-schema.org/schema#" xmlns:d448e1="http://wadl.dev.java.net/2009/02" xmlns:cldfeeds="http://docs.rackspace.com/api/cloudfeeds">
+<atom:id>urn:uuid:1a613dcf-8528-c334-20a7-a70af2f44fbd</atom:id>
+<atom:category term="tid:5914283" />
+<atom:category term="rgn:DFW" />
+<atom:category term="dc:DFW1" />
+<atom:category term="rid:4116" />
+<atom:category term="cloudservers.slice.slice.info" />
+<atom:category term="type:cloudservers.slice.slice.info" />
+<atom:category term="action:RESIZE" />
+<atom:category term="status:BUILD" />
+<atom:title type="text">Slice Action</atom:title>
+<atom:author>
+<atom:name>Atom Hopper Team</atom:name>
+</atom:author>
+<atom:category term="/private-attrs/servers/servers-slice-action.xml-9cf19f68cb" />
+<atom:content type="application/xml">
+<event xmlns="http://docs.rackspace.com/core/event" xmlns:csd="http://docs.rackspace.com/event/servers/slice" dataCenter="DFW1" environment="PROD" eventTime="2012-09-15T11:51:11Z" id="1a613dcf-8528-c334-20a7-a70af2f44fbd" region="DFW" resourceId="4116" tenantId="5914283" type="INFO" version="1">
+<csd:product action="RESIZE" createdAt="2011-05-15T11:51:11Z" customerId="100" dns1="1.1.1.1" dns2="1.1.1.1" flavorId="101" huddleId="202" imageId="101" imageName="My Image" managed="false" options="5" privateIp="1.1.1.1" publicIp="1.1.1.1" resourceType="SLICE" rootPassword="12345678" serverId="10" serviceCode="CloudServers" sliceType="CLOUD" status="BUILD" version="1">
+<csd:sliceMetaData key="key1" value="value1" />
+<csd:sliceMetaData key="key2" value="value2" />
+<csd:additionalPublicAddress dns1="1.1.1.1" dns2="1.1.1.1" ip="1.1.1.1" />
+<csd:additionalPublicAddress dns1="1.1.1.2" dns2="1.1.1.2" ip="1.1.1.2" />
+</csd:product>
+</event>
+</atom:content>
+<atom:link href="https://atom.test.ord1.us.ci.rackspace.net/functest1/events/entries/urn:uuid:1a613dcf-8528-c334-20a7-a70af2f44fbd" rel="self" /><atom:updated>2014-09-11T04:07:35.879Z</atom:updated><atom:published>2014-09-11T04:07:35.879Z</atom:published></atom:entry><atom:entry xmlns:atom="http://www.w3.org/2005/Atom" xmlns="http://wadl.dev.java.net/2009/02" xmlns:db="http://docbook.org/ns/docbook" xmlns:error="http://docs.rackspace.com/core/error" xmlns:wadl="http://wadl.dev.java.net/2009/02" xmlns:json="http://json-schema.org/schema#" xmlns:d448e1="http://wadl.dev.java.net/2009/02" xmlns:cldfeeds="http://docs.rackspace.com/api/cloudfeeds">
+<atom:id>urn:uuid:33236f06-ddab-8981-da0f-4b227dc3f772</atom:id>
+<atom:category term="tid:5914283" />
+<atom:category term="rgn:DFW" />
+<atom:category term="dc:DFW1" />
+<atom:category term="rid:4116" />
+<atom:category term="cloudservers.slice.slice.info" />
+<atom:category term="type:cloudservers.slice.slice.info" />
+<atom:category term="action:RESIZE" />
+<atom:category term="status:BUILD" />
+<atom:title type="text">Slice Action</atom:title>
+<atom:author>
+<atom:name>Atom Hopper Team</atom:name>
+</atom:author>
+<atom:category term="/private-attrs/servers/servers-slice-action.xml-8f1c503c6f" />
+<atom:content type="application/xml">
+<event xmlns="http://docs.rackspace.com/core/event" xmlns:csd="http://docs.rackspace.com/event/servers/slice" dataCenter="DFW1" environment="PROD" eventTime="2012-09-15T11:51:11Z" id="33236f06-ddab-8981-da0f-4b227dc3f772" region="DFW" resourceId="4116" tenantId="5914283" type="INFO" version="1">
+<csd:product action="RESIZE" createdAt="2011-05-15T11:51:11Z" customerId="100" dns1="1.1.1.1" dns2="1.1.1.1" flavorId="101" huddleId="202" imageId="101" imageName="My Image" managed="false" options="5" privateIp="1.1.1.1" publicIp="1.1.1.1" resourceType="SLICE" rootPassword="12345678" serverId="10" serviceCode="CloudServers" sliceType="CLOUD" status="BUILD" version="1">
+<csd:sliceMetaData key="key1" value="value1" />
+<csd:sliceMetaData key="key2" value="value2" />
+<csd:additionalPublicAddress dns1="1.1.1.1" dns2="1.1.1.1" ip="1.1.1.1" />
+<csd:additionalPublicAddress dns1="1.1.1.2" dns2="1.1.1.2" ip="1.1.1.2" />
+</csd:product>
+</event>
+</atom:content>
+<atom:link href="https://atom.test.ord1.us.ci.rackspace.net/functest1/events/entries/urn:uuid:33236f06-ddab-8981-da0f-4b227dc3f772" rel="self" /><atom:updated>2014-09-11T04:07:24.931Z</atom:updated><atom:published>2014-09-11T04:07:24.931Z</atom:published></atom:entry><atom:entry xmlns:atom="http://www.w3.org/2005/Atom" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:xerces="http://xerces.apache.org" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:saxon="http://saxon.sf.net/" xmlns:usage="http://docs.rackspace.com/core/usage" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" xmlns:html="http://www.w3.org/1999/xhtml">
+<atom:id>urn:uuid:6b575d79-07ac-2d7f-9145-c3c8129b3c64</atom:id>
+<atom:category term="tid:5914283" />
+<atom:category term="rgn:DFW" />
+<atom:category term="dc:DFW1" />
+<atom:category term="rid:4a2b42f4-6c63-11e1-815b-7fcbcf67f549" />
+<atom:category term="cloudservers.hostserver.host.down" />
+<atom:category term="type:cloudservers.hostserver.host.down" />
+<atom:title type="text">CloudServers</atom:title>
+<atom:category term="/private-attrs/servers/servers-hostserver-v2.xml-a8bb7a3b35" />
+<atom:content type="application/xml">
+<event xmlns="http://docs.rackspace.com/core/event" xmlns:sample="http://docs.rackspace.com/event/servers/hostserver" dataCenter="DFW1" environment="PROD" eventTime="2013-03-15T11:51:11Z" id="6b575d79-07ac-2d7f-9145-c3c8129b3c64" region="DFW" resourceId="4a2b42f4-6c63-11e1-815b-7fcbcf67f549" tenantId="5914283" type="DOWN" version="2">
+<sample:product backstageURL="sampleString" coreID="1" eventType="GENERIC" hostIP="sampleString" huddleID="1" resourceType="HOST" serverID="4294967295" serviceCode="CloudServers" version="2">
+<sample:slice id="1" ip="sampleString" name="sampleString" />
+</sample:product>
+</event>
+</atom:content>
+<atom:link href="https://atom.test.ord1.us.ci.rackspace.net/functest1/events/entries/urn:uuid:6b575d79-07ac-2d7f-9145-c3c8129b3c64" rel="self" /><atom:updated>2014-09-11T04:07:13.957Z</atom:updated><atom:published>2014-09-11T04:07:13.957Z</atom:published></atom:entry><atom:entry xmlns:atom="http://www.w3.org/2005/Atom" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:xerces="http://xerces.apache.org" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:saxon="http://saxon.sf.net/" xmlns:usage="http://docs.rackspace.com/core/usage" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" xmlns:html="http://www.w3.org/1999/xhtml">
+<atom:id>urn:uuid:cdd708c3-508f-1662-c894-a4ab970814f8</atom:id>
+<atom:category term="tid:5914283" />
+<atom:category term="rgn:DFW" />
+<atom:category term="dc:DFW1" />
+<atom:category term="rid:4a2b42f4-6c63-11e1-815b-7fcbcf67f549" />
+<atom:category term="cloudservers.hostserver.host.down" />
+<atom:category term="type:cloudservers.hostserver.host.down" />
+<atom:title type="text">CloudServers</atom:title>
+<atom:category term="/private-attrs/servers/servers-hostserver-v2.xml-cb3314d0a1" />
+<atom:content type="application/xml">
+<event xmlns="http://docs.rackspace.com/core/event" xmlns:sample="http://docs.rackspace.com/event/servers/hostserver" dataCenter="DFW1" environment="PROD" eventTime="2013-03-15T11:51:11Z" id="cdd708c3-508f-1662-c894-a4ab970814f8" region="DFW" resourceId="4a2b42f4-6c63-11e1-815b-7fcbcf67f549" tenantId="5914283" type="DOWN" version="2">
+<sample:product backstageURL="sampleString" coreID="1" eventType="GENERIC" hostIP="sampleString" huddleID="1" resourceType="HOST" serverID="4294967295" serviceCode="CloudServers" version="2">
+<sample:slice id="1" ip="sampleString" name="sampleString" />
+</sample:product>
+</event>
+</atom:content>
+<atom:link href="https://atom.test.ord1.us.ci.rackspace.net/functest1/events/entries/urn:uuid:cdd708c3-508f-1662-c894-a4ab970814f8" rel="self" /><atom:updated>2014-09-11T04:07:03.255Z</atom:updated><atom:published>2014-09-11T04:07:03.255Z</atom:published></atom:entry><atom:entry xmlns:atom="http://www.w3.org/2005/Atom" xmlns="http://docs.rackspace.com/core/event" xmlns:cb-bin="http://docs.rackspace.com/usage/cloudbackup/bandwidthIn">
+<atom:id>urn:uuid:b756fb67-6659-9180-8918-77b46d973adf</atom:id>
+<atom:category term="tid:5914283" />
+<atom:category term="rgn:DFW" />
+<atom:category term="dc:DFW1" />
+<atom:category term="rid:00000000" />
+<atom:category term="cloudbackup.bandwidthIn.agent.usage" />
+<atom:category term="type:cloudbackup.bandwidthIn.agent.usage" />
+<atom:category label="atom-hopper-test" term="atom-hopper-test" />
+<atom:author>
+<atom:name>Tenant Entry</atom:name>
+</atom:author>
+<atom:content type="application/xml">
+<event dataCenter="DFW1" endTime="2012-06-14T23:59:59Z" environment="PROD" id="b756fb67-6659-9180-8918-77b46d973adf" region="DFW" resourceId="00000000" startTime="2012-06-14T00:00:00Z" tenantId="5914283" type="USAGE" version="1">
+<cb-bin:product bandwidthIn="192998" resourceType="AGENT" serverID="00000000-0000-0000-0000-000000000000" serviceCode="CloudBackup" version="1" />
+</event>
+</atom:content>
+<atom:link href="https://atom.test.ord1.us.ci.rackspace.net/functest1/events/entries/urn:uuid:b756fb67-6659-9180-8918-77b46d973adf" rel="self" /><atom:updated>2014-09-11T04:06:55.308Z</atom:updated><atom:published>2014-09-11T04:06:55.308Z</atom:published></atom:entry><atom:entry xmlns:atom="http://www.w3.org/2005/Atom" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:xerces="http://xerces.apache.org" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:saxon="http://saxon.sf.net/" xmlns:usage="http://docs.rackspace.com/core/usage" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" xmlns:html="http://www.w3.org/1999/xhtml">
+<atom:id>urn:uuid:74639f70-b491-3368-ba43-d8f6dc6d48c8</atom:id>
+<atom:category term="tid:5914283" />
+<atom:category term="rgn:DFW" />
+<atom:category term="dc:DFW1" />
+<atom:category term="rid:4a2b42f4-6c63-11e1-815b-7fcbcf67f549" />
+<atom:category term="cloudservers.hostserver.host.down" />
+<atom:category term="type:cloudservers.hostserver.host.down" />
+<atom:title type="text">CloudServers</atom:title>
+<atom:category term="/private-attrs/servers/servers-hostserver-v2.xml-b0a392a36b" />
+<atom:content type="application/xml">
+<event xmlns="http://docs.rackspace.com/core/event" xmlns:sample="http://docs.rackspace.com/event/servers/hostserver" dataCenter="DFW1" environment="PROD" eventTime="2013-03-15T11:51:11Z" id="74639f70-b491-3368-ba43-d8f6dc6d48c8" region="DFW" resourceId="4a2b42f4-6c63-11e1-815b-7fcbcf67f549" tenantId="5914283" type="DOWN" version="2">
+<sample:product backstageURL="sampleString" coreID="1" eventType="GENERIC" hostIP="sampleString" huddleID="1" resourceType="HOST" serverID="4294967295" serviceCode="CloudServers" version="2">
+<sample:slice id="1" ip="sampleString" name="sampleString" />
+</sample:product>
+</event>
+</atom:content>
+<atom:link href="https://atom.test.ord1.us.ci.rackspace.net/functest1/events/entries/urn:uuid:74639f70-b491-3368-ba43-d8f6dc6d48c8" rel="self" /><atom:updated>2014-09-11T04:06:52.613Z</atom:updated><atom:published>2014-09-11T04:06:52.613Z</atom:published></atom:entry><atom:entry xmlns:atom="http://www.w3.org/2005/Atom" xmlns="http://docs.rackspace.com/core/event" xmlns:cb-bin="http://docs.rackspace.com/usage/cloudbackup/bandwidthIn">
+<atom:id>urn:uuid:65a65114-c5db-6a27-539f-384135234404</atom:id>
+<atom:category term="tid:5914283" />
+<atom:category term="rgn:DFW" />
+<atom:category term="dc:DFW1" />
+<atom:category term="rid:00000000" />
+<atom:category term="cloudbackup.bandwidthIn.agent.usage" />
+<atom:category term="type:cloudbackup.bandwidthIn.agent.usage" />
+<atom:category label="atom-hopper-test" term="atom-hopper-test" />
+<atom:author>
+<atom:name>Tenant Entry</atom:name>
+</atom:author>
+<atom:content type="application/xml">
+<event dataCenter="DFW1" endTime="2012-06-14T23:59:59Z" environment="PROD" id="65a65114-c5db-6a27-539f-384135234404" region="DFW" resourceId="00000000" startTime="2012-06-14T00:00:00Z" tenantId="5914283" type="USAGE" version="1">
+<cb-bin:product bandwidthIn="192998" resourceType="AGENT" serverID="00000000-0000-0000-0000-000000000000" serviceCode="CloudBackup" version="1" />
+</event>
+</atom:content>
+<atom:link href="https://atom.test.ord1.us.ci.rackspace.net/functest1/events/entries/urn:uuid:65a65114-c5db-6a27-539f-384135234404" rel="self" /><atom:updated>2014-09-11T04:06:44.823Z</atom:updated><atom:published>2014-09-11T04:06:44.823Z</atom:published></atom:entry><atom:entry xmlns:atom="http://www.w3.org/2005/Atom" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:xerces="http://xerces.apache.org" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:saxon="http://saxon.sf.net/" xmlns:usage="http://docs.rackspace.com/core/usage" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" xmlns:html="http://www.w3.org/1999/xhtml">
+<atom:id>urn:uuid:827248f1-37b7-1b3f-218f-cf2908820fdf</atom:id>
+<atom:category term="tid:5914283" />
+<atom:category term="rgn:DFW" />
+<atom:category term="dc:DFW1" />
+<atom:category term="rid:4a2b42f4-6c63-11e1-815b-7fcbcf67f549" />
+<atom:category term="cloudservers.hostserver.host.down" />
+<atom:category term="type:cloudservers.hostserver.host.down" />
+<atom:title type="text">CloudServers</atom:title>
+<atom:category term="/private-attrs/servers/servers-hostserver-v2.xml-a20f04c390" />
+<atom:content type="application/xml">
+<event xmlns="http://docs.rackspace.com/core/event" xmlns:sample="http://docs.rackspace.com/event/servers/hostserver" dataCenter="DFW1" environment="PROD" eventTime="2013-03-15T11:51:11Z" id="827248f1-37b7-1b3f-218f-cf2908820fdf" region="DFW" resourceId="4a2b42f4-6c63-11e1-815b-7fcbcf67f549" tenantId="5914283" type="DOWN" version="2">
+<sample:product backstageURL="sampleString" coreID="1" eventType="GENERIC" hostIP="sampleString" huddleID="1" resourceType="HOST" serverID="4294967295" serviceCode="CloudServers" version="2">
+<sample:slice id="1" ip="sampleString" name="sampleString" />
+</sample:product>
+</event>
+</atom:content>
+<atom:link href="https://atom.test.ord1.us.ci.rackspace.net/functest1/events/entries/urn:uuid:827248f1-37b7-1b3f-218f-cf2908820fdf" rel="self" /><atom:updated>2014-09-11T04:06:41.832Z</atom:updated><atom:published>2014-09-11T04:06:41.832Z</atom:published></atom:entry><atom:entry xmlns:atom="http://www.w3.org/2005/Atom" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:xerces="http://xerces.apache.org" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:saxon="http://saxon.sf.net/" xmlns:usage="http://docs.rackspace.com/core/usage" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" xmlns:html="http://www.w3.org/1999/xhtml">
+<atom:id>urn:uuid:0dbd8a05-da97-2d61-8ff7-57b2051b845a</atom:id>
+<atom:category term="tid:5914283" />
+<atom:category term="rgn:DFW" />
+<atom:category term="dc:DFW1" />
+<atom:category term="rid:4a2b42f4-6c63-11e1-815b-7fcbcf67f549" />
+<atom:category term="cloudservers.hostserver.host.down" />
+<atom:category term="type:cloudservers.hostserver.host.down" />
+<atom:title type="text">CloudServers</atom:title>
+<atom:category term="/private-attrs/servers/servers-hostserver-v1.xml-6c26a637f2" />
+<atom:content type="application/xml">
+<event xmlns="http://docs.rackspace.com/core/event" xmlns:sample="http://docs.rackspace.com/event/servers/hostserver" dataCenter="DFW1" environment="PROD" eventTime="2013-03-15T11:51:11Z" id="0dbd8a05-da97-2d61-8ff7-57b2051b845a" region="DFW" resourceId="4a2b42f4-6c63-11e1-815b-7fcbcf67f549" tenantId="5914283" type="DOWN" version="1">
+<sample:product backstageURL="sampleString" coreID="1" eventType="sampleString" hostIP="sampleString" huddleID="1" resourceType="HOST" serverID="1" serviceCode="CloudServers" version="1">
+<sample:slice id="1" ip="sampleString" name="sampleString" />
+</sample:product>
+</event>
+</atom:content>
+<atom:link href="https://atom.test.ord1.us.ci.rackspace.net/functest1/events/entries/urn:uuid:0dbd8a05-da97-2d61-8ff7-57b2051b845a" rel="self" /><atom:updated>2014-09-11T04:06:30.884Z</atom:updated><atom:published>2014-09-11T04:06:30.884Z</atom:published></atom:entry><atom:entry xmlns:atom="http://www.w3.org/2005/Atom" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:xerces="http://xerces.apache.org" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:saxon="http://saxon.sf.net/" xmlns:usage="http://docs.rackspace.com/core/usage" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" xmlns:html="http://www.w3.org/1999/xhtml">
+<atom:id>urn:uuid:65fa72d8-0d33-561f-d454-a6d2b5bf5508</atom:id>
+<atom:category term="tid:5914283" />
+<atom:category term="rgn:DFW" />
+<atom:category term="dc:DFW1" />
+<atom:category term="rid:4a2b42f4-6c63-11e1-815b-7fcbcf67f549" />
+<atom:category term="cloudservers.hostserver.host.down" />
+<atom:category term="type:cloudservers.hostserver.host.down" />
+<atom:title type="text">CloudServers</atom:title>
+<atom:category term="/private-attrs/servers/servers-hostserver-v1.xml-7c69365337" />
+<atom:content type="application/xml">
+<event xmlns="http://docs.rackspace.com/core/event" xmlns:sample="http://docs.rackspace.com/event/servers/hostserver" dataCenter="DFW1" environment="PROD" eventTime="2013-03-15T11:51:11Z" id="65fa72d8-0d33-561f-d454-a6d2b5bf5508" region="DFW" resourceId="4a2b42f4-6c63-11e1-815b-7fcbcf67f549" tenantId="5914283" type="DOWN" version="1">
+<sample:product backstageURL="sampleString" coreID="1" eventType="sampleString" hostIP="sampleString" huddleID="1" resourceType="HOST" serverID="1" serviceCode="CloudServers" version="1">
+<sample:slice id="1" ip="sampleString" name="sampleString" />
+</sample:product>
+</event>
+</atom:content>
+<atom:link href="https://atom.test.ord1.us.ci.rackspace.net/functest1/events/entries/urn:uuid:65fa72d8-0d33-561f-d454-a6d2b5bf5508" rel="self" /><atom:updated>2014-09-11T04:06:20.157Z</atom:updated><atom:published>2014-09-11T04:06:20.157Z</atom:published></atom:entry><atom:entry xmlns:atom="http://www.w3.org/2005/Atom" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:xerces="http://xerces.apache.org" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:saxon="http://saxon.sf.net/" xmlns:usage="http://docs.rackspace.com/core/usage" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" xmlns:html="http://www.w3.org/1999/xhtml">
+<atom:id>urn:uuid:7488dc2b-395c-8cf0-1738-7158449ab3c6</atom:id>
+<atom:category term="tid:5914283" />
+<atom:category term="rgn:DFW" />
+<atom:category term="dc:DFW1" />
+<atom:category term="rid:4a2b42f4-6c63-11e1-815b-7fcbcf67f549" />
+<atom:category term="cloudservers.hostserver.host.down" />
+<atom:category term="type:cloudservers.hostserver.host.down" />
+<atom:title type="text">CloudServers</atom:title>
+<atom:category term="/private-attrs/servers/servers-hostserver-v1.xml-29553504cb" />
+<atom:content type="application/xml">
+<event xmlns="http://docs.rackspace.com/core/event" xmlns:sample="http://docs.rackspace.com/event/servers/hostserver" dataCenter="DFW1" environment="PROD" eventTime="2013-03-15T11:51:11Z" id="7488dc2b-395c-8cf0-1738-7158449ab3c6" region="DFW" resourceId="4a2b42f4-6c63-11e1-815b-7fcbcf67f549" tenantId="5914283" type="DOWN" version="1">
+<sample:product backstageURL="sampleString" coreID="1" eventType="sampleString" hostIP="sampleString" huddleID="1" resourceType="HOST" serverID="1" serviceCode="CloudServers" version="1">
+<sample:slice id="1" ip="sampleString" name="sampleString" />
+</sample:product>
+</event>
+</atom:content>
+<atom:link href="https://atom.test.ord1.us.ci.rackspace.net/functest1/events/entries/urn:uuid:7488dc2b-395c-8cf0-1738-7158449ab3c6" rel="self" /><atom:updated>2014-09-11T04:06:09.564Z</atom:updated><atom:published>2014-09-11T04:06:09.564Z</atom:published></atom:entry><atom:entry xmlns:atom="http://www.w3.org/2005/Atom" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:xerces="http://xerces.apache.org" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:saxon="http://saxon.sf.net/" xmlns:usage="http://docs.rackspace.com/core/usage" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" xmlns:html="http://www.w3.org/1999/xhtml">
+<atom:id>urn:uuid:0ffb3144-6c49-f64f-0ac9-48b2581cf817</atom:id>
+<atom:category term="tid:5914283" />
+<atom:category term="rgn:DFW" />
+<atom:category term="dc:DFW1" />
+<atom:category term="rid:4a2b42f4-6c63-11e1-815b-7fcbcf67f549" />
+<atom:category term="cloudservers.hostserver.host.down" />
+<atom:category term="type:cloudservers.hostserver.host.down" />
+<atom:title type="text">CloudServers</atom:title>
+<atom:category term="/private-attrs/servers/servers-hostserver-v1.xml-a10f709209" />
+<atom:content type="application/xml">
+<event xmlns="http://docs.rackspace.com/core/event" xmlns:sample="http://docs.rackspace.com/event/servers/hostserver" dataCenter="DFW1" environment="PROD" eventTime="2013-03-15T11:51:11Z" id="0ffb3144-6c49-f64f-0ac9-48b2581cf817" region="DFW" resourceId="4a2b42f4-6c63-11e1-815b-7fcbcf67f549" tenantId="5914283" type="DOWN" version="1">
+<sample:product backstageURL="sampleString" coreID="1" eventType="sampleString" hostIP="sampleString" huddleID="1" resourceType="HOST" serverID="1" serviceCode="CloudServers" version="1">
+<sample:slice id="1" ip="sampleString" name="sampleString" />
+</sample:product>
+</event>
+</atom:content>
+<atom:link href="https://atom.test.ord1.us.ci.rackspace.net/functest1/events/entries/urn:uuid:0ffb3144-6c49-f64f-0ac9-48b2581cf817" rel="self" /><atom:updated>2014-09-11T04:05:58.868Z</atom:updated><atom:published>2014-09-11T04:05:58.868Z</atom:published></atom:entry><entry>
+<title type="text">Feed Service Test</title>
+<author>
+<name>Feed Service Test Team</name>
+</author>
+<content type="text">Feed Service deployment test - check out https://github.com/rackerlabs/atom-hopper/wiki/Release-Notes or https://one.rackspace.com/display/CIT/Atom+Hopper+Deployment+-+Release+Notes</content>
+<category term="Feed Service Post Test" />
+<category term="atomhoppertest" />
+<category term="tid:5914283" />
+<id>urn:uuid:b32f080b-f2b0-443a-a545-33111ff49140</id><link href="https://atom.test.ord1.us.ci.rackspace.net/functest1/events/entries/urn:uuid:b32f080b-f2b0-443a-a545-33111ff49140" rel="self" /><updated>2014-09-11T04:05:52.337Z</updated><published>2014-09-11T04:05:52.337Z</published></entry><entry>
+<title type="text">Feed Service Test</title>
+<author>
+<name>Feed Service Test Team</name>
+</author>
+<content type="text">Feed Service deployment test - check out https://github.com/rackerlabs/atom-hopper/wiki/Release-Notes or https://one.rackspace.com/display/CIT/Atom+Hopper+Deployment+-+Release+Notes</content>
+<category term="Feed Service Post Test" />
+<category term="atomhoppertest" />
+<category term="tid:5914283" />
+<id>urn:uuid:88630d86-9219-4895-a4f9-182ffddf6fb9</id><link href="https://atom.test.ord1.us.ci.rackspace.net/functest1/events/entries/urn:uuid:88630d86-9219-4895-a4f9-182ffddf6fb9" rel="self" /><updated>2014-09-11T04:05:41.749Z</updated><published>2014-09-11T04:05:41.749Z</published></entry><atom:entry xmlns:atom="http://www.w3.org/2005/Atom" xmlns="http://wadl.dev.java.net/2009/02" xmlns:db="http://docbook.org/ns/docbook" xmlns:error="http://docs.rackspace.com/core/error" xmlns:wadl="http://wadl.dev.java.net/2009/02" xmlns:json="http://json-schema.org/schema#" xmlns:d448e1="http://wadl.dev.java.net/2009/02" xmlns:cldfeeds="http://docs.rackspace.com/api/cloudfeeds">
+<atom:id>urn:uuid:64799d96-c515-3131-9769-b32943749362</atom:id>
+<atom:category term="tid:5914283" />
+<atom:category term="rgn:DFW" />
+<atom:category term="dc:DFW1" />
+<atom:category term="rid:4116" />
+<atom:category term="cloudservers.slice.slice.info" />
+<atom:category term="type:cloudservers.slice.slice.info" />
+<atom:category term="action:RESIZE" />
+<atom:category term="status:BUILD" />
+<atom:title type="text">Slice Action</atom:title>
+<atom:author>
+<atom:name>Atom Hopper Team</atom:name>
+</atom:author>
+<atom:category term="tests.atomhopper.ETagTest4573dc9f07" />
+<atom:content type="application/xml">
+<event xmlns="http://docs.rackspace.com/core/event" xmlns:csd="http://docs.rackspace.com/event/servers/slice" dataCenter="DFW1" environment="PROD" eventTime="2012-09-15T11:51:11Z" id="64799d96-c515-3131-9769-b32943749362" region="DFW" resourceId="4116" tenantId="5914283" type="INFO" version="1">
+<csd:product action="RESIZE" createdAt="2011-05-15T11:51:11Z" customerId="100" dns1="1.1.1.1" dns2="1.1.1.1" flavorId="101" huddleId="202" imageId="101" imageName="My Image" managed="false" options="5" privateIp="1.1.1.1" publicIp="1.1.1.1" resourceType="SLICE" rootPassword="12345678" serverId="10" serviceCode="CloudServers" sliceType="CLOUD" status="BUILD" version="1">
+<csd:sliceMetaData key="key1" value="value1" />
+<csd:sliceMetaData key="key2" value="value2" />
+<csd:additionalPublicAddress dns1="1.1.1.1" dns2="1.1.1.1" ip="1.1.1.1" />
+<csd:additionalPublicAddress dns1="1.1.1.2" dns2="1.1.1.2" ip="1.1.1.2" />
+</csd:product>
+</event>
+</atom:content>
+<atom:link href="https://atom.test.ord1.us.ci.rackspace.net/functest1/events/entries/urn:uuid:64799d96-c515-3131-9769-b32943749362" rel="self" /><atom:updated>2014-09-11T04:05:00.732Z</atom:updated><atom:published>2014-09-11T04:05:00.732Z</atom:published></atom:entry><atom:entry xmlns:atom="http://www.w3.org/2005/Atom" xmlns="http://wadl.dev.java.net/2009/02" xmlns:db="http://docbook.org/ns/docbook" xmlns:error="http://docs.rackspace.com/core/error" xmlns:wadl="http://wadl.dev.java.net/2009/02" xmlns:json="http://json-schema.org/schema#" xmlns:d448e1="http://wadl.dev.java.net/2009/02" xmlns:cldfeeds="http://docs.rackspace.com/api/cloudfeeds">
+<atom:id>urn:uuid:71956801-3a95-5257-acb2-d8073c55498a</atom:id>
+<atom:category term="tid:5914283" />
+<atom:category term="rgn:DFW" />
+<atom:category term="dc:DFW1" />
+<atom:category term="rid:4116" />
+<atom:category term="cloudservers.slice.slice.info" />
+<atom:category term="type:cloudservers.slice.slice.info" />
+<atom:category term="action:RESIZE" />
+<atom:category term="status:BUILD" />
+<atom:title type="text">Slice Action</atom:title>
+<atom:author>
+<atom:name>Atom Hopper Team</atom:name>
+</atom:author>
+<atom:category term="tests.atomhopper.ETagTest88870a5424" />
+<atom:content type="application/xml">
+<event xmlns="http://docs.rackspace.com/core/event" xmlns:csd="http://docs.rackspace.com/event/servers/slice" dataCenter="DFW1" environment="PROD" eventTime="2012-09-15T11:51:11Z" id="71956801-3a95-5257-acb2-d8073c55498a" region="DFW" resourceId="4116" tenantId="5914283" type="INFO" version="1">
+<csd:product action="RESIZE" createdAt="2011-05-15T11:51:11Z" customerId="100" dns1="1.1.1.1" dns2="1.1.1.1" flavorId="101" huddleId="202" imageId="101" imageName="My Image" managed="false" options="5" privateIp="1.1.1.1" publicIp="1.1.1.1" resourceType="SLICE" rootPassword="12345678" serverId="10" serviceCode="CloudServers" sliceType="CLOUD" status="BUILD" version="1">
+<csd:sliceMetaData key="key1" value="value1" />
+<csd:sliceMetaData key="key2" value="value2" />
+<csd:additionalPublicAddress dns1="1.1.1.1" dns2="1.1.1.1" ip="1.1.1.1" />
+<csd:additionalPublicAddress dns1="1.1.1.2" dns2="1.1.1.2" ip="1.1.1.2" />
+</csd:product>
+</event>
+</atom:content>
+<atom:link href="https://atom.test.ord1.us.ci.rackspace.net/functest1/events/entries/urn:uuid:71956801-3a95-5257-acb2-d8073c55498a" rel="self" /><atom:updated>2014-09-11T04:05:00.551Z</atom:updated><atom:published>2014-09-11T04:05:00.551Z</atom:published></atom:entry><atom:entry xmlns:atom="http://www.w3.org/2005/Atom" xmlns="http://wadl.dev.java.net/2009/02" xmlns:db="http://docbook.org/ns/docbook" xmlns:error="http://docs.rackspace.com/core/error" xmlns:wadl="http://wadl.dev.java.net/2009/02" xmlns:json="http://json-schema.org/schema#" xmlns:d448e1="http://wadl.dev.java.net/2009/02" xmlns:cldfeeds="http://docs.rackspace.com/api/cloudfeeds">
+<atom:id>urn:uuid:3a795b9a-a6b4-b815-5c14-ddfb4396c52b</atom:id>
+<atom:category term="tid:5914283" />
+<atom:category term="rgn:DFW" />
+<atom:category term="dc:DFW1" />
+<atom:category term="rid:4116" />
+<atom:category term="cloudservers.slice.slice.info" />
+<atom:category term="type:cloudservers.slice.slice.info" />
+<atom:category term="action:RESIZE" />
+<atom:category term="status:BUILD" />
+<atom:title type="text">Slice Action</atom:title>
+<atom:author>
+<atom:name>Atom Hopper Team</atom:name>
+</atom:author>
+<atom:category term="tests.atomhopper.ETagTest7c3c92b9c9" />
+<atom:content type="application/xml">
+<event xmlns="http://docs.rackspace.com/core/event" xmlns:csd="http://docs.rackspace.com/event/servers/slice" dataCenter="DFW1" environment="PROD" eventTime="2012-09-15T11:51:11Z" id="3a795b9a-a6b4-b815-5c14-ddfb4396c52b" region="DFW" resourceId="4116" tenantId="5914283" type="INFO" version="1">
+<csd:product action="RESIZE" createdAt="2011-05-15T11:51:11Z" customerId="100" dns1="1.1.1.1" dns2="1.1.1.1" flavorId="101" huddleId="202" imageId="101" imageName="My Image" managed="false" options="5" privateIp="1.1.1.1" publicIp="1.1.1.1" resourceType="SLICE" rootPassword="12345678" serverId="10" serviceCode="CloudServers" sliceType="CLOUD" status="BUILD" version="1">
+<csd:sliceMetaData key="key1" value="value1" />
+<csd:sliceMetaData key="key2" value="value2" />
+<csd:additionalPublicAddress dns1="1.1.1.1" dns2="1.1.1.1" ip="1.1.1.1" />
+<csd:additionalPublicAddress dns1="1.1.1.2" dns2="1.1.1.2" ip="1.1.1.2" />
+</csd:product>
+</event>
+</atom:content>
+<atom:link href="https://atom.test.ord1.us.ci.rackspace.net/functest1/events/entries/urn:uuid:3a795b9a-a6b4-b815-5c14-ddfb4396c52b" rel="self" /><atom:updated>2014-09-11T04:04:41.213Z</atom:updated><atom:published>2014-09-11T04:04:41.213Z</atom:published></atom:entry><atom:entry xmlns:atom="http://www.w3.org/2005/Atom" xmlns="http://wadl.dev.java.net/2009/02" xmlns:db="http://docbook.org/ns/docbook" xmlns:error="http://docs.rackspace.com/core/error" xmlns:wadl="http://wadl.dev.java.net/2009/02" xmlns:json="http://json-schema.org/schema#" xmlns:d448e1="http://wadl.dev.java.net/2009/02" xmlns:cldfeeds="http://docs.rackspace.com/api/cloudfeeds">
+<atom:id>urn:uuid:f16cf78b-768f-573f-acb7-7398a97cd762</atom:id>
+<atom:category term="tid:5914283" />
+<atom:category term="rgn:DFW" />
+<atom:category term="dc:DFW1" />
+<atom:category term="rid:4116" />
+<atom:category term="cloudservers.slice.slice.info" />
+<atom:category term="type:cloudservers.slice.slice.info" />
+<atom:category term="action:RESIZE" />
+<atom:category term="status:BUILD" />
+<atom:title type="text">Slice Action</atom:title>
+<atom:author>
+<atom:name>Atom Hopper Team</atom:name>
+</atom:author>
+<atom:category term="tests.atomhopper.ETagTest373b4ca014" />
+<atom:content type="application/xml">
+<event xmlns="http://docs.rackspace.com/core/event" xmlns:csd="http://docs.rackspace.com/event/servers/slice" dataCenter="DFW1" environment="PROD" eventTime="2012-09-15T11:51:11Z" id="f16cf78b-768f-573f-acb7-7398a97cd762" region="DFW" resourceId="4116" tenantId="5914283" type="INFO" version="1">
+<csd:product action="RESIZE" createdAt="2011-05-15T11:51:11Z" customerId="100" dns1="1.1.1.1" dns2="1.1.1.1" flavorId="101" huddleId="202" imageId="101" imageName="My Image" managed="false" options="5" privateIp="1.1.1.1" publicIp="1.1.1.1" resourceType="SLICE" rootPassword="12345678" serverId="10" serviceCode="CloudServers" sliceType="CLOUD" status="BUILD" version="1">
+<csd:sliceMetaData key="key1" value="value1" />
+<csd:sliceMetaData key="key2" value="value2" />
+<csd:additionalPublicAddress dns1="1.1.1.1" dns2="1.1.1.1" ip="1.1.1.1" />
+<csd:additionalPublicAddress dns1="1.1.1.2" dns2="1.1.1.2" ip="1.1.1.2" />
+</csd:product>
+</event>
+</atom:content>
+<atom:link href="https://atom.test.ord1.us.ci.rackspace.net/functest1/events/entries/urn:uuid:f16cf78b-768f-573f-acb7-7398a97cd762" rel="self" /><atom:updated>2014-09-11T04:04:41.045Z</atom:updated><atom:published>2014-09-11T04:04:41.045Z</atom:published></atom:entry><atom:entry xmlns:atom="http://www.w3.org/2005/Atom" xmlns="http://wadl.dev.java.net/2009/02" xmlns:db="http://docbook.org/ns/docbook" xmlns:error="http://docs.rackspace.com/core/error" xmlns:wadl="http://wadl.dev.java.net/2009/02" xmlns:json="http://json-schema.org/schema#" xmlns:d448e1="http://wadl.dev.java.net/2009/02" xmlns:cldfeeds="http://docs.rackspace.com/api/cloudfeeds">
+<atom:id>urn:uuid:19bdf99d-20e7-449f-9b63-055b9bcc04a8</atom:id>
+<atom:category term="tid:5914283" />
+<atom:category term="rgn:DFW" />
+<atom:category term="dc:DFW1" />
+<atom:category term="rid:91408e1f-ed46-4cad-beb6-aa90f94f2756" />
+<atom:category term="widget.widget.gadget.usage" />
+<atom:category term="type:widget.widget.gadget.usage" />
+<atom:category term="something" />
+<atom:content type="application/xml">
+<event xmlns="http://docs.rackspace.com/core/event" xmlns:widget="http://docs.rackspace.com/usage/widget" dataCenter="DFW1" endTime="2012-03-12T15:51:11Z" environment="PROD" id="19bdf99d-20e7-449f-9b63-055b9bcc04a8" region="DFW" resourceId="91408e1f-ed46-4cad-beb6-aa90f94f2756" startTime="2012-03-12T11:51:11Z" tenantId="5914283" type="USAGE" version="1">
+<widget:product dateTime="2013-09-12T11:51:11Z" disabled="false" enumList="BETTER" label="Test Label" mid="94c61976-9f4c-11e1-bddf-ab57017a9899" myAttribute="this is to be seen" num_checks="300" resourceType="GADGET" serviceCode="Widget" time="11:51:11Z" version="2" />
+</event>
+</atom:content>
+<atom:link href="https://atom.test.ord1.us.ci.rackspace.net/functest1/events/entries/urn:uuid:19bdf99d-20e7-449f-9b63-055b9bcc04a8" rel="self" /><atom:updated>2014-09-11T04:04:39.738Z</atom:updated><atom:published>2014-09-11T04:04:39.738Z</atom:published></atom:entry><atom:entry xmlns:atom="http://www.w3.org/2005/Atom" xmlns="http://wadl.dev.java.net/2009/02" xmlns:db="http://docbook.org/ns/docbook" xmlns:error="http://docs.rackspace.com/core/error" xmlns:wadl="http://wadl.dev.java.net/2009/02" xmlns:json="http://json-schema.org/schema#" xmlns:d448e1="http://wadl.dev.java.net/2009/02" xmlns:cldfeeds="http://docs.rackspace.com/api/cloudfeeds">
+<atom:id>urn:uuid:15b48194-b2ae-463c-b758-474050b475c8</atom:id>
+<atom:category term="tid:5914283" />
+<atom:category term="rgn:DFW" />
+<atom:category term="dc:DFW1" />
+<atom:category term="rid:c7ed81d5-5e92-40d0-91dd-6a0d32ac092a" />
+<atom:category term="widget.widget.gadget.usage" />
+<atom:category term="type:widget.widget.gadget.usage" />
+<atom:category term="something" />
+<atom:content type="application/xml">
+<event xmlns="http://docs.rackspace.com/core/event" xmlns:widget="http://docs.rackspace.com/usage/widget" dataCenter="DFW1" endTime="2012-03-12T15:51:11Z" environment="PROD" id="15b48194-b2ae-463c-b758-474050b475c8" region="DFW" resourceId="c7ed81d5-5e92-40d0-91dd-6a0d32ac092a" startTime="2012-03-12T11:51:11Z" tenantId="5914283" type="USAGE" version="1">
+<widget:product dateTime="2013-09-12T11:51:11Z" disabled="false" enumList="BETTER" label="Test Label" mid="94c61976-9f4c-11e1-bddf-ab57017a9899" myAttribute="this is to be seen" num_checks="300" resourceType="GADGET" serviceCode="Widget" time="11:51:11Z" version="2" />
+</event>
+</atom:content>
+<atom:link href="https://atom.test.ord1.us.ci.rackspace.net/functest1/events/entries/urn:uuid:15b48194-b2ae-463c-b758-474050b475c8" rel="self" /><atom:updated>2014-09-11T04:04:39.490Z</atom:updated><atom:published>2014-09-11T04:04:39.490Z</atom:published></atom:entry><atom:entry xmlns:atom="http://www.w3.org/2005/Atom" xmlns="http://wadl.dev.java.net/2009/02" xmlns:db="http://docbook.org/ns/docbook" xmlns:error="http://docs.rackspace.com/core/error" xmlns:wadl="http://wadl.dev.java.net/2009/02" xmlns:json="http://json-schema.org/schema#" xmlns:d448e1="http://wadl.dev.java.net/2009/02" xmlns:cldfeeds="http://docs.rackspace.com/api/cloudfeeds">
+<atom:id>urn:uuid:fb3f1fc6-0244-40b4-ac07-95572a2c646d</atom:id>
+<atom:category term="tid:5914283" />
+<atom:category term="rgn:DFW" />
+<atom:category term="dc:DFW1" />
+<atom:category term="rid:52cc82bd-2185-4562-8d96-2669548edebc" />
+<atom:category term="widget.widget.gadget.usage" />
+<atom:category term="type:widget.widget.gadget.usage" />
+<atom:category term="something" />
+<atom:content type="application/xml">
+<event xmlns="http://docs.rackspace.com/core/event" xmlns:widget="http://docs.rackspace.com/usage/widget" dataCenter="DFW1" endTime="2012-03-12T15:51:11Z" environment="PROD" id="fb3f1fc6-0244-40b4-ac07-95572a2c646d" region="DFW" resourceId="52cc82bd-2185-4562-8d96-2669548edebc" startTime="2012-03-12T11:51:11Z" tenantId="5914283" type="USAGE" version="1">
+<widget:product dateTime="2013-09-12T11:51:11Z" disabled="false" enumList="BETTER" label="Test Label" mid="94c61976-9f4c-11e1-bddf-ab57017a9899" myAttribute="this is to be seen" num_checks="300" resourceType="GADGET" serviceCode="Widget" time="11:51:11Z" version="2" />
+</event>
+</atom:content>
+<atom:link href="https://atom.test.ord1.us.ci.rackspace.net/functest1/events/entries/urn:uuid:fb3f1fc6-0244-40b4-ac07-95572a2c646d" rel="self" /><atom:updated>2014-09-11T04:04:38.112Z</atom:updated><atom:published>2014-09-11T04:04:38.112Z</atom:published></atom:entry><atom:entry xmlns:atom="http://www.w3.org/2005/Atom" xmlns="http://wadl.dev.java.net/2009/02" xmlns:db="http://docbook.org/ns/docbook" xmlns:error="http://docs.rackspace.com/core/error" xmlns:wadl="http://wadl.dev.java.net/2009/02" xmlns:json="http://json-schema.org/schema#" xmlns:d448e1="http://wadl.dev.java.net/2009/02" xmlns:cldfeeds="http://docs.rackspace.com/api/cloudfeeds">
+<atom:id>urn:uuid:bc6a3bce-61cc-4986-aae9-10361f151d6e</atom:id>
+<atom:category term="tid:5914283" />
+<atom:category term="rgn:DFW" />
+<atom:category term="dc:DFW1" />
+<atom:category term="rid:9285900a-7127-47a9-b633-1843abac2adc" />
+<atom:category term="widget.widget.gadget.usage" />
+<atom:category term="type:widget.widget.gadget.usage" />
+<atom:category term="something" />
+<atom:content type="application/xml">
+<event xmlns="http://docs.rackspace.com/core/event" xmlns:widget="http://docs.rackspace.com/usage/widget" dataCenter="DFW1" endTime="2012-03-12T15:51:11Z" environment="PROD" id="bc6a3bce-61cc-4986-aae9-10361f151d6e" region="DFW" resourceId="9285900a-7127-47a9-b633-1843abac2adc" startTime="2012-03-12T11:51:11Z" tenantId="5914283" type="USAGE" version="1">
+<widget:product dateTime="2013-09-12T11:51:11Z" disabled="false" enumList="BETTER" label="Test Label" mid="94c61976-9f4c-11e1-bddf-ab57017a9899" myAttribute="this is to be seen" num_checks="300" resourceType="GADGET" serviceCode="Widget" time="11:51:11Z" version="2" />
+</event>
+</atom:content>
+<atom:link href="https://atom.test.ord1.us.ci.rackspace.net/functest1/events/entries/urn:uuid:bc6a3bce-61cc-4986-aae9-10361f151d6e" rel="self" /><atom:updated>2014-09-11T04:04:37.847Z</atom:updated><atom:published>2014-09-11T04:04:37.847Z</atom:published></atom:entry><atom:entry xmlns:atom="http://www.w3.org/2005/Atom" xmlns="http://wadl.dev.java.net/2009/02" xmlns:db="http://docbook.org/ns/docbook" xmlns:error="http://docs.rackspace.com/core/error" xmlns:wadl="http://wadl.dev.java.net/2009/02" xmlns:json="http://json-schema.org/schema#" xmlns:d448e1="http://wadl.dev.java.net/2009/02" xmlns:cldfeeds="http://docs.rackspace.com/api/cloudfeeds">
+<atom:id>urn:uuid:2794d8f6-f0bf-2397-1885-37f2b768d2a7</atom:id>
+<atom:category term="tid:5914283" />
+<atom:category term="rgn:DFW" />
+<atom:category term="dc:DFW1" />
+<atom:category term="rid:4116" />
+<atom:category term="cloudservers.slice.slice.info" />
+<atom:category term="type:cloudservers.slice.slice.info" />
+<atom:category term="action:RESIZE" />
+<atom:category term="status:BUILD" />
+<atom:title type="text">Slice Action</atom:title>
+<atom:author>
+<atom:name>Atom Hopper Team</atom:name>
+</atom:author>
+<atom:category term="tests.atomhopper.ETagTest6af90df692" />
+<atom:content type="application/xml">
+<event xmlns="http://docs.rackspace.com/core/event" xmlns:csd="http://docs.rackspace.com/event/servers/slice" dataCenter="DFW1" environment="PROD" eventTime="2012-09-15T11:51:11Z" id="2794d8f6-f0bf-2397-1885-37f2b768d2a7" region="DFW" resourceId="4116" tenantId="5914283" type="INFO" version="1">
+<csd:product action="RESIZE" createdAt="2011-05-15T11:51:11Z" customerId="100" dns1="1.1.1.1" dns2="1.1.1.1" flavorId="101" huddleId="202" imageId="101" imageName="My Image" managed="false" options="5" privateIp="1.1.1.1" publicIp="1.1.1.1" resourceType="SLICE" rootPassword="12345678" serverId="10" serviceCode="CloudServers" sliceType="CLOUD" status="BUILD" version="1">
+<csd:sliceMetaData key="key1" value="value1" />
+<csd:sliceMetaData key="key2" value="value2" />
+<csd:additionalPublicAddress dns1="1.1.1.1" dns2="1.1.1.1" ip="1.1.1.1" />
+<csd:additionalPublicAddress dns1="1.1.1.2" dns2="1.1.1.2" ip="1.1.1.2" />
+</csd:product>
+</event>
+</atom:content>
+<atom:link href="https://atom.test.ord1.us.ci.rackspace.net/functest1/events/entries/urn:uuid:2794d8f6-f0bf-2397-1885-37f2b768d2a7" rel="self" /><atom:updated>2014-09-11T04:04:23.178Z</atom:updated><atom:published>2014-09-11T04:04:23.178Z</atom:published></atom:entry></feed>

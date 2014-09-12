@@ -33,6 +33,11 @@
             <artifactId>xslt-filter</artifactId>
             <type>jar</type>
         </dependency>
+        <dependency>
+            <groupId>com.rackspace.feeds.filters</groupId>
+            <artifactId>external-href-filter</artifactId>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 
     <build>

@@ -25,8 +25,9 @@
     </properties>
 
     <modules>
-        <module>filters/tenant-filter</module>
         <module>filters/xslt-filter</module>
+        <module>filters/tenant-filter</module>
+        <module>filters/external-href-filter</module>
         <module>feeds-atomhopper</module>
     </modules>
 
@@ -100,6 +101,13 @@
             <dependency>
                 <groupId>com.rackspace.feeds.filters</groupId>
                 <artifactId>xslt-filter</artifactId>
+                <version>${project.version}</version>
+                <type>jar</type>
+            </dependency>
+
+            <dependency>
+                <groupId>com.rackspace.feeds.filters</groupId>
+                <artifactId>external-href-filter</artifactId>
                 <version>${project.version}</version>
                 <type>jar</type>
             </dependency>
