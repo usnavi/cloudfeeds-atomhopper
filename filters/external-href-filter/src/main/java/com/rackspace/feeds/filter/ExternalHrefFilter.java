@@ -1,5 +1,6 @@
 package com.rackspace.feeds.filter;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,18 +97,28 @@ public class ExternalHrefFilter implements Filter {
             srp.doFilterAsynch(chain, httpServletRequest);
 
             // prepare the real response here
-            response.setContentType(ufr.getContentType());
+            String responseContentType = ufr.getContentType();
+            response.setContentType(responseContentType);
 
-            Map<String, Object> xsltParameters = new HashMap<String, Object>();
-            xsltParameters.put("correct_url", correctUrl);
-            try {
-                TransformerUtils transformer = new TransformerUtils();
-                transformer.doTransform(getXsltStreamSource(),
-                                xsltParameters,
-                                new StreamSource(srp.getInputStream()),
-                                new StreamResult(httpServletResponse.getWriter()));
-            } catch(TransformerException te) {
-                throw new ServletException(te);
+            // this is to accommodate existing feeds that are returned
+            // in JSON. We need to skip the transform in this case.
+            if ( StringUtils.isNotEmpty(responseContentType) &&
+                    (responseContentType.contains("application/xml") ||
+                     responseContentType.contains("application/atom+xml"))) {
+                Map<String, Object> xsltParameters = new HashMap<String, Object>();
+                xsltParameters.put("correct_url", correctUrl);
+                try {
+                    TransformerUtils transformer = new TransformerUtils();
+                    transformer.doTransform(getXsltStreamSource(),
+                                    xsltParameters,
+                                    new StreamSource(srp.getInputStream()),
+                                    new StreamResult(httpServletResponse.getWriter()));
+                } catch(TransformerException te) {
+                    throw new ServletException(te);
+                }
+            } else {
+                // copy input to output as is
+                IOUtils.copy(srp.getInputStream(), httpServletResponse.getOutputStream());
             }
         } else {
             // pass through
@@ -181,7 +192,7 @@ public class ExternalHrefFilter implements Filter {
             String newValue = value;
             Matcher matcher = HOSTNAME_PATTERN.matcher(value);
             if ( matcher.matches() ) {
-                newValue = matcher.replaceFirst("$1$2$3" + correctUrl + "/$5");
+                newValue = matcher.replaceFirst("$1" + correctUrl + "/$5");
             }
             return newValue;
         }

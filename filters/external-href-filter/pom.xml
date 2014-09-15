@@ -41,6 +41,7 @@
             <groupId>com.rackspace.feeds.filters</groupId>
             <artifactId>test-utils</artifactId>
             <classifier>tests</classifier>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.rackspace.feeds.filters</groupId>
