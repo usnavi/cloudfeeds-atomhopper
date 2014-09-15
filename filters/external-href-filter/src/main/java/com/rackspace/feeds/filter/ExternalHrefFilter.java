@@ -100,11 +100,13 @@ public class ExternalHrefFilter implements Filter {
             String responseContentType = ufr.getContentType();
             response.setContentType(responseContentType);
 
-            // this is to accommodate existing feeds that are returned
-            // in JSON. We need to skip the transform in this case.
+            // There are a few cases where we need to skip the transform:
+            // -) when response.contentType is not application/xml or application/atom+xml
+            // -) when response.status is not 20x (if it is 304 or 500, the xslt won't like it)
             if ( StringUtils.isNotEmpty(responseContentType) &&
                     (responseContentType.contains("application/xml") ||
-                     responseContentType.contains("application/atom+xml"))) {
+                     responseContentType.contains("application/atom+xml")) &&
+                    httpServletResponse.getStatus() >= 200 && httpServletResponse.getStatus() < 300 ) {
                 Map<String, Object> xsltParameters = new HashMap<String, Object>();
                 xsltParameters.put("correct_url", correctUrl);
                 try {
@@ -118,6 +120,7 @@ public class ExternalHrefFilter implements Filter {
                 }
             } else {
                 // copy input to output as is
+                LOG.debug("Response has contentType=" + responseContentType + " and status=" + httpServletResponse.getStatus());
                 IOUtils.copy(srp.getInputStream(), httpServletResponse.getOutputStream());
             }
         } else {
