@@ -14,16 +14,16 @@
         <xsl:param name="url"/>
 
         <xsl:variable name="org_hostname">
-            <xsl:analyze-string select="$url" regex="(https?://[^/:]+)/.*">
+            <xsl:analyze-string select="$url" regex="(http)(s?)(://[^/]+)/.*">
                 <xsl:matching-substring>
-                    <xsl:value-of select="regex-group(1)"/>
+                    <xsl:value-of select="concat(regex-group(1),regex-group(2),regex-group(3))"/>
                 </xsl:matching-substring>
             </xsl:analyze-string>
         </xsl:variable>
         <xsl:value-of select="replace( $url, $org_hostname, $correct_url )"/>
     </xsl:template>
 
-    <xsl:template match="@href">
+    <xsl:template match="@href[parent::node()[@rel='previous' or @rel='next' or @rel='current' or @rel='self' or @rel='last']]">
         <xsl:attribute name="href">
             <xsl:call-template name="replaceHostnameInUrl">
                 <xsl:with-param name="url" select="."></xsl:with-param>

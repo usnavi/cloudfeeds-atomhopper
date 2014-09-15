@@ -36,7 +36,6 @@ class TenantedSearchXsltTest extends Specification {
         transformer.transform(new StreamSource(xmlInput), result)
         Writer writer = result.writer
         String response = writer.toString();
-        System.out.println(response)
         def builder = documentBuilderFactory.newDocumentBuilder()
         def root = builder.parse(new InputSource( new StringReader( response ) )).documentElement
 

@@ -87,6 +87,7 @@
         <url-pattern>/atommetrics/*</url-pattern>
     </servlet-mapping>
 
+    <!-- Example of how to configure XsltFilter 
     <filter>
         <filter-name>IdentityXslt</filter-name>
         <filter-class>com.rackspace.feeds.filter.XsltFilter</filter-class>
@@ -95,6 +96,7 @@
             <param-value>WEB-INF/xslt/identity.xsl</param-value>
         </init-param>
     </filter>
+    -->
 
     <filter>
         <filter-name>TenantedFilter</filter-name>
@@ -110,10 +112,12 @@
         </init-param>
     </filter>
 
+    <!-- Example of XsltFilter 
     <filter-mapping>
         <filter-name>IdentityXslt</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+    -->
 
     <filter-mapping>
         <filter-name>TenantedFilter</filter-name>

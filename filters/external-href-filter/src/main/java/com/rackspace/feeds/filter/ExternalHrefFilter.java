@@ -21,20 +21,40 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * This class is a servlet filter that does the following:
+ * <ul>
+ *     <li>operates only both GET and POST requests</li>
+ *     <li>if the x-external-loc header is present (injected by Repose),
+ *     this filter will:
+ *     <ul>
+ *         <li>replace the URL in LINK and LOCATION headers to the URL specified
+ *             in the 'envFile' file, inside &lt;externalVIPURL&gt; element</li>
+ *         <li>replace the URL in all the @href attributes in the Response body
+ *             to the URL specified in the 'envFile' file, inside
+ *             &lt;externalVIPURL&gt; element</li>
+ *     </ul>
+ *     </li>
+ * </ul>
+ */
 public class ExternalHrefFilter implements Filter {
 
     private static Logger LOG = LoggerFactory.getLogger(ExternalHrefFilter.class);
 
+    /**
+     * Where the XSLT is going to be loaded from classpath
+     */
     static final String XSLT_PATH = "/xslt/external-href.xsl";
     static final String LINK_HEADER = "link";
     static final String LOCATION_HEADER = "location";
     static final String EXTERNAL_LOC_HEADER = "x-external-loc";
     static final String LINK_DELIM = ",";
 
-    private String correctUrl = null;
+    private String correctUrl = "";
 
     public void  init(FilterConfig config)
             throws ServletException {
+
         LOG.debug("initializing ExternalHrefFilter");
         String envFilePath = config.getInitParameter("envFile");
         if ( envFilePath == null ) {
@@ -45,6 +65,7 @@ public class ExternalHrefFilter implements Filter {
             throw new ServletException("envFile parameter must be a valid existing file");
         }
         try {
+            // quick and dirty, since the file is very small
             byte[] bytes = Files.readAllBytes(Paths.get(envFilePath));
             String environment = new String(bytes);
             Pattern pattern = Pattern.compile(".*<externalVipURL>(.*)</externalVipURL>.*");
@@ -106,17 +127,17 @@ public class ExternalHrefFilter implements Filter {
     }
 
     /**
-     * Wrapper class for HttpServletResponse that understands tenanted requests.
-     * If the tenantId exists in the URI:
-     * <ul>
-     *     <li>it adds the tenantId back to the URI</li>
-     *     <li>it removes the tenanted search from the 'search' query parameter</li>
-     * </ul>
+     * Wrapper class for HttpServletResponse that knows how to fix the URL in the
+     * LINK and LOCATION header.
      */
     static class URLFixerResponse extends HttpServletResponseWrapper {
 
         private String correctUrl = null;
-        private static final Pattern HOSTNAME_PATTERN = Pattern.compile("(.*)(https?)(://[^/:]+)/(.*)");
+
+        // This pattern is slightly different from the existing XSLT.
+        // This one is meant to support http://hostname:port, as well as
+        // https://hostname
+        private static final Pattern HOSTNAME_PATTERN = Pattern.compile("(.*)(http)(s?)(://[^/]+)/(.*)");
 
         public URLFixerResponse(HttpServletResponse response, String correctUrl) {
             super(response);
@@ -137,6 +158,7 @@ public class ExternalHrefFilter implements Filter {
             String newValue = value;
             if ( LINK_HEADER.equalsIgnoreCase(name) ) {
                 if ( StringUtils.isNotEmpty(value) ) {
+                    // link header can sometimes contain multiple links
                     String[] links = value.split(LINK_DELIM);
                     if ( links != null ) {
                         for (int idx=0; idx<links.length; idx++) {
@@ -159,7 +181,7 @@ public class ExternalHrefFilter implements Filter {
             String newValue = value;
             Matcher matcher = HOSTNAME_PATTERN.matcher(value);
             if ( matcher.matches() ) {
-                newValue = matcher.replaceFirst("$1" + correctUrl + "/$4");
+                newValue = matcher.replaceFirst("$1$2$3" + correctUrl + "/$5");
             }
             return newValue;
         }

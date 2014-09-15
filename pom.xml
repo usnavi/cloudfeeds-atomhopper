@@ -25,6 +25,7 @@
     </properties>
 
     <modules>
+        <module>test-utils</module>
         <module>filters/xslt-filter</module>
         <module>filters/tenant-filter</module>
         <module>filters/external-href-filter</module>
@@ -89,6 +90,14 @@
                 <artifactId>atomhopper</artifactId>
                 <version>${atomhopper.version}</version>
                 <type>war</type>
+            </dependency>
+
+            <dependency>
+                <groupId>com.rackspace.feeds.filters</groupId>
+                <artifactId>test-utils</artifactId>
+                <version>${project.version}</version>
+                <type>jar</type>
+                <classifier>tests</classifier>
             </dependency>
 
             <dependency>
