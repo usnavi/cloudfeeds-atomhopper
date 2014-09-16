@@ -90,29 +90,23 @@ public class TenantedFilter implements Filter {
 
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-        final TenantedRequest tenantedRequest = new TenantedRequest(httpServletRequest);
+        TenantedRequest tenantedRequest = new TenantedRequest(httpServletRequest);
 
         if ( isFeedsGetRequest(httpServletRequest) && StringUtils.isNotBlank(tenantedRequest.getTenantId()) ) {
 
-            final TenantedResponse tenantedResponse = new TenantedResponse(httpServletResponse, tenantedRequest.getTenantId());
-
-            ServletResponsePipe srp = new ServletResponsePipe(tenantedResponse);
-            srp.doFilterAsynch(chain, tenantedRequest);
-
-            // prepare the real response here
-            response.setContentType(tenantedResponse.getContentType());
+            TenantedResponse tenantedResponse = new TenantedResponse(httpServletResponse, tenantedRequest.getTenantId());
 
             Map<String, Object> xsltParameters = new HashMap<String, Object>();
             xsltParameters.put("tenantId", tenantedRequest.getTenantId());
-            try {
-                TransformerUtils transformer = new TransformerUtils();
-                transformer.doTransform(getXsltStreamSource(),
-                        xsltParameters,
-                        new StreamSource(srp.getInputStream()),
-                        new StreamResult(httpServletResponse.getWriter()));
-            } catch(TransformerException te) {
-                throw new ServletException(te);
-            }
+
+            TransformerUtils transformer = new TransformerUtils();
+            transformer.doTransform(tenantedRequest,
+                                    tenantedResponse,
+                                    httpServletResponse,
+                                    chain,
+                                    getXsltStreamSource(),
+                                    xsltParameters);
+
         } else {
             // pass through
             chain.doFilter(request, response);

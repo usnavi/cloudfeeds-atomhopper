@@ -91,38 +91,18 @@ public class ExternalHrefFilter implements Filter {
         String externalLocHeader = httpServletRequest.getHeader(EXTERNAL_LOC_HEADER);
         if ( StringUtils.isNotEmpty(externalLocHeader) ) {
 
-            URLFixerResponse ufr = new URLFixerResponse(httpServletResponse, correctUrl);
+            URLFixerResponse urlFixerResponse = new URLFixerResponse(httpServletResponse, correctUrl);
 
-            ServletResponsePipe srp = new ServletResponsePipe(ufr);
-            srp.doFilterAsynch(chain, httpServletRequest);
+            Map<String, Object> xsltParameters = new HashMap<String, Object>();
+            xsltParameters.put("correct_url", correctUrl);
 
-            // prepare the real response here
-            String responseContentType = ufr.getContentType();
-            response.setContentType(responseContentType);
-
-            // There are a few cases where we need to skip the transform:
-            // -) when response.contentType is not application/xml or application/atom+xml
-            // -) when response.status is not 20x (if it is 304 or 500, the xslt won't like it)
-            if ( StringUtils.isNotEmpty(responseContentType) &&
-                    (responseContentType.contains("application/xml") ||
-                     responseContentType.contains("application/atom+xml")) &&
-                    httpServletResponse.getStatus() >= 200 && httpServletResponse.getStatus() < 300 ) {
-                Map<String, Object> xsltParameters = new HashMap<String, Object>();
-                xsltParameters.put("correct_url", correctUrl);
-                try {
-                    TransformerUtils transformer = new TransformerUtils();
-                    transformer.doTransform(getXsltStreamSource(),
-                                    xsltParameters,
-                                    new StreamSource(srp.getInputStream()),
-                                    new StreamResult(httpServletResponse.getWriter()));
-                } catch(TransformerException te) {
-                    throw new ServletException(te);
-                }
-            } else {
-                // copy input to output as is
-                LOG.debug("Response has contentType=" + responseContentType + " and status=" + httpServletResponse.getStatus());
-                IOUtils.copy(srp.getInputStream(), httpServletResponse.getOutputStream());
-            }
+            TransformerUtils transformer = new TransformerUtils();
+            transformer.doTransform(httpServletRequest,
+                                    urlFixerResponse,
+                                    httpServletResponse,
+                                    chain,
+                                    getXsltStreamSource(),
+                                    xsltParameters);
         } else {
             // pass through
             chain.doFilter(request, response);

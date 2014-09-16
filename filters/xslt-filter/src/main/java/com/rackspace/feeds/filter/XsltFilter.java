@@ -1,5 +1,7 @@
 package com.rackspace.feeds.filter;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,29 +53,56 @@ public class XsltFilter implements Filter {
     }
 
     public void doFilter (ServletRequest request, ServletResponse response,
-                          final FilterChain chain)
+                          FilterChain chain)
             throws IOException, ServletException {
 
-        final HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
-        ServletResponsePipe srp = new ServletResponsePipe(httpServletResponse);
-        srp.doFilterAsynch(chain, httpServletRequest);
+        TransformerUtils transformerUtils = new TransformerUtils();
+        transformerUtils.doTransform(httpServletRequest, httpServletResponse, httpServletResponse,
+                                     chain, getXsltStreamSource(), new HashMap<String, Object>());
 
-        // prepare the real response here
-        response.setContentType(httpServletResponse.getContentType());
+    }
 
-        Map<String, Object> xsltParameters = new HashMap<String, Object>();
-        try {
-            TransformerUtils transformer = new TransformerUtils();
-            transformer.doTransform(getXsltStreamSource(),
-                    xsltParameters,
-                    new StreamSource(srp.getInputStream()),
-                    new StreamResult(httpServletResponse.getWriter()));
-        } catch(TransformerException te) {
-            throw new ServletException(te);
+    protected StreamSource getXsltStreamSource() throws IOException {
+        return new StreamSource(new File(this.xsltFileName));
+    }
+
+    protected void doTransform(HttpServletRequest wrappedRequest,
+                               HttpServletResponse wrappedResponse,
+                               HttpServletResponse originalResponse,
+                               FilterChain chain,
+                               Map<String, Object> xsltParameters)
+            throws IOException, ServletException {
+
+
+        ServletResponsePipe srp = new ServletResponsePipe(wrappedRequest, wrappedResponse);
+        srp.doFilterAsynch(chain);
+
+        String wrappedResponseContentType = wrappedResponse.getContentType();
+        originalResponse.setContentType(wrappedResponseContentType);
+        int status = wrappedResponse.getStatus();
+
+        if ( status >= 200 && status <300 &&
+             StringUtils.isNotEmpty(wrappedResponseContentType) &&
+             (wrappedResponseContentType.contains("application/xml") ||
+             wrappedResponseContentType.contains("application/atom+xml")) ) {
+
+            try {
+                TransformerUtils transformer = new TransformerUtils();
+                transformer.doTransform(getXsltStreamSource(),
+                                xsltParameters,
+                                new StreamSource(srp.getInputStream()),
+                                new StreamResult(originalResponse.getWriter()));
+            } catch(TransformerException te) {
+                throw new ServletException(te);
+            }
+        } else {
+            // copy input to output as is
+            LOG.debug("Response has contentType=" + wrappedResponseContentType + " and status=" + status);
+            IOUtils.copy(srp.getInputStream(), originalResponse.getOutputStream());
         }
-
     }
 
     /**
@@ -83,7 +112,4 @@ public class XsltFilter implements Filter {
 
     }
 
-    protected StreamSource getXsltStreamSource() {
-        return new StreamSource(new File(this.xsltFileName));
-    }
 }
