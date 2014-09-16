@@ -31,7 +31,7 @@ public class ServletOutputStreamWrapper extends ServletOutputStream {
     }
 
     public void setWriteListener(WriteListener writeListener) {
-        //TODO: what to write here?
+        throw new UnsupportedOperationException("setWriteListener() is not yet implemented in this class");
     }
 
     public boolean isReady() {

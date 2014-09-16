@@ -228,7 +228,7 @@ public class TenantedFilter implements Filter {
 
         String calculateNewLinkHeaderMultiple(String name, String value, String tenantId) {
             String newLink = value;
-            if ( StringUtils.isNotBlank(value) ) {
+            if ( LINK_HEADER.equalsIgnoreCase(name) && StringUtils.isNotBlank(value) ) {
                 // in case Link header contains multiple links
                 String[] links = value.split(LINK_DELIM);
                 if ( links != null ) {

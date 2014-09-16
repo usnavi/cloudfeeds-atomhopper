@@ -56,8 +56,6 @@ public class TransformerUtils {
         if ( status >= 200 && status <300 ) {
 
             try {
-                TransformerUtils transformer = new TransformerUtils();
-
                 // This is because we can't deterministically get Response's Content-Type
                 // from HttpServletResponse until we actually read it. Instead of
                 // relying on the Content-Type, we can look ahead 1 byte into the
@@ -68,10 +66,10 @@ public class TransformerUtils {
                 int char1 = bis.read();
                 bis.reset();
                 if ( char1 == '<') {
-                    transformer.doTransform(xsltStream,
-                                            xsltParameters,
-                                            new StreamSource(bis),
-                                            new StreamResult(originalResponse.getWriter()));
+                    doTransform(xsltStream,
+                                xsltParameters,
+                                new StreamSource(bis),
+                                new StreamResult(originalResponse.getWriter()));
                 } else {
                     // the input is not XML
                     LOG.debug("Skipping transform cuz input stream starts with '" + char1 + "', does not look to be XML");
