@@ -1,21 +1,12 @@
 package com.rackspace.feeds.filter;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.atomic.AtomicReference;
 import javax.servlet.*;
 import javax.servlet.http.*;
-import javax.xml.transform.*;
 import javax.xml.transform.stream.*;
 
 /**
@@ -67,42 +58,6 @@ public class XsltFilter implements Filter {
 
     protected StreamSource getXsltStreamSource() throws IOException {
         return new StreamSource(new File(this.xsltFileName));
-    }
-
-    protected void doTransform(HttpServletRequest wrappedRequest,
-                               HttpServletResponse wrappedResponse,
-                               HttpServletResponse originalResponse,
-                               FilterChain chain,
-                               Map<String, Object> xsltParameters)
-            throws IOException, ServletException {
-
-
-        ServletResponsePipe srp = new ServletResponsePipe(wrappedRequest, wrappedResponse);
-        srp.doFilterAsynch(chain);
-
-        String wrappedResponseContentType = wrappedResponse.getContentType();
-        originalResponse.setContentType(wrappedResponseContentType);
-        int status = wrappedResponse.getStatus();
-
-        if ( status >= 200 && status <300 &&
-             StringUtils.isNotEmpty(wrappedResponseContentType) &&
-             (wrappedResponseContentType.contains("application/xml") ||
-             wrappedResponseContentType.contains("application/atom+xml")) ) {
-
-            try {
-                TransformerUtils transformer = new TransformerUtils();
-                transformer.doTransform(getXsltStreamSource(),
-                                xsltParameters,
-                                new StreamSource(srp.getInputStream()),
-                                new StreamResult(originalResponse.getWriter()));
-            } catch(TransformerException te) {
-                throw new ServletException(te);
-            }
-        } else {
-            // copy input to output as is
-            LOG.debug("Response has contentType=" + wrappedResponseContentType + " and status=" + status);
-            IOUtils.copy(srp.getInputStream(), originalResponse.getOutputStream());
-        }
     }
 
     /**

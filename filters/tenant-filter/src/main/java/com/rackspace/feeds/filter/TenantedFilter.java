@@ -9,8 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 import java.util.HashMap;
@@ -93,6 +91,8 @@ public class TenantedFilter implements Filter {
         TenantedRequest tenantedRequest = new TenantedRequest(httpServletRequest);
 
         if ( isFeedsGetRequest(httpServletRequest) && StringUtils.isNotBlank(tenantedRequest.getTenantId()) ) {
+
+            LOG.debug("Getting request for tenantId=" + tenantedRequest.getTenantId());
 
             TenantedResponse tenantedResponse = new TenantedResponse(httpServletResponse, tenantedRequest.getTenantId());
 

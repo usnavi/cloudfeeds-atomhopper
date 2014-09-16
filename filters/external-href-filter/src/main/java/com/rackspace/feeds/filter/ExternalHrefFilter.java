@@ -1,6 +1,5 @@
 package com.rackspace.feeds.filter;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,8 +8,6 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.IOException;
 import java.io.InputStream;
@@ -75,6 +72,7 @@ public class ExternalHrefFilter implements Filter {
                 correctUrl = matcher.group(1);
             }
         } catch(IOException ioex) {
+            LOG.error("Error reading envFile: " + envFile, ioex);
             throw new ServletException(ioex);
         }
 
@@ -90,6 +88,8 @@ public class ExternalHrefFilter implements Filter {
 
         String externalLocHeader = httpServletRequest.getHeader(EXTERNAL_LOC_HEADER);
         if ( StringUtils.isNotEmpty(externalLocHeader) ) {
+
+            LOG.debug("Header " + EXTERNAL_LOC_HEADER + " = " + externalLocHeader);
 
             URLFixerResponse urlFixerResponse = new URLFixerResponse(httpServletResponse, correctUrl);
 

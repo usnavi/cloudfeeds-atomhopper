@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PipedInputStream;
@@ -85,9 +84,5 @@ public class ServletResponsePipe {
      */
     public InputStream getInputStream() {
         return pipedInputStream;
-    }
-
-    public String getContentType() {
-        return wrappedResponse.getContentType();
     }
 }

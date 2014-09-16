@@ -1,7 +1,6 @@
 package com.rackspace.feeds.filter;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,6 +19,14 @@ import java.io.*;
 import java.util.Map;
 
 /**
+ * This class is meant to be used from within a Servlet Filter, is <b>not</b>
+ * thread safe, and a single instance of this is meant to be used for one
+ * pair of servlet request and response.
+ *
+ * Its main goal is to set up a pipe between the output stream of a servlet
+ * response to an input stream. The pipe's input stream is then used to
+ * transform the response body.
+ *
  * User: shin4590
  * Date: 9/10/14
  */
@@ -51,7 +58,7 @@ public class TransformerUtils {
             try {
                 TransformerUtils transformer = new TransformerUtils();
 
-                // This is because we can't deterministically get response Content-Type
+                // This is because we can't deterministically get Response's Content-Type
                 // from HttpServletResponse until we actually read it. Instead of
                 // relying on the Content-Type, we can look ahead 1 byte into the
                 // input stream. If it is '<', then we take our chances and pass it
@@ -67,21 +74,15 @@ public class TransformerUtils {
                                             new StreamResult(originalResponse.getWriter()));
                 } else {
                     // the input is not XML
+                    LOG.debug("Skipping transform cuz input stream starts with '" + char1 + "', does not look to be XML");
                     IOUtils.copy(bis, originalResponse.getWriter());
                 }
             } catch(TransformerException te) {
-                String contentType = srp.getContentType();
-                if ( contentType.contains("application/xml") ||
-                     contentType.contains("application/atom+xml") ) {
-                    throw new ServletException(te);
-                } else {
-                    srp.getInputStream().reset();
-                    IOUtils.copy(srp.getInputStream(), originalResponse.getOutputStream());
-                }
+                throw new ServletException(te);
             }
         } else {
             // copy input to output as is
-            LOG.debug("Response has status=" + status);
+            LOG.debug("Skipping transform cuz response has status=" + status);
             IOUtils.copy(srp.getInputStream(), originalResponse.getOutputStream());
         }
     }
