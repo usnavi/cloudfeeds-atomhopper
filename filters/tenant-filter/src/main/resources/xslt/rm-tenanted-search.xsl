@@ -59,7 +59,7 @@
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="@href">
+    <xsl:template match="@href[parent::node()[@rel='previous' or @rel='next' or @rel='current' or @rel='self' or @rel='last']]">
         <xsl:attribute name="href">
             <xsl:call-template name="stripTenantedSearch">
                 <xsl:with-param name="url" select="."></xsl:with-param>
