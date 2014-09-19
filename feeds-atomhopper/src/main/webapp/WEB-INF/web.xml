@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" 
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
     <display-name>Cloud Feeds Atom Hopper Server</display-name>
-    <description>Customized Atom Hopper server for Rackspace Cloud Feeds</description>
+    <description>ATOM</description>
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
@@ -86,13 +87,45 @@
         <url-pattern>/atommetrics/*</url-pattern>
     </servlet-mapping>
 
+    <!-- Example of how to configure XsltFilter 
+    <filter>
+        <filter-name>IdentityXslt</filter-name>
+        <filter-class>com.rackspace.feeds.filter.XsltFilter</filter-class>
+        <init-param>
+            <param-name>xsltPath</param-name>
+            <param-value>WEB-INF/xslt/identity.xsl</param-value>
+        </init-param>
+    </filter>
+    -->
+
     <filter>
         <filter-name>TenantedFilter</filter-name>
         <filter-class>com.rackspace.feeds.filter.TenantedFilter</filter-class>
     </filter>
 
+    <filter>
+        <filter-name>ExternalHrefFilter</filter-name>
+        <filter-class>com.rackspace.feeds.filter.ExternalHrefFilter</filter-class>
+        <init-param>
+            <param-name>envFile</param-name>
+            <param-value>/etc/feedscatalog/feedscatalog.xml</param-value>
+        </init-param>
+    </filter>
+
+    <!-- Example of XsltFilter 
+    <filter-mapping>
+        <filter-name>IdentityXslt</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    -->
+
     <filter-mapping>
         <filter-name>TenantedFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>ExternalHrefFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
