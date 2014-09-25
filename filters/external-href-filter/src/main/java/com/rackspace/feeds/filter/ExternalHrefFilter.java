@@ -1,5 +1,6 @@
 package com.rackspace.feeds.filter;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ import javax.xml.transform.stream.StreamSource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.File;
+import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -50,6 +52,8 @@ public class ExternalHrefFilter implements Filter {
 
     private String correctUrl = "";
 
+    private String xsltStr = null;
+
     public void  init(FilterConfig config)
             throws ServletException {
 
@@ -73,6 +77,16 @@ public class ExternalHrefFilter implements Filter {
             }
         } catch(IOException ioex) {
             LOG.error("Error reading envFile: " + envFile, ioex);
+            throw new ServletException(ioex);
+        }
+
+        try {
+            xsltStr = getXsltFileAsString();
+            if ( StringUtils.isBlank(xsltStr) ) {
+                throw new ServletException("xslt " + XSLT_PATH + " is empty");
+            }
+        } catch (IOException ioex) {
+            LOG.error("Error reading xslt: " + XSLT_PATH);
             throw new ServletException(ioex);
         }
 
@@ -101,7 +115,7 @@ public class ExternalHrefFilter implements Filter {
                                     urlFixerResponse,
                                     httpServletResponse,
                                     chain,
-                                    getXsltStreamSource(),
+                                    new StreamSource(new StringReader(xsltStr)),
                                     xsltParameters);
         } else {
             // pass through
@@ -114,10 +128,20 @@ public class ExternalHrefFilter implements Filter {
       from service by the web container*/
     }
 
-    protected StreamSource getXsltStreamSource()
-            throws IOException {
-        InputStream is = getClass().getResourceAsStream(XSLT_PATH);
-        return new StreamSource(is);
+    protected String getXsltFileAsString() throws IOException {
+        InputStream is = null;
+        try {
+            is = getClass().getResourceAsStream(XSLT_PATH);
+            if ( is != null ) {
+                return IOUtils.toString(is);
+            } else {
+                throw new IOException("null input stream for " + XSLT_PATH);
+            }
+        } finally {
+            if ( is != null ) {
+                is.close();
+            }
+        }
     }
 
     /**
