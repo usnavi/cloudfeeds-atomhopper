@@ -1,5 +1,6 @@
 package com.rackspace.feeds.filter;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,9 +77,21 @@ public class TenantedFilter implements Filter {
 
     static final String XSLT_PATH = "/xslt/rm-tenanted-search.xsl";
 
+    private String xsltStr = null;
+
     public void  init(FilterConfig config)
             throws ServletException {
         LOG.debug("initializing TenantedFilter");
+
+        try {
+            xsltStr = getXsltFileAsString();
+            if ( StringUtils.isBlank(xsltStr) ) {
+                throw new ServletException("xslt " + XSLT_PATH + " is empty");
+            }
+        } catch (IOException ioex) {
+            LOG.error("Error reading xslt: " + XSLT_PATH);
+            throw new ServletException(ioex);
+        }
     }
 
     public void  doFilter(ServletRequest request,
@@ -104,7 +117,7 @@ public class TenantedFilter implements Filter {
                                     tenantedResponse,
                                     httpServletResponse,
                                     chain,
-                                    getXsltStreamSource(),
+                                    new StreamSource(new StringReader(xsltStr)),
                                     xsltParameters);
 
         } else {
@@ -124,10 +137,20 @@ public class TenantedFilter implements Filter {
         return matcher.matches() && request.getMethod().equalsIgnoreCase("get");
     }
 
-    protected StreamSource getXsltStreamSource()
-            throws IOException {
-        InputStream is = getClass().getResourceAsStream(XSLT_PATH);
-        return new StreamSource(is);
+    protected String getXsltFileAsString() throws IOException {
+        InputStream is = null;
+        try {
+            is = getClass().getResourceAsStream(XSLT_PATH);
+            if ( is != null ) {
+                return IOUtils.toString(is);
+            } else {
+                throw new IOException("null input stream for " + XSLT_PATH);
+            }
+        } finally {
+            if ( is != null ) {
+                is.close();
+            }
+        }
     }
 
     /**
