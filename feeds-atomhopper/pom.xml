@@ -38,6 +38,13 @@
             <artifactId>external-href-filter</artifactId>
             <type>jar</type>
         </dependency>
+
+        <dependency>
+            <groupId>com.rackspace.feeds.filters</groupId>
+            <artifactId>private-attrs-filter</artifactId>
+            <type>jar</type>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -202,7 +209,6 @@
                         <postinstallScriptlet>
                             <script>touch "/srv/tomcat/webapps/feeds-atomhopper.war"</script>
                         </postinstallScriptlet>
-                        --&gt;
                         <requires>
                             <!--
                                 This path is for our custom Tomcat7 RPM since
