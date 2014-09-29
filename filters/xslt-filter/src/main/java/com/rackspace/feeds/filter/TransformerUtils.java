@@ -27,6 +27,14 @@ import java.util.Map;
  * response to an input stream. The pipe's input stream is then used to
  * transform the response body.
  *
+ * This class performs the following:
+ * <ul>
+ *     <li>Calls the rest of the FilterChain, using the ServletResponsePipe class</li>
+ *     <li>If the status code is between 200 and 300 & response contains XML, transforms the response from the
+ *     wrappedResponse using the given XSLT, and then writes
+ *     the response to the originalResponse</li>
+ * </ul>
+ *
  * User: shin4590
  * Date: 9/10/14
  */

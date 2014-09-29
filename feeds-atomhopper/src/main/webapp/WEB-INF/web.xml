@@ -112,6 +112,15 @@
         </init-param>
     </filter>
 
+    <filter>
+        <filter-name>PrivateAttrsFilter</filter-name>
+        <filter-class>com.rackspace.feeds.filter.PrivateAttrsFilter</filter-class>
+        <init-param>
+            <param-name>xsltFile</param-name>
+            <param-value>/etc/repose/usage-schema/rm_private_attrs_for_obs.xsl</param-value>
+        </init-param>
+    </filter>
+
     <!-- Example of XsltFilter 
     <filter-mapping>
         <filter-name>IdentityXslt</filter-name>
@@ -126,6 +135,11 @@
 
     <filter-mapping>
         <filter-name>ExternalHrefFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>PrivateAttrsFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
