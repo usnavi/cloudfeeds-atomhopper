@@ -52,7 +52,7 @@ public class PrivateAttrsFilter implements Filter {
         }
         catch (IOException e ) {
 
-            LOG.error( "Error reading xslt: " + xsltFilePath );
+            LOG.error( "Error reading xslt: " + xsltFilePath, e );
             throw new ServletException( e );
         }
     }
