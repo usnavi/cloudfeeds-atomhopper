@@ -31,6 +31,14 @@
             <groupId>com.rackspace.feeds.filters</groupId>
             <artifactId>xslt-filter</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+        </dependency>
 
         <!-- for tests -->
         <dependency>
