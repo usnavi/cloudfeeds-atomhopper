@@ -110,7 +110,7 @@
         <filter-class>com.rackspace.feeds.filter.PrivateAttrsFilter</filter-class>
         <init-param>
             <param-name>xsltFile</param-name>
-            <param-value>/etc/repose/usage-schema/wadl/rm_private_attrs_for_obs.xsl</param-value>
+            <param-value>/etc/cloudfeeds/translation/rm_private_attrs_for_obs.xsl</param-value>
         </init-param>
     </filter>
 
