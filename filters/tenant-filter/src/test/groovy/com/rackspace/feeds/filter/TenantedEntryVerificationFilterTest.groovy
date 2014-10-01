@@ -1,13 +1,12 @@
 package com.rackspace.feeds.filter
 
-import net.sf.saxon.om.NodeInfo
+import org.w3c.dom.Document
 import org.xml.sax.InputSource
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
-import javax.xml.transform.sax.SAXSource
 
 import static org.mockito.Matchers.eq
 import static org.mockito.Mockito.*
@@ -65,38 +64,13 @@ class TenantedEntryVerificationFilterTest extends Specification {
         "  <atom:published>2014-09-29T21:27:47.446Z</atom:published>\n" +
         "</atom:entry>";
 
-    @Shared String responseXMLWithoutNamespace =
-                "<?xml version=\"1.0\"?>\n" +
-                "<entry>\n" +
-                "  <id>urn:uuid:c2575a57-9c31-41dd-0888-86ff59a05541</id>\n" +
-                "  <category term=\"tid:" + tenantId + "\"/>\n" +
-                "  <category term=\"rgn:DFW\"/>\n" +
-                "  <category term=\"dc:DFW1\"/>\n" +
-                "  <category term=\"rid:56\"/>\n" +
-                "  <category term=\"bigdata.bigdata.hbase_hdp1_3.usage\"/>\n" +
-                "  <category term=\"type:bigdata.bigdata.hbase_hdp1_3.usage\"/>\n" +
-                "  <title type=\"text\">Cloud Big Data</title>\n" +
-                "  <author>\n" +
-                "    <name>Atom Hopper Team</name>\n" +
-                "  </author>\n" +
-                "  <category label=\"atom-hopper-test\" term=\"atom-hopper-test\"/>\n" +
-                "  <content type=\"application/xml\">\n" +
-                "    <event xmlns=\"http://docs.rackspace.com/core/event\" xmlns:bigdata=\"http://docs.rackspace.com/usage/bigdata\" dataCenter=\"DFW1\" endTime=\"2013-03-16T11:51:11Z\" environment=\"PROD\" id=\"c2575a57-9c31-41dd-0888-86ff59a05541\" region=\"DFW\" resourceId=\"56\" startTime=\"2013-03-15T11:51:11Z\" tenantId=\"5914283\" type=\"USAGE\" version=\"1\">\n" +
-                "      <bigdata:product aggregatedClusterDuration=\"259200000\" bandwidthIn=\"1024\" bandwidthOut=\"19992\" flavorId=\"10\" flavorName=\"some flavor\" numberServersInCluster=\"3000\" resourceType=\"HBASE_HDP1_3\" serviceCode=\"BigData\" version=\"1\"/>\n" +
-                "    </event>\n" +
-                "  </content>\n" +
-                "  <link href=\"https://atom.test.ord1.us.ci.rackspace.net/functest1/events/entries/urn:uuid:c2575a57-9c31-41dd-0888-86ff59a05541\" rel=\"self\"/>\n" +
-                "  <updated>2014-09-28T05:38:59.995Z</updated>\n" +
-                "  <published>2014-09-28T05:38:59.995Z</published>\n" +
-                "</entry>";
-
     def "verify tenantId from the #responseXML"(String responseXML) {
 
         given:
         def verificationFilter = new TenantedEntryVerificationFilter();
         String expectedContentTid = "tid:" + tenantId;
-        NodeInfo doc = verificationFilter.xPathEvaluator.setSource(new SAXSource(
-                new InputSource(new StringReader(responseXML))));
+        Document doc = verificationFilter.builderFactory.newDocumentBuilder()
+                .parse(new InputSource(new StringReader(responseXML)));
 
         when:
         String contentTid = verificationFilter.getTenantIdFromResponse(doc);
@@ -105,8 +79,7 @@ class TenantedEntryVerificationFilterTest extends Specification {
         assert contentTid == expectedContentTid
 
         where:
-        responseXML << [ getSampleResponseXMLWithNamespace(tenantId),
-                         responseXMLWithoutNamespace
+        responseXML << [ getSampleResponseXMLWithNamespace(tenantId)
                        ]
     }
 
@@ -114,8 +87,8 @@ class TenantedEntryVerificationFilterTest extends Specification {
 
         given:
         def verificationFilter = new TenantedEntryVerificationFilter();
-        NodeInfo doc = verificationFilter.xPathEvaluator.setSource(new SAXSource(
-                new InputSource(new StringReader(responseXML))));
+        Document doc = verificationFilter.builderFactory.newDocumentBuilder()
+                .parse(new InputSource(new StringReader(responseXML)));
 
         when:
         boolean isPrivateEvent = verificationFilter.isPrivateEvent(doc);

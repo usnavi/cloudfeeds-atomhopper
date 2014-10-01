@@ -1,7 +1,5 @@
 package com.rackspace.feeds.filter;
 
-import net.sf.saxon.om.NodeInfo;
-import net.sf.saxon.xpath.XPathEvaluator;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.pool2.BasePooledObjectFactory;
@@ -11,19 +9,26 @@ import org.apache.commons.pool2.impl.DefaultPooledObject;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
-import javax.xml.transform.sax.SAXSource;
+import javax.xml.namespace.NamespaceContext;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringReader;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -55,8 +60,15 @@ public class TenantedEntryVerificationFilter implements Filter {
                 "</error>";
     }
 
-    // Following is specific to Saxon. We chose to do this because Saxon9 supports XPath 2.0.
-    private static XPathEvaluator xPathEvaluator = new XPathEvaluator();
+
+    private static final DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+
+    private static final XPathFactory xPathFactory = XPathFactory.newInstance();;
+
+    private static final SimpleNamespaceContext namespaces =
+            new SimpleNamespaceContext(new HashMap<String, String>() {{
+                                            put("atomns", "http://www.w3.org/2005/Atom");
+                                        }});
 
     private static final Logger LOG = LoggerFactory.getLogger(TenantedEntryVerificationFilter.class);
 
@@ -106,7 +118,7 @@ public class TenantedEntryVerificationFilter implements Filter {
 
         try {
 
-            NodeInfo doc = xPathEvaluator.setSource(new SAXSource(new InputSource(new StringReader(originalResponseContent))));
+            Document doc = builderFactory.newDocumentBuilder().parse(new InputSource(new StringReader(originalResponseContent)));
 
             String contentTid = getTenantIdFromResponse(doc);
 
@@ -143,7 +155,7 @@ public class TenantedEntryVerificationFilter implements Filter {
      * @return contentTid which is a string with text "tid:<tenantid>"
      * @throws Exception
      */
-    private String getTenantIdFromResponse(NodeInfo doc) throws Exception {
+    private String getTenantIdFromResponse(Document doc) throws Exception {
 
         XPathExpression tidPath = tidPool.borrowObject();
         String contentTid = tidPath.evaluate( doc );
@@ -161,7 +173,7 @@ public class TenantedEntryVerificationFilter implements Filter {
      * @return true/false if the event has private category or not.
      * @throws Exception
      */
-    private boolean isPrivateEvent(NodeInfo doc) throws Exception {
+    private boolean isPrivateEvent(Document doc) throws Exception {
 
         XPathExpression privPath = privatePool.borrowObject();
         boolean privEvent = !privPath.evaluate( doc ).isEmpty();
@@ -189,8 +201,9 @@ public class TenantedEntryVerificationFilter implements Filter {
         @Override
         public XPathExpression create() throws XPathExpressionException {
             synchronized ( this ) {
-                //In Xpath 2.0 use *:localname to select nodes with a given local name, regardless of namespace
-                return (XPathExpression)xPathEvaluator.compile("/*:entry/*:category[@term = 'cloudfeeds:private']/@term");
+                XPath xPath = xPathFactory.newXPath();
+                xPath.setNamespaceContext(namespaces);
+                return (XPathExpression) xPath.compile("/atomns:entry/atomns:category[@term = 'cloudfeeds:private']/@term");
             }
         }
 
@@ -207,8 +220,9 @@ public class TenantedEntryVerificationFilter implements Filter {
         @Override
         public XPathExpression create() throws XPathExpressionException {
             synchronized ( this ) {
-                //In Xpath 2.0 use *:localname to select nodes with a given local name, regardless of namespace
-                return (XPathExpression)xPathEvaluator.compile("/*:entry/*:category[starts-with(@term, \"tid:\")]/@term");
+                XPath xPath = xPathFactory.newXPath();
+                xPath.setNamespaceContext(namespaces);
+                return (XPathExpression) xPath.compile("/atomns:entry/atomns:category[starts-with(@term, \"tid:\")]/@term");
             }
         }
 
@@ -287,5 +301,27 @@ public class TenantedEntryVerificationFilter implements Filter {
         public PrintWriter getWriter() {
             return writer;
         }
+    }
+
+    static class SimpleNamespaceContext implements NamespaceContext {
+
+        private final Map<String, String> PREF_MAP = new HashMap<String, String>();
+
+        public SimpleNamespaceContext(final Map<String, String> prefMap) {
+            PREF_MAP.putAll(prefMap);
+        }
+
+        public String getNamespaceURI(String prefix) {
+            return PREF_MAP.get(prefix);
+        }
+
+        public String getPrefix(String uri) {
+            throw new UnsupportedOperationException();
+        }
+
+        public Iterator getPrefixes(String uri) {
+            throw new UnsupportedOperationException();
+        }
+
     }
 }
