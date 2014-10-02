@@ -68,11 +68,11 @@ public class TransformerUtils {
                 doTransform(xsltStream,
                         xsltParameters,
                         new StreamSource(bis),
-                        new StreamResult(originalResponse.getOutputStream()));
+                        new StreamResult(originalResponse.getWriter()));
             } else {
                 // the input is not XML
                 LOG.debug("Skipping transform cuz input stream starts with '" + firstByte + "', does not look to be XML or Response has status=" + wrappedResponse.getStatus());
-                IOUtils.copy(srp.getInputStream(), originalResponse.getWriter());
+                IOUtils.copy(srp.getInputStream(), originalResponse.getOutputStream());
             }
         } catch(TransformerException te) {
             throw new ServletException(te);
