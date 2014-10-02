@@ -6,6 +6,7 @@ import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import javax.servlet.ServletOutputStream
 import javax.servlet.http.HttpServletResponse
 
 import static org.mockito.Matchers.eq
@@ -148,8 +149,8 @@ class TenantedEntryVerificationFilterTest extends Specification {
         given:
         def verificationFilter = new TenantedEntryVerificationFilter();
         def mockedResponse = mock(HttpServletResponse);
-        def mockedOutWriter = mock(PrintWriter)
-        when(mockedResponse.getWriter()).thenReturn(mockedOutWriter);
+        def servletOutputStream = mock(ServletOutputStream)
+        when(mockedResponse.getOutputStream()).thenReturn(servletOutputStream);
 
         when:
         verificationFilter.validateEntryAndUpdateResponse(mockedResponse, tenantId, responseXML);
