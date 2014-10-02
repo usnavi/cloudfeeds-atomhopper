@@ -189,7 +189,7 @@ public class TenantedEntryVerificationFilter implements Filter {
     }
 
     private void setResponseContent(String responseContent, ServletResponse servletResponse) throws IOException {
-        servletResponse.getWriter().write(responseContent);
+        servletResponse.getOutputStream().write(responseContent.getBytes());
     }
 
     @Override
