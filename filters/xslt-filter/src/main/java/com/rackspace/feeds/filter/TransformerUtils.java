@@ -68,7 +68,7 @@ public class TransformerUtils {
                 doTransform(xsltStream,
                         xsltParameters,
                         new StreamSource(bis),
-                        new StreamResult(originalResponse.getWriter()));
+                        new StreamResult(originalResponse.getOutputStream()));
             } else {
                 // the input is not XML
                 LOG.debug("Skipping transform cuz input stream starts with '" + firstByte + "', does not look to be XML or Response has status=" + wrappedResponse.getStatus());
