@@ -14,7 +14,7 @@
 
     <properties>
         <project.license>apache20</project.license>
-        <atomhopper.version>1.2.28</atomhopper.version>
+        <atomhopper.version>1.2.29</atomhopper.version>
         <org.springframework.version>4.0.6.RELEASE</org.springframework.version>
      
         <!-- for tests -->
