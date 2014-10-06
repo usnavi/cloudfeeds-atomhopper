@@ -9,10 +9,10 @@
     </parent>
 
     <groupId>com.rackspace.feeds.filters</groupId>
-    <artifactId>private-attrs-filter</artifactId>
+    <artifactId>filter-utils</artifactId>
     <packaging>jar</packaging>
 
-    <name>Cloud Feeds Private Attributes Filter</name>
+    <name>Cloud Feeds Filter Utils</name>
 
     <dependencies>
         <dependency>
@@ -24,8 +24,22 @@
             <artifactId>slf4j-api</artifactId>
         </dependency>
         <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>Saxon-HE</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.rackspace.feeds.filters</groupId>
-            <artifactId>filter-utils</artifactId>
+            <artifactId>test-utils</artifactId>
+            <classifier>tests</classifier>
+            <version>${project.version}</version>
         </dependency>
 
         <!-- for tests -->

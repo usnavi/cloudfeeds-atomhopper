@@ -60,7 +60,6 @@ public class TenantedEntryVerificationFilter implements Filter {
                 "</error>";
     }
 
-
     private static final DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
 
     private static final XPathFactory xPathFactory = XPathFactory.newInstance();;
@@ -82,18 +81,22 @@ public class TenantedEntryVerificationFilter implements Filter {
             throws IOException, ServletException {
 
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-        ResponseWrapper responseWrapper = new ResponseWrapper( (HttpServletResponse) servletResponse );
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        ServletOutputStreamWrapper sosw = new ServletOutputStreamWrapper(stream);
+        OutputStreamResponseWrapper wrappedResponse =
+                new OutputStreamResponseWrapper((HttpServletResponse) servletResponse, sosw);
 
         // get tid before translation rips it out of the request
         String tid = getTenantIdFromRequestURI(httpServletRequest.getRequestURI());
 
-        filterChain.doFilter(servletRequest, responseWrapper);
+        filterChain.doFilter(servletRequest, wrappedResponse);
 
-        String originalResponseContent = responseWrapper.getContent();
+        String originalResponseContent = stream.toString();
 
-        if ( tid != null
+        if ( StringUtils.isNotEmpty(tid)
                 && StringUtils.isNotEmpty(originalResponseContent)
-                && responseWrapper.getStatus() == HttpServletResponse.SC_OK) {
+                && wrappedResponse.getStatus() == HttpServletResponse.SC_OK) {
 
             validateEntryAndUpdateResponse(servletResponse, tid, originalResponseContent);
         } else {
@@ -230,76 +233,6 @@ public class TenantedEntryVerificationFilter implements Filter {
         public PooledObject<XPathExpression> wrap( XPathExpression xpath ) {
 
             return new DefaultPooledObject<XPathExpression>( xpath );
-        }
-    }
-
-    private class FilterServletOutputStream extends ServletOutputStream {
-
-        private ByteArrayOutputStream stream;
-        private WriteListener writeListener;
-
-        public FilterServletOutputStream( ByteArrayOutputStream streamP ) {
-            stream = streamP;
-        }
-
-        @Override
-        public void write(int b) throws IOException  {
-            stream.write(b);
-            if (writeListener != null) {
-                writeListener.notify();
-            }
-        }
-
-        @Override
-        public void write(byte[] b) throws IOException  {
-            stream.write(b);
-            if (writeListener != null) {
-                writeListener.notify();
-            }
-        }
-
-        @Override
-        public void write(byte[] b, int off, int len) throws IOException  {
-            stream.write(b,off,len);
-            if (writeListener != null) {
-                writeListener.notify();
-            }
-        }
-
-        @Override
-        public boolean isReady() {
-            return false;
-        }
-
-        @Override
-        public void setWriteListener(WriteListener writeListener) {
-            this.writeListener = writeListener;
-        }
-    }
-
-    private class ResponseWrapper extends HttpServletResponseWrapper {
-
-        private ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        private PrintWriter writer = new PrintWriter( stream );
-        private ServletOutputStream soStream = new FilterServletOutputStream( stream );
-
-
-        public String getContent() {
-            return stream.toString();
-        }
-
-        public ResponseWrapper( HttpServletResponse resp ) {
-            super( resp );
-        }
-
-        @Override
-        public ServletOutputStream getOutputStream() throws IOException {
-            return soStream;
-        }
-
-        @Override
-        public PrintWriter getWriter() {
-            return writer;
         }
     }
 

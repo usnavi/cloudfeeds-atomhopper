@@ -72,7 +72,7 @@ public class TransformerUtils {
             } else {
                 // the input is not XML
                 LOG.debug("Skipping transform cuz input stream starts with '" + firstByte + "', does not look to be XML or Response has status=" + wrappedResponse.getStatus());
-                IOUtils.copy(srp.getInputStream(), originalResponse.getOutputStream());
+                IOUtils.copy(bis, originalResponse.getOutputStream());
             }
         } catch(TransformerException te) {
             throw new ServletException(te);
