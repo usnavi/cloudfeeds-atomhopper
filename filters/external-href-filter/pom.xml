@@ -43,7 +43,7 @@
         </dependency>
         <dependency>
             <groupId>com.rackspace.feeds.filters</groupId>
-            <artifactId>xslt-filter</artifactId>
+            <artifactId>filter-utils</artifactId>
         </dependency>
 
         <!-- for tests -->

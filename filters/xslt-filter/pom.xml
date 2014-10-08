@@ -35,6 +35,10 @@
             <groupId>net.sf.saxon</groupId>
             <artifactId>Saxon-HE</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.rackspace.feeds.filters</groupId>
+            <artifactId>filter-utils</artifactId>
+        </dependency>
 
         <!-- for tests -->
         <dependency>
