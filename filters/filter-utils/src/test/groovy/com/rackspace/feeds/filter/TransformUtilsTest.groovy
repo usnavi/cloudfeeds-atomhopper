@@ -1,6 +1,5 @@
-package groovy.com.rackspace.feeds.filter
+package com.rackspace.feeds.filter
 
-import com.rackspace.feeds.filter.TransformerUtils
 import org.apache.commons.io.IOUtils
 import spock.lang.Specification
 

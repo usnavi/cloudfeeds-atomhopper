@@ -8,7 +8,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.transform.*;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.BufferedInputStream;
@@ -40,14 +40,16 @@ public class TransformerUtils {
 
     static Logger LOG = LoggerFactory.getLogger(TransformerUtils.class);
 
-    static final TransformerFactory transformerFactory =
-            TransformerFactory.newInstance("net.sf.saxon.TransformerFactoryImpl", null);
+    private final XSLTTransformerUtil xsltTransformerUtil;
+
+    public TransformerUtils(XSLTTransformerUtil xsltTransformerUtil) {
+        this.xsltTransformerUtil = xsltTransformerUtil;
+    }
 
     public void doTransform(HttpServletRequest wrappedRequest,
                             HttpServletResponse wrappedResponse,
                             HttpServletResponse originalResponse,
                             FilterChain chain,
-                            StreamSource xsltStream,
                             Map<String, Object> xsltParameters)
             throws IOException, ServletException {
 
@@ -65,8 +67,7 @@ public class TransformerUtils {
             // input stream. If it is '<', then we take our chances and pass it
             // down to XSLT.
             if ( firstByte == '<' &&  (status >= 200 && status <300)) {
-                doTransform(xsltStream,
-                        xsltParameters,
+                xsltTransformerUtil.doTransform(xsltParameters,
                         new StreamSource(bis),
                         new StreamResult(originalResponse.getWriter()));
             } else {
@@ -99,31 +100,5 @@ public class TransformerUtils {
         }
 
         return firstByte;
-    }
-
-    /**
-     * Utility method to make it easier for people who wants to transform an 'inputXml'
-     * using an 'xslt' stylesheet and writes it to 'result'.
-     *
-     * @param xslt            the transformation stylesheet
-     * @param xsltParameters  the parameters to the xslt
-     * @param inputXml        the XML to be transformed
-     * @param result         the resulting transformed output
-     * @throws IOException
-     * @throws TransformerException
-     */
-    protected void doTransform(Source xslt, Map<String, Object> xsltParameters, Source inputXml, Result result)
-            throws IOException, TransformerException {
-
-        Transformer trans = transformerFactory.newTransformer(xslt);
-
-        // set transformer parameters, if any
-        if ( xsltParameters != null && !xsltParameters.isEmpty() ) {
-            for (String key: xsltParameters.keySet()) {
-                trans.setParameter(key, xsltParameters.get(key));
-            }
-        }
-
-        trans.transform(inputXml, result);
     }
 }

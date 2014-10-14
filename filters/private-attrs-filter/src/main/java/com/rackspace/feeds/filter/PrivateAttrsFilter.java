@@ -7,10 +7,8 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
-import javax.xml.transform.stream.StreamSource;
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -32,7 +30,8 @@ public class PrivateAttrsFilter implements Filter {
     public static String CF_ADMIN = "cloudfeeds:service-admin";
 
     private static Logger LOG = LoggerFactory.getLogger( PrivateAttrsFilter.class );
-    private byte[] byteXslt;
+
+    private XSLTTransformerUtil xsltTransformerUtil;
 
     public void  init(FilterConfig config)
             throws ServletException {
@@ -43,18 +42,7 @@ public class PrivateAttrsFilter implements Filter {
         if ( xsltFilePath == null ) {
             throw new ServletException("xsltFile parameter is required for this filter");
         }
-        File xsltFile = new File(xsltFilePath);
-        if ( !xsltFile.exists() ) {
-            throw new ServletException("xsltFile parameter must be a valid existing file: " + xsltFilePath );
-        }
-        try {
-            byteXslt = Files.readAllBytes( Paths.get( xsltFilePath ) );
-        }
-        catch (IOException e ) {
-
-            LOG.error( "Error reading xslt: " + xsltFilePath, e );
-            throw new ServletException( e );
-        }
+        xsltTransformerUtil = XSLTTransformerUtil.getInstanceForExternalFile(xsltFilePath);
     }
 
     public void  doFilter(ServletRequest servletRequest,
@@ -74,14 +62,13 @@ public class PrivateAttrsFilter implements Filter {
 
         if( !roles.contains( CF_ADMIN ) ) {
 
-            TransformerUtils transformer = new TransformerUtils();
+            TransformerUtils transformer = new TransformerUtils(xsltTransformerUtil);
 
-            transformer.doTransform( request,
-                    wrapper,
-                    response,
-                    chain,
-                    new StreamSource( new ByteArrayInputStream( byteXslt ) ),
-                    Collections.EMPTY_MAP );
+            transformer.doTransform(request,
+                                    wrapper,
+                                    response,
+                                    chain,
+                                    Collections.EMPTY_MAP );
         }
         else {
 

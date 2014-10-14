@@ -3,11 +3,11 @@ package com.rackspace.feeds.filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
-import java.util.HashMap;
 import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.xml.transform.stream.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.HashMap;
 
 /**
  *
@@ -16,7 +16,7 @@ public class XsltFilter implements Filter {
 
     static Logger LOG = LoggerFactory.getLogger(XsltFilter.class);
 
-    private String xsltFileName;
+    private XSLTTransformerUtil xsltTransformerUtil;
 
     /**
      * This method is called once when the filter is first loaded.
@@ -32,15 +32,10 @@ public class XsltFilter implements Filter {
         }
 
         // convert the context-relative path to a physical path name
-        this.xsltFileName = filterConfig.getServletContext( )
+        String xsltFileName = filterConfig.getServletContext( )
                                   .getRealPath(xsltPath);
 
-        // verify that the file exists
-        if (this.xsltFileName == null ||
-                !new File(this.xsltFileName).exists( )) {
-            throw new UnavailableException(
-                    "Unable to locate stylesheet: " + this.xsltFileName, 30);
-        }
+        xsltTransformerUtil = XSLTTransformerUtil.getInstance(xsltPath);
     }
 
     public void doFilter (ServletRequest request, ServletResponse response,
@@ -50,14 +45,10 @@ public class XsltFilter implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
-        TransformerUtils transformerUtils = new TransformerUtils();
+        TransformerUtils transformerUtils = new TransformerUtils(xsltTransformerUtil);
         transformerUtils.doTransform(httpServletRequest, httpServletResponse, httpServletResponse,
-                                     chain, getXsltStreamSource(), new HashMap<String, Object>());
+                                     chain, new HashMap<String, Object>());
 
-    }
-
-    protected StreamSource getXsltStreamSource() throws IOException {
-        return new StreamSource(new File(this.xsltFileName));
     }
 
     /**

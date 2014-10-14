@@ -1,6 +1,5 @@
 package com.rackspace.feeds.filter;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,11 +8,8 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
-import javax.xml.transform.stream.StreamSource;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.File;
-import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -52,7 +48,7 @@ public class ExternalHrefFilter implements Filter {
 
     private String correctUrl = "";
 
-    private String xsltStr = null;
+    private static final XSLTTransformerUtil xsltTransformerUtil = XSLTTransformerUtil.getInstance(XSLT_PATH);
 
     public void  init(FilterConfig config)
             throws ServletException {
@@ -79,17 +75,6 @@ public class ExternalHrefFilter implements Filter {
             LOG.error("Error reading envFile: " + envFile, ioex);
             throw new ServletException(ioex);
         }
-
-        try {
-            xsltStr = getXsltFileAsString();
-            if ( StringUtils.isBlank(xsltStr) ) {
-                throw new ServletException("xslt " + XSLT_PATH + " is empty");
-            }
-        } catch (IOException ioex) {
-            LOG.error("Error reading xslt: " + XSLT_PATH);
-            throw new ServletException(ioex);
-        }
-
     }
 
     public void  doFilter(ServletRequest request,
@@ -110,12 +95,11 @@ public class ExternalHrefFilter implements Filter {
             Map<String, Object> xsltParameters = new HashMap<String, Object>();
             xsltParameters.put("correct_url", correctUrl);
 
-            TransformerUtils transformer = new TransformerUtils();
+            TransformerUtils transformer = new TransformerUtils(xsltTransformerUtil);
             transformer.doTransform(httpServletRequest,
                                     urlFixerResponse,
                                     httpServletResponse,
                                     chain,
-                                    new StreamSource(new StringReader(xsltStr)),
                                     xsltParameters);
         } else {
             // pass through
@@ -126,22 +110,6 @@ public class ExternalHrefFilter implements Filter {
     public void destroy( ) {
       /* Called before the Filter instance is removed
       from service by the web container*/
-    }
-
-    protected String getXsltFileAsString() throws IOException {
-        InputStream is = null;
-        try {
-            is = getClass().getResourceAsStream(XSLT_PATH);
-            if ( is != null ) {
-                return IOUtils.toString(is);
-            } else {
-                throw new IOException("null input stream for " + XSLT_PATH);
-            }
-        } finally {
-            if ( is != null ) {
-                is.close();
-            }
-        }
     }
 
     /**
