@@ -74,11 +74,12 @@ public class TenantedFilter implements Filter {
 
     static final String XSLT_PATH = "/xslt/rm-tenanted-search.xsl";
 
-    private static final XSLTTransformerUtil xsltTransformerUtil = XSLTTransformerUtil.getInstance(XSLT_PATH);
+    private TransformerUtils transformer;
 
     public void  init(FilterConfig config)
             throws ServletException {
         LOG.debug("initializing TenantedFilter");
+        transformer = TransformerUtils.getInstanceForXsltAsResource(XSLT_PATH);
     }
 
     public void  doFilter(ServletRequest request,
@@ -99,7 +100,6 @@ public class TenantedFilter implements Filter {
             Map<String, Object> xsltParameters = new HashMap<String, Object>();
             xsltParameters.put("tenantId", tenantedRequest.getTenantId());
 
-            TransformerUtils transformer = new TransformerUtils(xsltTransformerUtil);
             transformer.doTransform(tenantedRequest,
                                     tenantedResponse,
                                     httpServletResponse,

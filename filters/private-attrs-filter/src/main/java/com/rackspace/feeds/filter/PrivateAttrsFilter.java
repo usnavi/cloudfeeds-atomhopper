@@ -31,7 +31,7 @@ public class PrivateAttrsFilter implements Filter {
 
     private static Logger LOG = LoggerFactory.getLogger( PrivateAttrsFilter.class );
 
-    private XSLTTransformerUtil xsltTransformerUtil;
+    private TransformerUtils transformer;
 
     public void  init(FilterConfig config)
             throws ServletException {
@@ -42,7 +42,7 @@ public class PrivateAttrsFilter implements Filter {
         if ( xsltFilePath == null ) {
             throw new ServletException("xsltFile parameter is required for this filter");
         }
-        xsltTransformerUtil = XSLTTransformerUtil.getInstanceForExternalFile(xsltFilePath);
+        transformer = TransformerUtils.getInstanceForXsltAsFile(xsltFilePath);
     }
 
     public void  doFilter(ServletRequest servletRequest,
@@ -61,8 +61,6 @@ public class PrivateAttrsFilter implements Filter {
         Set<String> roles = new HashSet<String>( Collections.list( roleEnum ) );
 
         if( !roles.contains( CF_ADMIN ) ) {
-
-            TransformerUtils transformer = new TransformerUtils(xsltTransformerUtil);
 
             transformer.doTransform(request,
                                     wrapper,

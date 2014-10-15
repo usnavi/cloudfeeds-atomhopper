@@ -16,7 +16,7 @@ public class XsltFilter implements Filter {
 
     static Logger LOG = LoggerFactory.getLogger(XsltFilter.class);
 
-    private XSLTTransformerUtil xsltTransformerUtil;
+    private TransformerUtils transformer;
 
     /**
      * This method is called once when the filter is first loaded.
@@ -31,11 +31,7 @@ public class XsltFilter implements Filter {
                          + "check the deployment descriptor.");
         }
 
-        // convert the context-relative path to a physical path name
-        String xsltFileName = filterConfig.getServletContext( )
-                                  .getRealPath(xsltPath);
-
-        xsltTransformerUtil = XSLTTransformerUtil.getInstance(xsltPath);
+        transformer = TransformerUtils.getInstanceForXsltAsResource(xsltPath);
     }
 
     public void doFilter (ServletRequest request, ServletResponse response,
@@ -45,8 +41,7 @@ public class XsltFilter implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
-        TransformerUtils transformerUtils = new TransformerUtils(xsltTransformerUtil);
-        transformerUtils.doTransform(httpServletRequest, httpServletResponse, httpServletResponse,
+        transformer.doTransform(httpServletRequest, httpServletResponse, httpServletResponse,
                                      chain, new HashMap<String, Object>());
 
     }

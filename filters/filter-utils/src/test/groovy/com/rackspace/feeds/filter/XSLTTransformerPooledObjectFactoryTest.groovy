@@ -14,7 +14,7 @@ class XSLTTransformerPooledObjectFactoryTest extends Specification {
     def "should get a transformer object"() {
 
         when:
-        def xsltAsString = XSLTTransformerUtil.getXsltFileAsString("/samples/test.xsl")
+        def xsltAsString = TransformerUtils.getXsltResourceAsString("/samples/test.xsl")
         ObjectPool<Transformer> transformerPool =
             new GenericObjectPool<Transformer>(new XSLTTransformerPooledObjectFactory<Transformer>(xsltAsString));
         def transformer = transformerPool.borrowObject()

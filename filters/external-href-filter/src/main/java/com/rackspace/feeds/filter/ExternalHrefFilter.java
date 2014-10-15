@@ -48,7 +48,7 @@ public class ExternalHrefFilter implements Filter {
 
     private String correctUrl = "";
 
-    private static final XSLTTransformerUtil xsltTransformerUtil = XSLTTransformerUtil.getInstance(XSLT_PATH);
+    private TransformerUtils transformer;
 
     public void  init(FilterConfig config)
             throws ServletException {
@@ -75,6 +75,7 @@ public class ExternalHrefFilter implements Filter {
             LOG.error("Error reading envFile: " + envFile, ioex);
             throw new ServletException(ioex);
         }
+        transformer = TransformerUtils.getInstanceForXsltAsResource(XSLT_PATH);
     }
 
     public void  doFilter(ServletRequest request,
@@ -95,7 +96,6 @@ public class ExternalHrefFilter implements Filter {
             Map<String, Object> xsltParameters = new HashMap<String, Object>();
             xsltParameters.put("correct_url", correctUrl);
 
-            TransformerUtils transformer = new TransformerUtils(xsltTransformerUtil);
             transformer.doTransform(httpServletRequest,
                                     urlFixerResponse,
                                     httpServletResponse,
