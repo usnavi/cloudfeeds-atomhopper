@@ -82,28 +82,34 @@ public class TenantedEntryVerificationFilter implements Filter {
 
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
 
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        ServletOutputStreamWrapper sosw = new ServletOutputStreamWrapper(stream);
-        OutputStreamResponseWrapper wrappedResponse =
-                new OutputStreamResponseWrapper((HttpServletResponse) servletResponse, sosw);
-
         // get tid before translation rips it out of the request
         String tid = getTenantIdFromRequestURI(httpServletRequest.getRequestURI());
 
-        filterChain.doFilter(servletRequest, wrappedResponse);
+        if (StringUtils.isNotEmpty(tid)) {
 
-        String originalResponseContent = stream.toString();
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            ServletOutputStreamWrapper sosw = new ServletOutputStreamWrapper(stream);
+            OutputStreamResponseWrapper wrappedResponse =
+                    new OutputStreamResponseWrapper((HttpServletResponse) servletResponse, sosw);
 
-        if ( StringUtils.isNotEmpty(tid)
-                && StringUtils.isNotEmpty(originalResponseContent)
-                && wrappedResponse.getStatus() == HttpServletResponse.SC_OK) {
+            filterChain.doFilter(servletRequest, wrappedResponse);
 
-            validateEntryAndUpdateResponse(servletResponse, tid, originalResponseContent);
+            String originalResponseContent = stream.toString();
+
+            if (StringUtils.isNotEmpty(originalResponseContent)
+                    && wrappedResponse.getStatus() == HttpServletResponse.SC_OK) {
+
+                validateEntryAndUpdateResponse(servletResponse, tid, originalResponseContent);
+            } else {
+                // copy original response as is
+                LOG.debug("Skipping tenant id corresponding to entry validation cuz of non-tenantId request or error/empty response");
+                setResponseContent(originalResponseContent, servletResponse);
+            }
+
         } else {
-            // copy original response as is
-            LOG.debug("Skipping tenant id corresponding to entry validation cuz of non-tenantId request or error/empty response");
-            setResponseContent(originalResponseContent, servletResponse);
+            filterChain.doFilter(servletRequest, servletResponse);
         }
+
     }
 
     private String getTenantIdFromRequestURI(String url) {
