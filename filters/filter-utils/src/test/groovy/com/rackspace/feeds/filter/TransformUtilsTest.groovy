@@ -68,4 +68,20 @@ class TransformUtilsTest extends Specification {
         assert writer.toString() == "Unstoppable Juggernaut"
 
     }
+
+    @Unroll
+    def "should transform xml using xslt & initial template"() {
+
+        when:
+        def writer = new StringWriter();
+        def xsltTransformer = TransformerUtils.getInstanceForXsltAsResource("/samples/test-initial.xsl", "main" )
+        xsltTransformer.doTransform(Collections.EMPTY_MAP,
+                new StreamSource(this.getClass().getResourceAsStream("/samples/test.xml")),
+                new StreamResult(writer))
+
+        then:
+        assert writer.toString().length() > 0
+        assert writer.toString() == "Unstoppable Juggernaut"
+
+    }
 }
