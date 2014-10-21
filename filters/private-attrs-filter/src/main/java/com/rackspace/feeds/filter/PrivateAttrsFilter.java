@@ -28,6 +28,7 @@ public class PrivateAttrsFilter implements Filter {
 
     public static String X_ROLES = "x-roles";
     public static String CF_ADMIN = "cloudfeeds:service-admin";
+    public static String INIT_TEMPLATE = "main";
 
     private static Logger LOG = LoggerFactory.getLogger( PrivateAttrsFilter.class );
 
@@ -42,7 +43,7 @@ public class PrivateAttrsFilter implements Filter {
         if ( xsltFilePath == null ) {
             throw new ServletException("xsltFile parameter is required for this filter");
         }
-        transformer = TransformerUtils.getInstanceForXsltAsFile(xsltFilePath);
+        transformer = TransformerUtils.getInstanceForXsltAsFile(xsltFilePath, INIT_TEMPLATE );
     }
 
     public void  doFilter(ServletRequest servletRequest,
