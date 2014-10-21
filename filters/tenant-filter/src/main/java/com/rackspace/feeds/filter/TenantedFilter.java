@@ -1,6 +1,5 @@
 package com.rackspace.feeds.filter;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,8 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
-import javax.xml.transform.stream.StreamSource;
-import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -77,21 +74,12 @@ public class TenantedFilter implements Filter {
 
     static final String XSLT_PATH = "/xslt/rm-tenanted-search.xsl";
 
-    private String xsltStr = null;
+    private TransformerUtils transformer;
 
     public void  init(FilterConfig config)
             throws ServletException {
         LOG.debug("initializing TenantedFilter");
-
-        try {
-            xsltStr = getXsltFileAsString();
-            if ( StringUtils.isBlank(xsltStr) ) {
-                throw new ServletException("xslt " + XSLT_PATH + " is empty");
-            }
-        } catch (IOException ioex) {
-            LOG.error("Error reading xslt: " + XSLT_PATH);
-            throw new ServletException(ioex);
-        }
+        transformer = TransformerUtils.getInstanceForXsltAsResource(XSLT_PATH);
     }
 
     public void  doFilter(ServletRequest request,
@@ -112,12 +100,10 @@ public class TenantedFilter implements Filter {
             Map<String, Object> xsltParameters = new HashMap<String, Object>();
             xsltParameters.put("tenantId", tenantedRequest.getTenantId());
 
-            TransformerUtils transformer = new TransformerUtils();
             transformer.doTransform(tenantedRequest,
                                     tenantedResponse,
                                     httpServletResponse,
                                     chain,
-                                    new StreamSource(new StringReader(xsltStr)),
                                     xsltParameters);
 
         } else {
@@ -135,22 +121,6 @@ public class TenantedFilter implements Filter {
         String requestURI = request.getRequestURI();
         Matcher matcher = FEEDS_URI_PATTERN.matcher(requestURI);
         return matcher.matches() && request.getMethod().equalsIgnoreCase("get");
-    }
-
-    protected String getXsltFileAsString() throws IOException {
-        InputStream is = null;
-        try {
-            is = getClass().getResourceAsStream(XSLT_PATH);
-            if ( is != null ) {
-                return IOUtils.toString(is);
-            } else {
-                throw new IOException("null input stream for " + XSLT_PATH);
-            }
-        } finally {
-            if ( is != null ) {
-                is.close();
-            }
-        }
     }
 
     /**

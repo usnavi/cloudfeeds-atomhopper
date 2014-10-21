@@ -5,14 +5,14 @@
         <groupId>com.rackspace.feeds</groupId>
         <artifactId>cloudfeeds-atomhopper</artifactId>
         <version>1.3.1-SNAPSHOT</version>
-        <relativePath>./../pom.xml</relativePath>
+        <relativePath>./../../pom.xml</relativePath>
     </parent>
 
     <groupId>com.rackspace.feeds.filters</groupId>
-    <artifactId>test-utils</artifactId>
+    <artifactId>filter-utils</artifactId>
     <packaging>jar</packaging>
 
-    <name>Cloud Feeds Filter Test Utilities</name>
+    <name>Cloud Feeds Filter Utils</name>
 
     <dependencies>
         <dependency>
@@ -32,8 +32,22 @@
             <artifactId>commons-io</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+        </dependency>
+        <dependency>
             <groupId>net.sf.saxon</groupId>
             <artifactId>Saxon-HE</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.rackspace.feeds.filters</groupId>
+            <artifactId>test-utils</artifactId>
+            <classifier>tests</classifier>
+            <version>${project.version}</version>
         </dependency>
 
         <!-- for tests -->
@@ -87,19 +101,6 @@
                             <goal>compile</goal>
                             <goal>generateTestStubs</goal>
                             <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.5</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>test-jar</goal>
                         </goals>
                     </execution>
                 </executions>

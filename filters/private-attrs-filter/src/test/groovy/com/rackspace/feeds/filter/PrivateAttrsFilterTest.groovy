@@ -24,32 +24,6 @@ class PrivateAttrsFilterTest extends Specification {
 
 
     @Unroll
-    def "Should throw ServletException when xsltFile is not specified"() {
-
-        when:
-        PrivateAttrsFilter filter = new PrivateAttrsFilter()
-        FilterConfig config = mock(FilterConfig)
-        when(config.getInitParameter("xsltFile")).thenReturn(null)
-        filter.init(config)
-
-        then:
-        thrown ServletException
-    }
-
-    @Unroll
-    def "Should throw ServletException when xsltFile is specified, but doesn't exist"() {
-
-        when:
-        PrivateAttrsFilter filter = new PrivateAttrsFilter()
-        FilterConfig config = mock(FilterConfig)
-        when(config.getInitParameter("xsltFile")).thenReturn("/some/nonexistent/path")
-        filter.init(config)
-
-        then:
-        thrown ServletException
-    }
-
-    @Unroll
     def "Should pass through when xsltFile exists & x-roles header contains cloudfeeds:service-admin"() {
 
         when:
@@ -70,6 +44,7 @@ class PrivateAttrsFilterTest extends Specification {
                 <xsl:template match="@*|node()">
                 </xsl:template>
                 </xsl:stylesheet>""")
+        writer.flush()
         when(config.getInitParameter("xsltFile")).thenReturn(tempFile.absolutePath)
         when(request.getHeaders("x-roles")).thenReturn( (new Vector( [ PrivateAttrsFilter.CF_ADMIN ].asList() ) ).elements() )
         filter.init(config)
