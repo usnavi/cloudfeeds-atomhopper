@@ -159,7 +159,7 @@ public class TransformerUtils {
             transformer.transform(inputXml, result);
         } catch (Exception e) {
             LOG.error("Error transforming xml using xslt: " + xsltPath, e);
-            new TransformerException(e);
+            throw new TransformerException(e);
         } finally {
             try {
                 if (transformer != null) {
