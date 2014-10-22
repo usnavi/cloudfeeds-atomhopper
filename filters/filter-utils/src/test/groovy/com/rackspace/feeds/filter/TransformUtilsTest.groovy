@@ -4,6 +4,7 @@ import org.apache.commons.io.IOUtils
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import javax.xml.transform.TransformerException
 import javax.xml.transform.stream.StreamResult
 import javax.xml.transform.stream.StreamSource
 
@@ -59,6 +60,35 @@ class TransformUtilsTest extends Specification {
         when:
         def writer = new StringWriter();
         def xsltTransformer = TransformerUtils.getInstanceForXsltAsResource("/samples/test.xsl")
+        xsltTransformer.doTransform(Collections.EMPTY_MAP,
+                new StreamSource(this.getClass().getResourceAsStream("/samples/test.xml")),
+                new StreamResult(writer))
+
+        then:
+        assert writer.toString().length() > 0
+        assert writer.toString() == "Unstoppable Juggernaut"
+    }
+
+    @Unroll
+    def "should throw exception when transforming invalid xml using xslt"() {
+
+        when:
+        def writer = new StringWriter();
+        def xsltTransformer = TransformerUtils.getInstanceForXsltAsResource("/samples/test.xsl")
+        xsltTransformer.doTransform(Collections.EMPTY_MAP,
+                new StreamSource(this.getClass().getResourceAsStream("/samples/invalid.xml")),
+                new StreamResult(writer))
+
+        then:
+        thrown TransformerException
+    }
+
+    @Unroll
+    def "should transform xml using xslt & initial template"() {
+
+        when:
+        def writer = new StringWriter();
+        def xsltTransformer = TransformerUtils.getInstanceForXsltAsResource("/samples/test-initial.xsl", "main" )
         xsltTransformer.doTransform(Collections.EMPTY_MAP,
                 new StreamSource(this.getClass().getResourceAsStream("/samples/test.xml")),
                 new StreamResult(writer))

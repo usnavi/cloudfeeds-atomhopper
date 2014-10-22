@@ -1,5 +1,6 @@
 package com.rackspace.feeds.filter;
 
+import net.sf.saxon.lib.FeatureKeys;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.pool2.ObjectPool;
@@ -61,19 +62,32 @@ public class TransformerUtils {
         return new TransformerUtils(xsltPath, getXsltResourceAsString(xsltPath));
     }
 
+    public static TransformerUtils getInstanceForXsltAsResource(String xsltPath, String initialTemplate ) {
+        return new TransformerUtils(xsltPath, getXsltResourceAsString(xsltPath), initialTemplate);
+    }
+
     /**
      * Creates TransformerUtils instance to work with xsltPaths which are external.
      *
      * @param xsltPath
      * @return
      */
-    public static TransformerUtils getInstanceForXsltAsFile(String xsltPath) {
+    public static TransformerUtils getInstanceForXsltAsFile(String xsltPath ) {
         return new TransformerUtils(xsltPath, getXsltFileAsString(xsltPath));
+    }
+
+    public static TransformerUtils getInstanceForXsltAsFile(String xsltPath, String initialTemplate ) {
+        return new TransformerUtils(xsltPath, getXsltFileAsString(xsltPath), initialTemplate );
     }
 
     private TransformerUtils(String xsltPath, String xsltAsString) {
         this.xsltPath = xsltPath;
         this.transformerPool = new GenericObjectPool<Transformer>(new XSLTTransformerPooledObjectFactory<Transformer>(xsltAsString));
+    }
+
+    private TransformerUtils(String xsltPath, String xsltAsString, String initialTemplate ) {
+        this.xsltPath = xsltPath;
+        this.transformerPool = new GenericObjectPool<Transformer>(new XSLTTransformerPooledObjectFactory<Transformer>(xsltAsString, initialTemplate));
     }
 
     public void doTransform(HttpServletRequest wrappedRequest,
@@ -159,7 +173,7 @@ public class TransformerUtils {
             transformer.transform(inputXml, result);
         } catch (Exception e) {
             LOG.error("Error transforming xml using xslt: " + xsltPath, e);
-            new TransformerException(e);
+            throw new TransformerException(e);
         } finally {
             try {
                 if (transformer != null) {
@@ -237,6 +251,7 @@ public class TransformerUtils {
         } finally {
             IOUtils.closeQuietly(is);
         }
+
 
         if ( StringUtils.isBlank(xsltStr) ) {
             throw new IllegalArgumentException("Empty content in file:" + xsltPath);
