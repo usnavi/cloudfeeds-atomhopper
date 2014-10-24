@@ -98,6 +98,15 @@
     </filter>
     -->
 
+    <filter>
+        <filter-name>Xml2JsonFilter</filter-name>
+        <filter-class>com.rackspace.feeds.filter.Xml2JsonFilter</filter-class>
+        <init-param>
+            <param-name>xsltFile</param-name>
+            <param-value>/etc/cloudfeeds/translation/xml2json-feeds.xsl</param-value>
+        </init-param>
+    </filter>
+
     <!-- This filter should be at the top as does not use ServlerResponsePipe like other filters.
          We had seen issues with truncating response if its placed in between -->
     <filter>
@@ -134,6 +143,11 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
     -->
+
+    <filter-mapping>
+        <filter-name>Xml2JsonFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
     <filter-mapping>
         <filter-name>TenantedEntryVerificationFilter</filter-name>

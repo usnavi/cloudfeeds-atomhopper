@@ -5,9 +5,6 @@ import spock.lang.Unroll
 
 import javax.servlet.FilterChain
 import javax.servlet.FilterConfig
-import javax.servlet.ServletContext
-import javax.servlet.ServletException
-import javax.servlet.ServletOutputStream
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -15,7 +12,6 @@ import static org.mockito.Mockito.mock
 import static org.mockito.Mockito.only
 import static org.mockito.Mockito.verify
 import static org.mockito.Mockito.when
-import static org.mockito.Mockito.times
 
 /**
  * Created by rona6028 on 9/25/14.
