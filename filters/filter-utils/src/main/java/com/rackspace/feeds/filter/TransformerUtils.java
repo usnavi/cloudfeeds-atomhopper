@@ -1,6 +1,5 @@
 package com.rackspace.feeds.filter;
 
-import net.sf.saxon.lib.FeatureKeys;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.pool2.ObjectPool;
@@ -19,9 +18,11 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.util.Map;
 
 /**
@@ -72,12 +73,21 @@ public class TransformerUtils {
      * @param xsltPath
      * @return
      */
-    public static TransformerUtils getInstanceForXsltAsFile(String xsltPath ) {
-        return new TransformerUtils(xsltPath, getXsltFileAsString(xsltPath));
+    public static TransformerUtils getInstanceForXsltAsFile(String xsltPath) {
+        return getInstanceForXsltAsFile(xsltPath, null);
     }
 
     public static TransformerUtils getInstanceForXsltAsFile(String xsltPath, String initialTemplate ) {
-        return new TransformerUtils(xsltPath, getXsltFileAsString(xsltPath), initialTemplate );
+        if ( StringUtils.isEmpty(xsltPath) ) {
+            throw new IllegalArgumentException("xsltPath servlet filter parameter should not be empty or null");
+        }
+        try {
+            File xsltFile = new File(xsltPath);
+            String systemId = xsltFile.toURI().toURL().toExternalForm();
+            return new TransformerUtils(xsltPath, getXsltFileAsString(xsltPath), initialTemplate, systemId );
+        } catch (MalformedURLException ex) {
+            throw new IllegalArgumentException("File " + xsltPath + " can not be converted to URL", ex);
+        }
     }
 
     private TransformerUtils(String xsltPath, String xsltAsString) {
@@ -88,6 +98,11 @@ public class TransformerUtils {
     private TransformerUtils(String xsltPath, String xsltAsString, String initialTemplate ) {
         this.xsltPath = xsltPath;
         this.transformerPool = new GenericObjectPool<Transformer>(new XSLTTransformerPooledObjectFactory<Transformer>(xsltAsString, initialTemplate));
+    }
+
+    private TransformerUtils(String xsltPath, String xsltAsString, String initialTemplate, String systemId ) {
+        this.xsltPath = xsltPath;
+        this.transformerPool = new GenericObjectPool<Transformer>(new XSLTTransformerPooledObjectFactory<Transformer>(xsltAsString, initialTemplate, systemId));
     }
 
     public void doTransform(HttpServletRequest wrappedRequest,
@@ -110,7 +125,7 @@ public class TransformerUtils {
             // relying on the Content-Type, we can look ahead 1 byte into the
             // input stream. If it is '<', then we take our chances and pass it
             // down to XSLT.
-            if ( firstByte == '<' &&  (status >= 200 && status <300)) {
+            if ( firstByte == '<' &&  (status >= 200 && status <500)) {
                 doTransform(xsltParameters,
                         new StreamSource(bis),
                         new StreamResult(originalResponse.getWriter()));

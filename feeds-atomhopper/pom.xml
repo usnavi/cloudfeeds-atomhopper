@@ -38,13 +38,16 @@
             <artifactId>external-href-filter</artifactId>
             <type>jar</type>
         </dependency>
-
         <dependency>
             <groupId>com.rackspace.feeds.filters</groupId>
             <artifactId>private-attrs-filter</artifactId>
             <type>jar</type>
         </dependency>
-
+        <dependency>
+            <groupId>com.rackspace.feeds.filters</groupId>
+            <artifactId>json-filter</artifactId>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 
     <build>

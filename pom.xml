@@ -16,6 +16,7 @@
         <project.license>apache20</project.license>
         <atomhopper.version>1.2.29</atomhopper.version>
         <org.springframework.version>4.0.6.RELEASE</org.springframework.version>
+        <abdera.version>1.1.2</abdera.version>
 
         <!-- for tests -->
         <groovy.version>2.2.0</groovy.version>
@@ -31,6 +32,7 @@
         <module>filters/tenant-filter</module>
         <module>filters/external-href-filter</module>
         <module>filters/private-attrs-filter</module>
+        <module>filters/json-filter</module>
         <module>feeds-atomhopper</module>
     </modules>
 
@@ -100,6 +102,12 @@
             </dependency>
 
             <dependency>
+                <groupId>org.apache.abdera</groupId>
+                <artifactId>abdera-server</artifactId>
+                <version>${abdera.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>org.atomhopper</groupId>
                 <artifactId>atomhopper</artifactId>
                 <version>${atomhopper.version}</version>
@@ -145,6 +153,13 @@
             <dependency>
                 <groupId>com.rackspace.feeds.filters</groupId>
                 <artifactId>private-attrs-filter</artifactId>
+                <version>${project.version}</version>
+                <type>jar</type>
+            </dependency>
+
+            <dependency>
+                <groupId>com.rackspace.feeds.filters</groupId>
+                <artifactId>json-filter</artifactId>
                 <version>${project.version}</version>
                 <type>jar</type>
             </dependency>
