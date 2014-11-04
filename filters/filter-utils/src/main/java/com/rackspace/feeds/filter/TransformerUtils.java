@@ -57,7 +57,7 @@ public class TransformerUtils {
 
     static {
 
-        CONFIG.setMinIdle( 1 );
+        CONFIG.setMinIdle( 2 );
     }
 
 
