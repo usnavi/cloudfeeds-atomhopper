@@ -58,6 +58,9 @@ public class TransformerUtils {
     static {
 
         CONFIG.setMinIdle( 2 );
+        // We're using this value to initialize the pool
+        // To evict idle instances, we'll need to set timeBetweenEvictionRunsMillis, but since things are working
+        // fine, we won't mess with it for the time being
     }
 
 
@@ -68,12 +71,12 @@ public class TransformerUtils {
      * @param xsltPath
      * @return
      */
-    public static TransformerUtils getInstanceForXsltAsResource(String xsltPath) {
-        return new TransformerUtils(xsltPath, getXsltResourceAsString(xsltPath), CONFIG);
+    public static TransformerUtils getInstanceForXsltAsResource(String xsltPath) throws Exception {
+        return new TransformerUtils(xsltPath, getXsltResourceAsString(xsltPath), null, null, CONFIG);
     }
 
-    public static TransformerUtils getInstanceForXsltAsResource(String xsltPath, String initialTemplate ) {
-        return new TransformerUtils(xsltPath, getXsltResourceAsString(xsltPath), initialTemplate, CONFIG);
+    public static TransformerUtils getInstanceForXsltAsResource(String xsltPath, String initialTemplate ) throws Exception {
+        return new TransformerUtils(xsltPath, getXsltResourceAsString(xsltPath), initialTemplate, null, CONFIG);
     }
 
     /**
@@ -82,11 +85,11 @@ public class TransformerUtils {
      * @param xsltPath
      * @return
      */
-    public static TransformerUtils getInstanceForXsltAsFile(String xsltPath) {
+    public static TransformerUtils getInstanceForXsltAsFile(String xsltPath) throws Exception {
         return getInstanceForXsltAsFile( xsltPath, null );
     }
 
-    public static TransformerUtils getInstanceForXsltAsFile(String xsltPath, String initialTemplate ) {
+    public static TransformerUtils getInstanceForXsltAsFile(String xsltPath, String initialTemplate ) throws Exception {
 
         if ( StringUtils.isEmpty(xsltPath) ) {
             throw new IllegalArgumentException("xsltPath servlet filter parameter should not be empty or null");
@@ -100,19 +103,13 @@ public class TransformerUtils {
         }
     }
 
-    private TransformerUtils(String xsltPath, String xsltAsString, GenericObjectPoolConfig config ) {
-        this.xsltPath = xsltPath;
-        this.transformerPool = new GenericObjectPool<Transformer>(new XSLTTransformerPooledObjectFactory<Transformer>(xsltAsString), config );
-    }
-
-    private TransformerUtils(String xsltPath, String xsltAsString, String initialTemplate, GenericObjectPoolConfig config ) {
-        this.xsltPath = xsltPath;
-        this.transformerPool = new GenericObjectPool<Transformer>(new XSLTTransformerPooledObjectFactory<Transformer>(xsltAsString, initialTemplate), config );
-    }
-
-    private TransformerUtils(String xsltPath, String xsltAsString, String initialTemplate, String systemId, GenericObjectPoolConfig config ) {
+    private TransformerUtils(String xsltPath, String xsltAsString, String initialTemplate, String systemId, GenericObjectPoolConfig config ) throws Exception {
         this.xsltPath = xsltPath;
         this.transformerPool = new GenericObjectPool<Transformer>(new XSLTTransformerPooledObjectFactory<Transformer>(xsltAsString, initialTemplate, systemId), config );
+
+        // The object pool doesn't actually initialize the pool, so we do it manually
+        for( int i = 0; i < config.getMinIdle(); i++ )
+            transformerPool.addObject();
     }
 
     public void doTransform(HttpServletRequest wrappedRequest,

@@ -43,7 +43,11 @@ public class PrivateAttrsFilter implements Filter {
         if ( xsltFilePath == null ) {
             throw new ServletException("xsltFile parameter is required for this filter");
         }
-        transformer = TransformerUtils.getInstanceForXsltAsFile(xsltFilePath, INIT_TEMPLATE );
+        try {
+            transformer = TransformerUtils.getInstanceForXsltAsFile(xsltFilePath, INIT_TEMPLATE );
+        } catch ( Exception e ) {
+            throw new ServletException( e );
+        }
     }
 
     public void  doFilter(ServletRequest servletRequest,

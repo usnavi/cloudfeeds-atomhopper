@@ -5,6 +5,7 @@ import spock.lang.Unroll
 
 import javax.servlet.FilterChain
 import javax.servlet.FilterConfig
+import javax.servlet.ServletException
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -18,6 +19,19 @@ import static org.mockito.Mockito.when
  */
 class PrivateAttrsFilterTest extends Specification {
 
+
+    @Unroll
+    def "Should fail when given invalid XSLT"() {
+
+        when:
+        PrivateAttrsFilter filter = new PrivateAttrsFilter()
+        FilterConfig config = mock(FilterConfig)
+        when( config.getInitParameter( "xsltFile" )).thenReturn( "src/test/resources/invalid.xsl" )
+        filter.init( config )
+
+        then:
+        thrown ServletException
+    }
 
     @Unroll
     def "Should pass through when xsltFile exists & x-roles header contains cloudfeeds:service-admin"() {
@@ -41,7 +55,8 @@ class PrivateAttrsFilterTest extends Specification {
                 </xsl:template>
                 </xsl:stylesheet>""")
         writer.flush()
-        when(config.getInitParameter("xsltFile")).thenReturn(tempFile.absolutePath)
+        System.println( System.getProperty( "user.dir"))
+        when(config.getInitParameter("xsltFile")).thenReturn( "src/test/resources/valid.xsl" )
         when(request.getHeaders("x-roles")).thenReturn( (new Vector( [ PrivateAttrsFilter.CF_ADMIN ].asList() ) ).elements() )
         filter.init(config)
         filter.doFilter(request, response, chain)
