@@ -4,6 +4,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.pool2.ObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPool;
+import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,6 +53,14 @@ public class TransformerUtils {
     private final ObjectPool<Transformer> transformerPool;
     private final String xsltPath;
 
+    static private GenericObjectPoolConfig CONFIG = new GenericObjectPoolConfig();
+
+    static {
+
+        CONFIG.setMinIdle( 1 );
+    }
+
+
     /**
      * Creates TransformerUtils instance to work with xsltPaths which are present in
      * classpath.
@@ -60,11 +69,11 @@ public class TransformerUtils {
      * @return
      */
     public static TransformerUtils getInstanceForXsltAsResource(String xsltPath) {
-        return new TransformerUtils(xsltPath, getXsltResourceAsString(xsltPath));
+        return new TransformerUtils(xsltPath, getXsltResourceAsString(xsltPath), CONFIG);
     }
 
     public static TransformerUtils getInstanceForXsltAsResource(String xsltPath, String initialTemplate ) {
-        return new TransformerUtils(xsltPath, getXsltResourceAsString(xsltPath), initialTemplate);
+        return new TransformerUtils(xsltPath, getXsltResourceAsString(xsltPath), initialTemplate, CONFIG);
     }
 
     /**
@@ -74,35 +83,36 @@ public class TransformerUtils {
      * @return
      */
     public static TransformerUtils getInstanceForXsltAsFile(String xsltPath) {
-        return getInstanceForXsltAsFile(xsltPath, null);
+        return getInstanceForXsltAsFile( xsltPath, null );
     }
 
     public static TransformerUtils getInstanceForXsltAsFile(String xsltPath, String initialTemplate ) {
+
         if ( StringUtils.isEmpty(xsltPath) ) {
             throw new IllegalArgumentException("xsltPath servlet filter parameter should not be empty or null");
         }
         try {
             File xsltFile = new File(xsltPath);
             String systemId = xsltFile.toURI().toURL().toExternalForm();
-            return new TransformerUtils(xsltPath, getXsltFileAsString(xsltPath), initialTemplate, systemId );
+            return new TransformerUtils(xsltPath, getXsltFileAsString(xsltPath), initialTemplate, systemId, CONFIG );
         } catch (MalformedURLException ex) {
             throw new IllegalArgumentException("File " + xsltPath + " can not be converted to URL", ex);
         }
     }
 
-    private TransformerUtils(String xsltPath, String xsltAsString) {
+    private TransformerUtils(String xsltPath, String xsltAsString, GenericObjectPoolConfig config ) {
         this.xsltPath = xsltPath;
-        this.transformerPool = new GenericObjectPool<Transformer>(new XSLTTransformerPooledObjectFactory<Transformer>(xsltAsString));
+        this.transformerPool = new GenericObjectPool<Transformer>(new XSLTTransformerPooledObjectFactory<Transformer>(xsltAsString), config );
     }
 
-    private TransformerUtils(String xsltPath, String xsltAsString, String initialTemplate ) {
+    private TransformerUtils(String xsltPath, String xsltAsString, String initialTemplate, GenericObjectPoolConfig config ) {
         this.xsltPath = xsltPath;
-        this.transformerPool = new GenericObjectPool<Transformer>(new XSLTTransformerPooledObjectFactory<Transformer>(xsltAsString, initialTemplate));
+        this.transformerPool = new GenericObjectPool<Transformer>(new XSLTTransformerPooledObjectFactory<Transformer>(xsltAsString, initialTemplate), config );
     }
 
-    private TransformerUtils(String xsltPath, String xsltAsString, String initialTemplate, String systemId ) {
+    private TransformerUtils(String xsltPath, String xsltAsString, String initialTemplate, String systemId, GenericObjectPoolConfig config ) {
         this.xsltPath = xsltPath;
-        this.transformerPool = new GenericObjectPool<Transformer>(new XSLTTransformerPooledObjectFactory<Transformer>(xsltAsString, initialTemplate, systemId));
+        this.transformerPool = new GenericObjectPool<Transformer>(new XSLTTransformerPooledObjectFactory<Transformer>(xsltAsString, initialTemplate, systemId), config );
     }
 
     public void doTransform(HttpServletRequest wrappedRequest,
