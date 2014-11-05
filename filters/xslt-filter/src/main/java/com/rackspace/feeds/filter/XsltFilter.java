@@ -31,7 +31,12 @@ public class XsltFilter implements Filter {
                          + "check the deployment descriptor.");
         }
 
-        transformer = TransformerUtils.getInstanceForXsltAsResource(xsltPath);
+        try {
+            transformer = TransformerUtils.getInstanceForXsltAsResource(xsltPath);
+        } catch ( Exception e ) {
+            LOG.error( "Error loading Xslt: " + xsltPath );
+            throw new ServletException( e );
+        }
     }
 
     public void doFilter (ServletRequest request, ServletResponse response,

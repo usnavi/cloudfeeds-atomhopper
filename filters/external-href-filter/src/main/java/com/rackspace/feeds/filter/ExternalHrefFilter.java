@@ -75,7 +75,12 @@ public class ExternalHrefFilter implements Filter {
             LOG.error("Error reading envFile: " + envFile, ioex);
             throw new ServletException(ioex);
         }
-        transformer = TransformerUtils.getInstanceForXsltAsResource(XSLT_PATH);
+        try {
+            transformer = TransformerUtils.getInstanceForXsltAsResource(XSLT_PATH);
+        } catch ( Exception e ) {
+            LOG.error( "Error loading Xslt: " + XSLT_PATH );
+            throw new ServletException( e );
+        }
     }
 
     public void  doFilter(ServletRequest request,

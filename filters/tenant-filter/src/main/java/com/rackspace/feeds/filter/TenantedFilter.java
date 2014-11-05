@@ -79,7 +79,12 @@ public class TenantedFilter implements Filter {
     public void  init(FilterConfig config)
             throws ServletException {
         LOG.debug("initializing TenantedFilter");
-        transformer = TransformerUtils.getInstanceForXsltAsResource(XSLT_PATH);
+        try {
+            transformer = TransformerUtils.getInstanceForXsltAsResource(XSLT_PATH);
+        } catch ( Exception e ) {
+            LOG.error( "Error loading Xslt: " + XSLT_PATH );
+            throw new ServletException( e );
+        }
     }
 
     public void  doFilter(ServletRequest request,

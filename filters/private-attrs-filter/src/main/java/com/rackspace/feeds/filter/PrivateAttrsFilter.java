@@ -46,6 +46,7 @@ public class PrivateAttrsFilter implements Filter {
         try {
             transformer = TransformerUtils.getInstanceForXsltAsFile(xsltFilePath, INIT_TEMPLATE );
         } catch ( Exception e ) {
+            LOG.error( "Error loading Xslt: " + xsltFilePath );
             throw new ServletException( e );
         }
     }

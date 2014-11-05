@@ -19,20 +19,6 @@ import static org.mockito.Mockito.when
  */
 class PrivateAttrsFilterTest extends Specification {
 
-
-    @Unroll
-    def "Should fail when given invalid XSLT"() {
-
-        when:
-        PrivateAttrsFilter filter = new PrivateAttrsFilter()
-        FilterConfig config = mock(FilterConfig)
-        when( config.getInitParameter( "xsltFile" )).thenReturn( "src/test/resources/invalid.xsl" )
-        filter.init( config )
-
-        then:
-        thrown ServletException
-    }
-
     @Unroll
     def "Should pass through when xsltFile exists & x-roles header contains cloudfeeds:service-admin"() {
 
@@ -51,12 +37,11 @@ class PrivateAttrsFilterTest extends Specification {
                 xmlns="http://wadl.dev.java.net/2009/02"
                 version="2.0">
                 <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
-                <xsl:template match="@*|node()">
+                <xsl:template match="@*|node()" name="main">
                 </xsl:template>
                 </xsl:stylesheet>""")
         writer.flush()
-        System.println( System.getProperty( "user.dir"))
-        when(config.getInitParameter("xsltFile")).thenReturn( "src/test/resources/valid.xsl" )
+        when(config.getInitParameter("xsltFile")).thenReturn(tempFile.absolutePath)
         when(request.getHeaders("x-roles")).thenReturn( (new Vector( [ PrivateAttrsFilter.CF_ADMIN ].asList() ) ).elements() )
         filter.init(config)
         filter.doFilter(request, response, chain)

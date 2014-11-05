@@ -31,14 +31,19 @@ public class Xml2JsonFilter implements Filter {
 
     public void  init(FilterConfig config)
             throws ServletException {
-        LOG.debug("initializing Xml2JsonFilter");
+        LOG.debug( "initializing Xml2JsonFilter" );
 
-        String xsltFilePath = config.getInitParameter("xsltFile");
+        String xsltFilePath = config.getInitParameter( "xsltFile" );
 
         if ( xsltFilePath == null ) {
-            throw new ServletException("xsltFile parameter is required for this filter");
+            throw new ServletException( "xsltFile parameter is required for this filter" );
         }
-        transformer = TransformerUtils.getInstanceForXsltAsFile(xsltFilePath, "main");
+        try {
+            transformer = TransformerUtils.getInstanceForXsltAsFile( xsltFilePath, "main" );
+        } catch ( Exception e ) {
+            LOG.error( "Error loading Xslt: " + xsltFilePath );
+            throw new ServletException( e );
+        }
     }
 
     public void  doFilter(ServletRequest servletRequest,

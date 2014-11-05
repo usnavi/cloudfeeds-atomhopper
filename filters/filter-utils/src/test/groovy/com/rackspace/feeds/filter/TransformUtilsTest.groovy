@@ -98,4 +98,14 @@ class TransformUtilsTest extends Specification {
         assert writer.toString() == "Unstoppable Juggernaut"
 
     }
+
+    @Unroll
+    def "Should throw Exception when given invalid XSLT"() {
+
+        when:
+        def transformer = TransformerUtils.getInstanceForXsltAsResource( "/samples/invalid.xsl" )
+
+        then:
+        thrown Exception
+    }
 }
