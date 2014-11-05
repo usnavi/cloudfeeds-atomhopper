@@ -5,6 +5,7 @@ import spock.lang.Unroll
 
 import javax.servlet.FilterChain
 import javax.servlet.FilterConfig
+import javax.servlet.ServletException
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -17,7 +18,6 @@ import static org.mockito.Mockito.when
  * Created by rona6028 on 9/25/14.
  */
 class PrivateAttrsFilterTest extends Specification {
-
 
     @Unroll
     def "Should pass through when xsltFile exists & x-roles header contains cloudfeeds:service-admin"() {
@@ -37,7 +37,7 @@ class PrivateAttrsFilterTest extends Specification {
                 xmlns="http://wadl.dev.java.net/2009/02"
                 version="2.0">
                 <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
-                <xsl:template match="@*|node()">
+                <xsl:template match="@*|node()" name="main">
                 </xsl:template>
                 </xsl:stylesheet>""")
         writer.flush()

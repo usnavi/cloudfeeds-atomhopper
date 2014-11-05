@@ -27,15 +27,6 @@ public class XSLTTransformerPooledObjectFactory<Transformer> extends BasePooledO
     private String initialTemplate = null;
     private String systemId = null;
 
-    public XSLTTransformerPooledObjectFactory(String xsltAsString) {
-        this.xsltAsString = xsltAsString;
-    }
-
-    public XSLTTransformerPooledObjectFactory(String xsltAsString, String initialTemplateP ) {
-        this.xsltAsString = xsltAsString;
-        initialTemplate = initialTemplateP;
-    }
-
     public XSLTTransformerPooledObjectFactory(String xsltAsString, String initialTemplateP, String systemId ) {
         this.xsltAsString = xsltAsString;
         initialTemplate = initialTemplateP;

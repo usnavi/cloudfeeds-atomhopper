@@ -4,6 +4,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.pool2.ObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPool;
+import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,6 +53,17 @@ public class TransformerUtils {
     private final ObjectPool<Transformer> transformerPool;
     private final String xsltPath;
 
+    static private GenericObjectPoolConfig CONFIG = new GenericObjectPoolConfig();
+
+    static {
+
+        CONFIG.setMinIdle( 2 );
+        // We're using this value to initialize the pool
+        // To evict idle instances, we'll need to set timeBetweenEvictionRunsMillis, but since things are working
+        // fine, we won't mess with it for the time being
+    }
+
+
     /**
      * Creates TransformerUtils instance to work with xsltPaths which are present in
      * classpath.
@@ -59,12 +71,12 @@ public class TransformerUtils {
      * @param xsltPath
      * @return
      */
-    public static TransformerUtils getInstanceForXsltAsResource(String xsltPath) {
-        return new TransformerUtils(xsltPath, getXsltResourceAsString(xsltPath));
+    public static TransformerUtils getInstanceForXsltAsResource(String xsltPath) throws Exception {
+        return new TransformerUtils(xsltPath, getXsltResourceAsString(xsltPath), null, null, CONFIG);
     }
 
-    public static TransformerUtils getInstanceForXsltAsResource(String xsltPath, String initialTemplate ) {
-        return new TransformerUtils(xsltPath, getXsltResourceAsString(xsltPath), initialTemplate);
+    public static TransformerUtils getInstanceForXsltAsResource(String xsltPath, String initialTemplate ) throws Exception {
+        return new TransformerUtils(xsltPath, getXsltResourceAsString(xsltPath), initialTemplate, null, CONFIG);
     }
 
     /**
@@ -73,36 +85,31 @@ public class TransformerUtils {
      * @param xsltPath
      * @return
      */
-    public static TransformerUtils getInstanceForXsltAsFile(String xsltPath) {
-        return getInstanceForXsltAsFile(xsltPath, null);
+    public static TransformerUtils getInstanceForXsltAsFile(String xsltPath) throws Exception {
+        return getInstanceForXsltAsFile( xsltPath, null );
     }
 
-    public static TransformerUtils getInstanceForXsltAsFile(String xsltPath, String initialTemplate ) {
+    public static TransformerUtils getInstanceForXsltAsFile(String xsltPath, String initialTemplate ) throws Exception {
+
         if ( StringUtils.isEmpty(xsltPath) ) {
             throw new IllegalArgumentException("xsltPath servlet filter parameter should not be empty or null");
         }
         try {
             File xsltFile = new File(xsltPath);
             String systemId = xsltFile.toURI().toURL().toExternalForm();
-            return new TransformerUtils(xsltPath, getXsltFileAsString(xsltPath), initialTemplate, systemId );
+            return new TransformerUtils(xsltPath, getXsltFileAsString(xsltPath), initialTemplate, systemId, CONFIG );
         } catch (MalformedURLException ex) {
             throw new IllegalArgumentException("File " + xsltPath + " can not be converted to URL", ex);
         }
     }
 
-    private TransformerUtils(String xsltPath, String xsltAsString) {
+    private TransformerUtils(String xsltPath, String xsltAsString, String initialTemplate, String systemId, GenericObjectPoolConfig config ) throws Exception {
         this.xsltPath = xsltPath;
-        this.transformerPool = new GenericObjectPool<Transformer>(new XSLTTransformerPooledObjectFactory<Transformer>(xsltAsString));
-    }
+        this.transformerPool = new GenericObjectPool<Transformer>(new XSLTTransformerPooledObjectFactory<Transformer>(xsltAsString, initialTemplate, systemId), config );
 
-    private TransformerUtils(String xsltPath, String xsltAsString, String initialTemplate ) {
-        this.xsltPath = xsltPath;
-        this.transformerPool = new GenericObjectPool<Transformer>(new XSLTTransformerPooledObjectFactory<Transformer>(xsltAsString, initialTemplate));
-    }
-
-    private TransformerUtils(String xsltPath, String xsltAsString, String initialTemplate, String systemId ) {
-        this.xsltPath = xsltPath;
-        this.transformerPool = new GenericObjectPool<Transformer>(new XSLTTransformerPooledObjectFactory<Transformer>(xsltAsString, initialTemplate, systemId));
+        // The object pool doesn't actually initialize the pool, so we do it manually
+        for( int i = 0; i < config.getMinIdle(); i++ )
+            transformerPool.addObject();
     }
 
     public void doTransform(HttpServletRequest wrappedRequest,
