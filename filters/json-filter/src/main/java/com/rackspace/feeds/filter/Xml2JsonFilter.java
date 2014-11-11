@@ -92,7 +92,6 @@ public class Xml2JsonFilter implements Filter {
         String accept = request.getHeader("Accept");
         if ( StringUtils.isNotEmpty(accept) ) {
             String[] orderedAccept = ProviderHelper.orderByQ(accept);
-            System.out.println(Arrays.toString(orderedAccept));
             for ( String acceptHeader : orderedAccept ) {
                 if ( acceptHeader.equals(ATOM_XML_MEDIA_TYPE) )  {
                     return false;
