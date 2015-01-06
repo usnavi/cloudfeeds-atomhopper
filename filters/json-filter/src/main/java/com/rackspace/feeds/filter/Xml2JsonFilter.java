@@ -24,6 +24,8 @@ public class Xml2JsonFilter implements Filter {
 
     public static final String RAX_JSON_MEDIA_TYPE = "application/vnd.rackspace.atom+json";
     public static final String ATOM_XML_MEDIA_TYPE = "application/atom+xml";
+    public static final String XML_MEDIA_TYPE = "application/xml";
+    public static final String JSON_MEDIA_TYPE = "application/json";
 
     private static Logger LOG = LoggerFactory.getLogger( Xml2JsonFilter.class );
 
@@ -82,9 +84,18 @@ public class Xml2JsonFilter implements Filter {
         }
 
         @Override
-        public String getContentType() {
-            // we have converted it to application/vnd.rackspace.atom+json
-            return RAX_JSON_MEDIA_TYPE;
+        public void setContentType(String contentType) {
+            super.setContentType(swizzleContentType(contentType));
+        }
+
+        String swizzleContentType(String originalContentType) {
+            if ( originalContentType.startsWith(ATOM_XML_MEDIA_TYPE) ) {
+                return originalContentType.replace(ATOM_XML_MEDIA_TYPE, RAX_JSON_MEDIA_TYPE);
+            } else if ( originalContentType.startsWith(XML_MEDIA_TYPE) ) {
+                return originalContentType.replace(XML_MEDIA_TYPE, JSON_MEDIA_TYPE);
+            } else {
+                return originalContentType;
+            }
         }
     }
 
