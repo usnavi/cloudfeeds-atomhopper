@@ -90,10 +90,19 @@ public class Xml2JsonFilter implements Filter {
 
         @Override
         public void setHeader(String name, String value) {
-            if ( StringUtils.isNotBlank(name) && name.equalsIgnoreCase(CONTENT_TYPE_HEADER) ) {
+            if ( CONTENT_TYPE_HEADER.equalsIgnoreCase(name) ) {
                 super.setHeader(name, swizzleContentType(value));
             } else {
                 super.setHeader(name, value);
+            }
+        }
+
+        @Override
+        public void addHeader(String name, String value) {
+            if ( CONTENT_TYPE_HEADER.equalsIgnoreCase(name) ) {
+                super.addHeader(name, swizzleContentType(value));
+            } else {
+                super.addHeader(name, value);
             }
         }
 
