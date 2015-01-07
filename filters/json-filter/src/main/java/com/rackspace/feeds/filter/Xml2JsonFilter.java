@@ -8,7 +8,6 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
-import java.util.Arrays;
 import java.util.Collections;
 
 import org.apache.commons.lang.StringUtils;
@@ -26,6 +25,7 @@ public class Xml2JsonFilter implements Filter {
     public static final String ATOM_XML_MEDIA_TYPE = "application/atom+xml";
     public static final String XML_MEDIA_TYPE = "application/xml";
     public static final String JSON_MEDIA_TYPE = "application/json";
+    public static final String CONTENT_TYPE_HEADER = "content-type";
 
     private static Logger LOG = LoggerFactory.getLogger( Xml2JsonFilter.class );
 
@@ -79,7 +79,7 @@ public class Xml2JsonFilter implements Filter {
 
     static class JsonResponseBodyWrapper extends HttpServletResponseWrapper {
 
-        public JsonResponseBodyWrapper(HttpServletResponse response){
+        public JsonResponseBodyWrapper(HttpServletResponse response) {
             super(response);
         }
 
@@ -88,12 +88,22 @@ public class Xml2JsonFilter implements Filter {
             super.setContentType(swizzleContentType(contentType));
         }
 
+        @Override
+        public void setHeader(String name, String value) {
+            if ( StringUtils.isNotBlank(name) && name.equalsIgnoreCase(CONTENT_TYPE_HEADER) ) {
+                super.setHeader(name, swizzleContentType(value));
+            } else {
+                super.setHeader(name, value);
+            }
+        }
+
         String swizzleContentType(String originalContentType) {
-            if ( originalContentType.startsWith(ATOM_XML_MEDIA_TYPE) ) {
+            if ( StringUtils.isNotBlank(originalContentType) && originalContentType.startsWith(ATOM_XML_MEDIA_TYPE) ) {
                 return originalContentType.replace(ATOM_XML_MEDIA_TYPE, RAX_JSON_MEDIA_TYPE);
-            } else if ( originalContentType.startsWith(XML_MEDIA_TYPE) ) {
+            } else if ( StringUtils.isNotBlank(originalContentType) && originalContentType.startsWith(XML_MEDIA_TYPE) ) {
                 return originalContentType.replace(XML_MEDIA_TYPE, JSON_MEDIA_TYPE);
             } else {
+                LOG.debug("Not swizzling original content-type: " + originalContentType);
                 return originalContentType;
             }
         }
