@@ -24,13 +24,21 @@ class Xml2JsonFilterTest extends Specification {
 
         where:
         [method, acceptHeader] << [ ['GET', 'application/vnd.rackspace.atom+json'],
+                                    ['GET', 'application/vnd.rackspace.atomsvc+json'],
                                     ['GET', 'application/vnd.rackspace.atom+json,application/json'],
+                                    ['GET', 'application/vnd.rackspace.atomsvc+json,application/json'],
                                     ['GET', 'application/json;q=0.5, application/vnd.rackspace.atom+json'],
+                                    ['GET', 'application/json;q=0.5, application/vnd.rackspace.atomsvc+json'],
                                     ['GET', 'application/json;q=0.5, application/vnd.rackspace.atom+json;q=0.7, text/html'],
+                                    ['GET', 'application/json;q=0.5, application/vnd.rackspace.atomsvc+json;q=0.7, text/html'],
                                     ['POST', 'application/vnd.rackspace.atom+json'],
+                                    ['POST', 'application/vnd.rackspace.atomsvc+json'],
                                     ['POST', 'application/vnd.rackspace.atom+json,application/json'],
+                                    ['POST', 'application/vnd.rackspace.atomsvc+json,application/json'],
                                     ['POST', 'application/json;q=0.5, application/vnd.rackspace.atom+json'],
+                                    ['POST', 'application/json;q=0.5, application/vnd.rackspace.atomsvc+json'],
                                     ['POST', 'application/json;q=0.5, application/vnd.rackspace.atom+json;q=0.7, text/html'],
+                                    ['POST', 'application/json;q=0.5, application/vnd.rackspace.atomsvc+json;q=0.7, text/html'],
                         ]
     }
 
@@ -53,6 +61,8 @@ class Xml2JsonFilterTest extends Specification {
                 ['GET', 'application/json;q=0.5, application/vnd.rackspace.atom+json;q=0.3'],
                 ['GET', 'application/json;q=0.5, text/html'],
                 ['GET', 'application/json;q=0.5, application/vnd.rackspace.atom+json;q=0.8, application/atom+xml'],
+                ['GET', 'application/json;q=0.5, application/vnd.rackspace.atom+xml;q=0.8, application/atom+xml'],
+                ['GET', 'application/json;q=0.5, application/vnd.rackspace.atomsvc+xml;q=0.8, application/atom+xml'],
 
                 ['POST', 'application/json'],
                 ['POST', 'application/vnd.rackspace.atom+json;q=0.1,application/json;q=0.5'],

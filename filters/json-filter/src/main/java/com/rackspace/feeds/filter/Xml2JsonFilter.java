@@ -22,6 +22,7 @@ import org.apache.commons.lang.StringUtils;
 public class Xml2JsonFilter implements Filter {
 
     public static final String RAX_JSON_MEDIA_TYPE = "application/vnd.rackspace.atom+json";
+    public static final String RAX_SVC_JSON_MEDIA_TYPE = "application/vnd.rackspace.atomsvc+json";
     public static final String ATOM_XML_MEDIA_TYPE = "application/atom+xml";
     public static final String XML_MEDIA_TYPE = "application/xml";
     public static final String JSON_MEDIA_TYPE = "application/json";
@@ -125,7 +126,7 @@ public class Xml2JsonFilter implements Filter {
             for ( String acceptHeader : orderedAccept ) {
                 if ( acceptHeader.equals(ATOM_XML_MEDIA_TYPE) )  {
                     return false;
-                } else if ( acceptHeader.equals(RAX_JSON_MEDIA_TYPE) ) {
+                } else if ( acceptHeader.equals(RAX_JSON_MEDIA_TYPE) || acceptHeader.equals(RAX_SVC_JSON_MEDIA_TYPE) ) {
                     return true;
                 } else if ( acceptHeader.contains("json") ) {
                     // If it's json anything but it's not our vnd.rax.atom+json,
