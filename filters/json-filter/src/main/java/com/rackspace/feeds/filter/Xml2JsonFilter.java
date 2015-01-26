@@ -24,9 +24,12 @@ public class Xml2JsonFilter implements Filter {
     public static final String RAX_JSON_MEDIA_TYPE = "application/vnd.rackspace.atom+json";
     public static final String RAX_SVC_JSON_MEDIA_TYPE = "application/vnd.rackspace.atomsvc+json";
     public static final String ATOM_XML_MEDIA_TYPE = "application/atom+xml";
+    public static final String ATOM_SVC_XML_MEDIA_TYPE = "application/atomsvc+xml";
     public static final String XML_MEDIA_TYPE = "application/xml";
     public static final String JSON_MEDIA_TYPE = "application/json";
     public static final String CONTENT_TYPE_HEADER = "content-type";
+
+
 
     private static Logger LOG = LoggerFactory.getLogger( Xml2JsonFilter.class );
 
@@ -112,6 +115,8 @@ public class Xml2JsonFilter implements Filter {
                 return originalContentType.replace(ATOM_XML_MEDIA_TYPE, RAX_JSON_MEDIA_TYPE);
             } else if ( StringUtils.isNotBlank(originalContentType) && originalContentType.startsWith(XML_MEDIA_TYPE) ) {
                 return originalContentType.replace(XML_MEDIA_TYPE, JSON_MEDIA_TYPE);
+            } else if ( StringUtils.isNotBlank(originalContentType) && originalContentType.startsWith(ATOM_SVC_XML_MEDIA_TYPE) ) {
+                return originalContentType.replace(ATOM_SVC_XML_MEDIA_TYPE, RAX_SVC_JSON_MEDIA_TYPE);
             } else {
                 LOG.debug("Not swizzling original content-type: " + originalContentType);
                 return originalContentType;
