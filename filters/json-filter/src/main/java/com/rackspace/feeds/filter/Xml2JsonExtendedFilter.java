@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.util.Collections;
@@ -39,37 +40,30 @@ public class Xml2JsonExtendedFilter extends Xml2JsonFilter {
 
         if( jsonPreferred(httpServletRequest) ) {
 
-            //create wrapper response with output stream to collect transformed content
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            ServletOutputStreamWrapper outputStreamWrapper = new ServletOutputStreamWrapper(stream);
-            OutputStreamResponseWrapper wrappedResponse =
-                    new OutputStreamResponseWrapper(httpServletResponse, outputStreamWrapper);
+            //create wrapper response to collect response content
+            StringResponseWrapper wrappedResponse = new StringResponseWrapper(httpServletResponse);
 
             // apply filter further down the chain on wrapped response
             chain.doFilter(httpServletRequest, wrappedResponse);
 
             // obtain response content
-            String originalResponseContent = stream.toString();
-            LOG.debug("Original response content length = " + originalResponseContent.length());
+            String originalResponseContent = wrappedResponse.getResponseString();
 
+            // apply xml2json filter if response is not empty
             if (StringUtils.isNotEmpty(originalResponseContent)) {
 
                 try {
+                    //set up output stream to collect result of transformation
                     OutputStream outputStream = new ByteArrayOutputStream();
 
-                    // transform response content with the xml to json xslt
+                    // transform response content with the xml2json xslt
                     transformer.doTransform(Collections.EMPTY_MAP,
                             new StreamSource(new StringReader(originalResponseContent)),
                             new StreamResult(outputStream));
 
+                    // set JsonResponse with the transformed json content to swizzle the header
                     String jsonResponseContent = outputStream.toString();
-                    LOG.debug("New response content length = " + jsonResponseContent.length());
-
-                    // set new json response wrapper with the transformed json content
-                    JsonResponseBodyWrapper jsonBodyWrapper = new JsonResponseBodyWrapper( httpServletResponse );
-                    jsonBodyWrapper.setContentLength(jsonResponseContent.length());
-                    jsonBodyWrapper.setContentType(RAX_SVC_JSON_MEDIA_TYPE);
-                    jsonBodyWrapper.getWriter().write(jsonResponseContent);
+                    setResponseContent(httpServletRequest, httpServletResponse, jsonResponseContent);
                 }
                 catch (Exception e) {
                     LOG.error("Error transforming xml: " + e.getMessage());
@@ -82,5 +76,19 @@ public class Xml2JsonExtendedFilter extends Xml2JsonFilter {
         else {
             chain.doFilter( servletRequest, servletResponse );
         }
+    }
+
+    private void setResponseContent(HttpServletRequest request, HttpServletResponse response, String content)
+            throws IOException {
+        JsonResponseBodyWrapper jsonBodyWrapper = new JsonResponseBodyWrapper( response );
+        jsonBodyWrapper.setContentLength(content.length());
+        String acceptHeader = request.getHeader("Accept");
+        if (acceptHeader != null && acceptHeader.startsWith(RAX_SVC_JSON_MEDIA_TYPE)) {
+            jsonBodyWrapper.setContentType(RAX_SVC_JSON_MEDIA_TYPE);
+        }
+        else {
+            jsonBodyWrapper.setContentType(JSON_MEDIA_TYPE);
+        }
+        jsonBodyWrapper.getWriter().write(content);
     }
 }
