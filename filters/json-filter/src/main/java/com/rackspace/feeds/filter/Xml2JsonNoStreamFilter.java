@@ -25,8 +25,8 @@ import java.util.Collections;
  * It requires a Filter input parameter called 'xsltFile' which is the full path to the XSLT file to perform the
  * transformation.
  */
-public class Xml2JsonExtendedFilter extends Xml2JsonFilter {
-    private static Logger LOG = LoggerFactory.getLogger(Xml2JsonExtendedFilter.class);
+public class Xml2JsonNoStreamFilter extends Xml2JsonFilter {
+    private static Logger LOG = LoggerFactory.getLogger(Xml2JsonNoStreamFilter.class);
 
     @Override
     public void doFilter(ServletRequest servletRequest,
@@ -34,7 +34,7 @@ public class Xml2JsonExtendedFilter extends Xml2JsonFilter {
                          final FilterChain chain)
             throws java.io.IOException, ServletException {
 
-        LOG.debug( "Xml2JsonExtendedFilter doFilter()" );
+        LOG.debug( "Xml2JsonNoStreamFilter doFilter()" );
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
 
@@ -57,6 +57,7 @@ public class Xml2JsonExtendedFilter extends Xml2JsonFilter {
                     OutputStream outputStream = new ByteArrayOutputStream();
 
                     // transform response content with the xml2json xslt
+                    TransformerUtils transformer = super.getTransformer();
                     transformer.doTransform(Collections.EMPTY_MAP,
                             new StreamSource(new StringReader(originalResponseContent)),
                             new StreamResult(outputStream));
@@ -65,8 +66,8 @@ public class Xml2JsonExtendedFilter extends Xml2JsonFilter {
                     String jsonResponseContent = outputStream.toString();
                     setResponseContent(httpServletRequest, httpServletResponse, jsonResponseContent);
                 }
-                catch (Exception e) {
-                    LOG.error("Error transforming xml: " + e.getMessage());
+                catch(Exception e) {
+                    throw new ServletException(e);
                 }
                 finally {
                     httpServletResponse.getWriter().close();
