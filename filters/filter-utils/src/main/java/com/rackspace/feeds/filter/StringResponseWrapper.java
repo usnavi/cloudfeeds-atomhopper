@@ -19,26 +19,20 @@ public class StringResponseWrapper extends HttpServletResponseWrapper {
      * Create a wrapper for servlet response
      * @param response
      */
-    public StringResponseWrapper(HttpServletResponse response){
+    public StringResponseWrapper(HttpServletResponse response) {
         super(response);
-        this.stream = new ByteArrayOutputStream();
-        this.servletOutputStream = new ServletOutputStreamWrapper(stream);
+        stream = new ByteArrayOutputStream();
+        servletOutputStream = new ServletOutputStreamWrapper(stream);
+        writer = new PrintWriter(servletOutputStream);
     }
 
     @Override
     public PrintWriter getWriter() {
-        if ( writer != null ) {
-            return writer;
-        }
-        writer = new PrintWriter(servletOutputStream);
-        return writer;
+       return writer;
     }
 
     @Override
     public ServletOutputStream getOutputStream() {
-        if ( writer != null ) {
-            throw new IllegalStateException("getWriter() has already been called");
-        }
         return servletOutputStream;
     }
 
@@ -47,6 +41,6 @@ public class StringResponseWrapper extends HttpServletResponseWrapper {
      * @return
      */
     public String getResponseString() {
-        return this.stream.toString();
+        return stream.toString();
     }
 }

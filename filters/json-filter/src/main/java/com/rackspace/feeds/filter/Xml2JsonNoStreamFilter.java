@@ -62,7 +62,7 @@ public class Xml2JsonNoStreamFilter extends Xml2JsonFilter {
                             new StreamSource(new StringReader(originalResponseContent)),
                             new StreamResult(outputStream));
 
-                    // set JsonResponse with the transformed json content to swizzle the header
+                    // set response with the transformed json content
                     String jsonResponseContent = outputStream.toString();
                     setResponseContent(httpServletRequest, httpServletResponse, jsonResponseContent);
                 }
@@ -81,15 +81,16 @@ public class Xml2JsonNoStreamFilter extends Xml2JsonFilter {
 
     private void setResponseContent(HttpServletRequest request, HttpServletResponse response, String content)
             throws IOException {
-        JsonResponseBodyWrapper jsonBodyWrapper = new JsonResponseBodyWrapper( response );
-        jsonBodyWrapper.setContentLength(content.length());
+
+        response.setContentLength(content.length());
         String acceptHeader = request.getHeader("Accept");
         if (acceptHeader != null && acceptHeader.startsWith(RAX_SVC_JSON_MEDIA_TYPE)) {
-            jsonBodyWrapper.setContentType(RAX_SVC_JSON_MEDIA_TYPE);
+            response.setContentType(RAX_SVC_JSON_MEDIA_TYPE);
         }
         else {
-            jsonBodyWrapper.setContentType(JSON_MEDIA_TYPE);
+            response.setContentType(JSON_MEDIA_TYPE);
         }
-        jsonBodyWrapper.getWriter().write(content);
+        response.getWriter().write(content);
     }
+
 }

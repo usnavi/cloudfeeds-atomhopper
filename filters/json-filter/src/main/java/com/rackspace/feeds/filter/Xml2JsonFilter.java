@@ -31,20 +31,19 @@ public class Xml2JsonFilter implements Filter {
 
     private static Logger LOG = LoggerFactory.getLogger( Xml2JsonFilter.class );
 
-    private String xsltFilePath;
     private TransformerUtils transformer;
 
     public void init(FilterConfig config)
             throws ServletException {
         LOG.debug( "initializing Xml2JsonFilter" );
 
-        xsltFilePath = config.getInitParameter( "xsltFile" );
+        String xsltFilePath = config.getInitParameter( "xsltFile" );
 
         if ( xsltFilePath == null ) {
             throw new ServletException( "xsltFile parameter is required for this filter" );
         }
         try {
-            transformer = getTransformer();
+            transformer = TransformerUtils.getInstanceForXsltAsFile( xsltFilePath, "main" );
         } catch ( Exception e ) {
             LOG.error( "Error loading Xslt: " + xsltFilePath );
             throw new ServletException( e );
@@ -74,8 +73,8 @@ public class Xml2JsonFilter implements Filter {
 
     }
 
-    public TransformerUtils getTransformer() throws Exception {
-        return TransformerUtils.getInstanceForXsltAsFile( xsltFilePath, "main" );
+    TransformerUtils getTransformer() throws Exception {
+        return transformer;
     }
 
     @Override
