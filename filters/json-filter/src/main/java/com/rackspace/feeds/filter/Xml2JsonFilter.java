@@ -29,13 +29,11 @@ public class Xml2JsonFilter implements Filter {
     public static final String JSON_MEDIA_TYPE = "application/json";
     public static final String CONTENT_TYPE_HEADER = "content-type";
 
-
-
     private static Logger LOG = LoggerFactory.getLogger( Xml2JsonFilter.class );
 
     private TransformerUtils transformer;
 
-    public void  init(FilterConfig config)
+    public void init(FilterConfig config)
             throws ServletException {
         LOG.debug( "initializing Xml2JsonFilter" );
 
@@ -52,7 +50,7 @@ public class Xml2JsonFilter implements Filter {
         }
     }
 
-    public void  doFilter(ServletRequest servletRequest,
+    public void doFilter(ServletRequest servletRequest,
                           ServletResponse servletResponse,
                           final FilterChain chain)
             throws java.io.IOException, ServletException {
@@ -73,6 +71,10 @@ public class Xml2JsonFilter implements Filter {
             chain.doFilter( servletRequest, servletResponse );
         }
 
+    }
+
+    TransformerUtils getTransformer() throws Exception {
+        return transformer;
     }
 
     @Override
