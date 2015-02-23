@@ -33,12 +33,23 @@ public class Xml2JsonFilter implements Filter {
 
     private TransformerUtils transformer;
 
+    /**
+     * This flag controls whether or not this Xml2Json filter is supposed to trigger
+     * when the Accept: header has the generic application/json media type.
+     *
+     * For the case of Cloud Feeds, we do not want *yet* to have this filter trigger
+     * on application/json.
+     *
+     * For the case of Cloud Feeds Catalog, we do want to have this filter trigger
+     * on application/json.
+     */
+    private boolean filterOnGenericJsonMediaType = false;
+
     public void init(FilterConfig config)
             throws ServletException {
         LOG.debug( "initializing Xml2JsonFilter" );
 
         String xsltFilePath = config.getInitParameter( "xsltFile" );
-
         if ( xsltFilePath == null ) {
             throw new ServletException( "xsltFile parameter is required for this filter" );
         }
@@ -48,6 +59,8 @@ public class Xml2JsonFilter implements Filter {
             LOG.error( "Error loading Xslt: " + xsltFilePath );
             throw new ServletException( e );
         }
+
+        filterOnGenericJsonMediaType = Boolean.parseBoolean(config.getInitParameter("filterOnGenericJsonMediaType"));
     }
 
     public void doFilter(ServletRequest servletRequest,
@@ -75,6 +88,14 @@ public class Xml2JsonFilter implements Filter {
 
     TransformerUtils getTransformer() throws Exception {
         return transformer;
+    }
+
+    protected boolean isFilterOnGenericJsonMediaType() {
+        return filterOnGenericJsonMediaType;
+    }
+
+    protected void setFilterOnGenericJsonMediaType(boolean flag) {
+        filterOnGenericJsonMediaType = flag;
     }
 
     @Override
@@ -134,6 +155,8 @@ public class Xml2JsonFilter implements Filter {
                 if ( acceptHeader.equals(ATOM_XML_MEDIA_TYPE) )  {
                     return false;
                 } else if ( acceptHeader.equals(RAX_JSON_MEDIA_TYPE) || acceptHeader.equals(RAX_SVC_JSON_MEDIA_TYPE) ) {
+                    return true;
+                } else if ( filterOnGenericJsonMediaType && acceptHeader.contains(JSON_MEDIA_TYPE) ) {
                     return true;
                 } else if ( acceptHeader.contains("json") ) {
                     // If it's json anything but it's not our vnd.rax.atom+json,
