@@ -60,10 +60,7 @@ public class Xml2JsonFilter implements Filter {
             throw new ServletException( e );
         }
 
-        String filterOnJsonStr = config.getInitParameter("filterOnGenericJsonMediaType");
-        if ( StringUtils.isNotBlank(filterOnJsonStr) ) {
-            filterOnGenericJsonMediaType = Boolean.parseBoolean(filterOnJsonStr);
-        }
+        filterOnGenericJsonMediaType = Boolean.parseBoolean(config.getInitParameter("filterOnGenericJsonMediaType"));
     }
 
     public void doFilter(ServletRequest servletRequest,
