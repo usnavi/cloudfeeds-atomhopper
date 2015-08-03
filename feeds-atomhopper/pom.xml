@@ -338,7 +338,7 @@
                                     def uploadCurl = ["curl", "--compressed",
                                                       "-u", "${veracode.username}:${veracode.password}",
                                                       "-F", "app_id=${appId}",
-                                                      "-F", "file=@\"${project.basedir}/target/feeds-atomhopper-${version}.war\"",
+                                                      "-F", "file=@${project.basedir}/target/feeds-atomhopper-${version}.war",
                                                       "-F", "save_as=feeds-atomhopper.war",
                                                       "${veracodeUrl}4.0/uploadfile.do"]
                                     def proc = uploadCurl.execute()
