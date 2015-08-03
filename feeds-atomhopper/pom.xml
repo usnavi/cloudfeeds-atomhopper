@@ -312,7 +312,7 @@
                                     // the application must be pre-created from Veracode web UI
                                     def appId =  client.getAppId("Feeds Atom Hopper")
                                     println "For applicationId: " + appId 
-                                    println 
+                                    println ""
 
                                     def http = new HTTPBuilder(veracodeUrl)
                                     http.auth.basic '${veracode.username}', '${veracode.password}'
