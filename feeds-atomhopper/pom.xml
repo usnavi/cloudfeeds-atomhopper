@@ -301,7 +301,6 @@
                                     def client = new DefaultVeracodeApiClient(veracodeUrl, '${veracode.username}', 
                                                                               '${veracode.password}', System.out)
                                     def version = project.version
-                                    def warFile = new File('${project.basedir}', "/target/feeds-atomhopper-" + version + ".war")
 
                                     // scanName is the version (minus -SNAPSHOT) and build number.
                                     // an example would be: 1.11.0-1
@@ -339,10 +338,9 @@
                                     def uploadCurl = ["curl", "--compressed",
                                                       "-u", "${veracode.username}:${veracode.password}",
                                                       "-F", "app_id=${appId}",
-                                                      "-F", "file=@\"${warFile.canonicalPath}\"",
+                                                      "-F", "file=@\"${project.basedir}/target/feeds-atomhopper-${version}.war\"",
                                                       "-F", "save_as=feeds-atomhopper.war",
                                                       "${veracodeUrl}4.0/uploadfile.do"]
-                                    println "Executing command: " + uploadCurl
                                     def proc = uploadCurl.execute()
                                     Thread.start { System.err &lt;&lt; proc.err }
                                     proc.waitFor() 
