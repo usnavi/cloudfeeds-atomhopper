@@ -334,7 +334,7 @@
                                     // Step 2 - upload the file to scan
                                     // Note: I could not make the MultipartEntity to work with
                                     // HttpBuilder class. So I resorted to calling curl
-                                    println "Uploading file /api/4.0/uploadfile.do"
+                                    println "Uploading file ${project.basedir}/target/feeds-atomhopper-${version}.war to /api/4.0/uploadfile.do"
                                     def uploadCurl = ["curl", "--compressed",
                                                       "-u", "${veracode.username}:${veracode.password}",
                                                       "-F", "app_id=${appId}",
