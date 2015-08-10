@@ -9,10 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * This filter operates on the XML body of responses from cloud feeds.  It uses XSLT provide by the usage-schema rpm
@@ -62,9 +59,7 @@ public class PrivateAttrsFilter implements Filter {
 
         ResponseBodyWrapper wrapper = new ResponseBodyWrapper( response );
 
-        Enumeration<String> roleEnum = request.getHeaders( X_ROLES );
-
-        Set<String> roles = new HashSet<String>( Collections.list( roleEnum ) );
+        Set<String> roles = findRoles( request );
 
         if( !roles.contains( CF_ADMIN ) ) {
 
@@ -79,6 +74,18 @@ public class PrivateAttrsFilter implements Filter {
             chain.doFilter( servletRequest, servletResponse );
         }
 
+    }
+
+    private Set<String> findRoles( HttpServletRequest request ) {
+        Enumeration<String> roleEnum = request.getHeaders( X_ROLES );
+        Set<String> roles = new HashSet<String>();
+
+        // the x-roles might be passed as a single comma-delimited header
+        while( roleEnum.hasMoreElements() ) {
+
+            roles.addAll( Arrays.asList( roleEnum.nextElement().split( "," ) ) );
+        }
+        return roles;
     }
 
     @Override
